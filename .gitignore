@@ -1,0 +1,12 @@
+# Cache and generated files
+*.cache
+*.log
+*~
+.DS_Store
+
+# Sensitive data
+*.secret
+*password*
+
+# User-specific runtime data
+hyprland/hypr/
