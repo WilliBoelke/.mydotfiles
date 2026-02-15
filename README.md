@@ -32,12 +32,19 @@ dotfiles/
 # Install dependencies
 sudo pacman -S hyprland kitty waybar rofi swaync grim slurp wl-clipboard cliphist nwg-displays
 
+# Install themes (if using Ant-Dark)
+sudo pacman -S ant-dark-gtk-theme
+# Or your preferred GTK/Qt themes
+
 # Deploy configs
 mv ~/.config/hypr ~/.config/hypr.backup  # backup if needed
 ln -s ~/dotfiles/hyprland ~/.config/hypr
 ln -s ~/dotfiles/waybar ~/.config/waybar
-hyprctl reload
-```
+
+# Deploy shared theme configs
+ln -s ~/dotfiles/shared/kdeglobals ~/.config/kdeglobals
+ln -s ~/dotfiles/shared/gtk-3.0/settings.ini ~/.config/gtk-3.0/settings.ini
+ln -s ~/dotfiles/shared/gtk-4.0/settings.ini ~/.config/gtk-4.0/settings.ini
 
 ### KDE Plasma
 (TODO)
