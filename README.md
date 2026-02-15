@@ -27,32 +27,21 @@ dotfiles/
 
 ## Installation
 
-### Prerequisites
+### Hyprland
 ```bash
-# Core Hyprland dependencies
-sudo pacman -S hyprland kitty waybar rofi
+# Install dependencies
+sudo pacman -S hyprland kitty waybar rofi swaync grim slurp wl-clipboard cliphist nwg-displays
 
-# Utilities referenced in scripts
-sudo pacman -S grim slurp wl-clipboard # Screenshot tools
-sudo pacman -S nwg-displays            # Monitor configuration GUI
+# Deploy configs
+mv ~/.config/hypr ~/.config/hypr.backup  # backup if needed
+ln -s ~/dotfiles/hyprland ~/.config/hypr
+ln -s ~/dotfiles/waybar ~/.config/waybar
+hyprctl reload
 ```
 
-### Deploy Hyprland Configuration
+### KDE Plasma
+(TODO)
 
-1. **Backup existing config** (if any):
-```bash
-   mv ~/.config/hypr ~/.config/hypr.backup
-```
-
-2. **Symlink this repository**:
-```bash
-   ln -s ~/dotfiles/hyprland ~/.config/hypr
-```
-
-3. **Reload Hyprland**:
-```bash
-   hyprctl reload
-```
 
 ### Environment Variables
 
