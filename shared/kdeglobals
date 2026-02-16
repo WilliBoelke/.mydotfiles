@@ -101,6 +101,9 @@ menuFont=Agave Nerd Font,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 smallestReadableFont=Agave Nerd Font,9,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 toolBarFont=Agave Nerd Font Mono,11,-1,5,700,0,0,0,0,0,0,0,0,0,0,1,Bold
 
+[Icons]
+Theme=candy-icons
+
 [KDE]
 AnimationDurationFactor=0.7071067811865475
 LookAndFeelPackage=Ant-Dark

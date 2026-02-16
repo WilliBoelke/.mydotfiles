@@ -30,7 +30,10 @@ dotfiles/
 ### Hyprland
 ```bash
 # Install dependencies
-sudo pacman -S hyprland kitty waybar rofi swaync grim slurp wl-clipboard cliphist nwg-displays
+sudo pacman -S hyprland kitty waybar swaync grim slurp wl-clipboard cliphist nwg-displays
+
+# Anyrun launcher 
+yay -S anyrun-git
 
 # Install themes (if using Ant-Dark)
 sudo pacman -S ant-dark-gtk-theme

@@ -1,0 +1,15 @@
+Config(
+  width: Absolute(1200),
+  position: Top,
+  vertical_offset: Relative(0.35),
+  hide_plugin_info: false,
+  hide_icons: false,
+  show_results_immediately: true,
+  max_entries: Some(10),
+  plugins: [
+    "libapplications.so",
+    "libshell.so",
+    "libwebsearch.so",
+    "libsymbols.so",
+  ],
+)
