@@ -30,7 +30,7 @@ dotfiles/
 ### Hyprland
 ```bash
 # Install dependencies
-sudo pacman -S hyprland kitty waybar swaync grim slurp wl-clipboard cliphist nwg-displays
+sudo pacman -S hyprland kitty waybar swaync grim slurp wl-clipboard cliphist nwg-displays hyprpaper
 
 # Anyrun launcher 
 yay -S anyrun-git
@@ -43,6 +43,9 @@ sudo pacman -S ant-dark-gtk-theme
 mv ~/.config/hypr ~/.config/hypr.backup  # backup if needed
 ln -s ~/dotfiles/hyprland ~/.config/hypr
 ln -s ~/dotfiles/waybar ~/.config/waybar
+ln -s ~/dotfiles/anyrun ~/.config/anyrun
+ln -s ~/dotfiles/hyprland/hyprpaper.conf ~/.config/hypr/hyprpaper.conf
+
 
 # Deploy shared theme configs
 ln -s ~/dotfiles/shared/kdeglobals ~/.config/kdeglobals

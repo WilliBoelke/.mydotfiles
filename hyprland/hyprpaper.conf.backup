@@ -1,0 +1,19 @@
+preload = /home/wboelke/.config/ml4w/wallpapers/Nocturne-of-Steel-and-Glass.jpg
+
+wallpaper {
+    monitor = DP-1
+    path = /home/wboelke/.config/ml4w/wallpapers/Nocturne-of-Steel-and-Glass.jpg
+    fit_mode = cover
+}
+
+wallpaper {
+    monitor = DP-2
+    path = /home/wboelke/.config/ml4w/wallpapers/Nocturne-of-Steel-and-Glass.jpg
+    fit_mode = cover
+}
+
+wallpaper {
+    monitor = DP-3
+    path = /home/wboelke/.config/ml4w/wallpapers/Nocturne-of-Steel-and-Glass.jpg
+    fit_mode = cover
+}
