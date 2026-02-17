@@ -30,7 +30,7 @@ dotfiles/
 ### Hyprland
 ```bash
 # Install dependencies
-sudo pacman -S hyprland kitty waybar swaync grim slurp wl-clipboard cliphist nwg-displays hyprpaper
+sudo pacman -S hyprland kitty waybar swaync grim slurp wl-clipboard cliphist nwg-displays hyprpaper nwg-dock-hyprland
 
 # Anyrun launcher 
 yay -S anyrun-git
@@ -45,9 +45,9 @@ ln -s ~/dotfiles/hyprland ~/.config/hypr
 ln -s ~/dotfiles/waybar ~/.config/waybar
 ln -s ~/dotfiles/anyrun ~/.config/anyrun
 ln -s ~/dotfiles/hyprland/hyprpaper.conf ~/.config/hypr/hyprpaper.conf
+ln -s ~/dotfiles/nwg-dock-hyprland ~/.config/nwg-dock-hyprland
 
-
-# Deploy shared theme configs
+# Deploy shared (Hypr and KDE) theme configs
 ln -s ~/dotfiles/shared/kdeglobals ~/.config/kdeglobals
 ln -s ~/dotfiles/shared/gtk-3.0/settings.ini ~/.config/gtk-3.0/settings.ini
 ln -s ~/dotfiles/shared/gtk-4.0/settings.ini ~/.config/gtk-4.0/settings.ini
