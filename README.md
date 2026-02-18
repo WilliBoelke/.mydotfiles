@@ -30,8 +30,8 @@ dotfiles/
 ### Hyprland
 ```bash
 # Install dependencies
-sudo pacman -S hyprland kitty waybar swaync grim slurp wl-clipboard cliphist nwg-displays hyprpaper nwg-dock-hyprland
-
+sudo pacman -S hyprland kitty waybar swaync grim slurp wl-clipboard cliphist nwg-displays hyprpaper nwg-dock-hyprland oh-my-posh
+ 
 # Anyrun launcher 
 yay -S anyrun-git
 
@@ -46,6 +46,13 @@ ln -s ~/dotfiles/waybar ~/.config/waybar
 ln -s ~/dotfiles/anyrun ~/.config/anyrun
 ln -s ~/dotfiles/hyprland/hyprpaper.conf ~/.config/hypr/hyprpaper.conf
 ln -s ~/dotfiles/nwg-dock-hyprland ~/.config/nwg-dock-hyprland
+
+# Shell configurations
+ln -s ~/dotfiles/shell/.bashrc ~/.bashrc
+ln -s ~/dotfiles/shell/.zshrc ~/.zshrc
+ln -s ~/dotfiles/shell/bashrc ~/.config/bashrc
+ln -s ~/dotfiles/shell/zshrc ~/.config/zshrc
+ln -s ~/dotfiles/shell/ohmyposh ~/.config/ohmyposh
 
 # Deploy shared (Hypr and KDE) theme configs
 ln -s ~/dotfiles/shared/kdeglobals ~/.config/kdeglobals
