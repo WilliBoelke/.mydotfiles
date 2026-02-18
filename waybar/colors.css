@@ -2,10 +2,10 @@
 * Css Colors
 * Generated with Matugen
 */
-@define-color blur_background rgba(14, 20, 21, 0.3);
-@define-color blur_background8 rgba(14, 20, 21, 0.8);
+@define-color blur_background rgba(14, 20, 21, 0.0);
+@define-color blur_background8 rgba(14, 20, 21, 0.0);
 
-    @define-color background #0e1415;
+    @define-color background #5e0000;
 
     @define-color error #ffb4ab;
 

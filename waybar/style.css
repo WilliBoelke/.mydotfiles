@@ -256,50 +256,9 @@ window#waybar.empty #window {
     color: @error;
 }
 
-/* -----------------------------------------------------
- * App Launcher
- * ----------------------------------------------------- */
 
-#custom-appmenu {
-    background-color: @background;
-    font-size: 16px;
-    color: @on_surface;
-    border-radius: 8px;
-    padding: 3px 10px 3px 10px;
-    margin: 3px 10px 3px 0px;
-    border: 2px solid @border_color;
-    transition: all 0.3s ease-out;    
-}
 
-#custom-appmenu:hover {
-    color: @on_surface;
-    background: @primary_container;
-    border-color: @primary;
-}
 
-/* -----------------------------------------------------
- * Custom Now Playing
- * ----------------------------------------------------- */
-
- #custom-nowplaying {
-    background-color: @background;
-    font-size: 11px;
-    color: @on_surface;
-    border-radius: 5px 5px 5px 5px;
-    padding: 0px 10px 0px 10px;
-    margin: 3px 0px 3px 15px;
-    opacity: 1.0;
-    border: 1px solid @border_color;
-}
-
- #custom-nowplaying.playing {
-    background-color: @primary_container;
-    color: @on_primary_container;
-}
-
- #custom-nowplaying.paused {
-    background-color: @background;
-}
 
 /* -----------------------------------------------------
  * Custom Notification
@@ -642,7 +601,6 @@ window#waybar {
 #workspaces button:hover {
     color: @on_surface;
     background: @primary_container;
-    border-radius: 15px;
     border-color: @primary;
     box-shadow: none;
 }
@@ -1149,8 +1107,3 @@ window#waybar.empty #window {
 @define-color icon_color #000000;
 @define-color border_color #000000;
 @define-color background #000000;
-
- 
-#custom-ml4w-welcome {
-    background-image: url("../../assets/ml4w-icon-black.svg");
-}

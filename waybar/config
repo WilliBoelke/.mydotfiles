@@ -16,12 +16,12 @@
     "modules-left": [
         "custom/appmenu",
         "hyprland/workspaces",
-        "custom/empty"
+        "custom/empty",
+        "group/hardware"
     ],
     
     // Modules Center
     "modules-center": [
-        "hyprland/window",
         "custom/empty"
     ],
     
@@ -31,8 +31,6 @@
         "pulseaudio",
         "bluetooth",
         "network",
-        "battery",
-        "group/hardware",
         "group/tools",
         "tray",
         "custom/notification",

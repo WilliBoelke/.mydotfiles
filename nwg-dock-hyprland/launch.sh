@@ -7,5 +7,5 @@ sleep 0.2
 # Launch dock with relative path to config dir
 cd ~/.config/nwg-dock-hyprland
 nwg-dock-hyprland -i 32 -w 5 -mb 10 -x \
-  -s themes/modern/style.css \
+  -s style.css \
   -c ~/.config/hypr/scripts/launcher.sh
