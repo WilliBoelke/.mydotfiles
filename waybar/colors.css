@@ -55,13 +55,13 @@
 
     @define-color outline_variant #3f484a;
 
-    @define-color primary #81d3e0;
+    @define-color primary #d55c1b;
 
     @define-color primary_container #004f57;
 
     @define-color primary_fixed #9eeffc;
 
-    @define-color primary_fixed_dim #81d3e0;
+    @define-color primary_fixed_dim #d55c1b;
 
     @define-color scrim #000000;
 
@@ -93,7 +93,7 @@
 
     @define-color surface_dim #0e1415;
 
-    @define-color surface_tint #81d3e0;
+    @define-color surface_tint #d55c1b;
 
     @define-color surface_variant #3f484a;
 
