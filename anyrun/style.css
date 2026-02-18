@@ -1,37 +1,68 @@
-/* Simplified anyrun styling */
+
+/* Anyrun with orange accents */
 
 window {
-  background-color: rgba(49, 50, 68, 0.9);
-  border: 2px solid rgba(196, 89, 1, 0.836);
-  border-radius: 16px;
+  background-color: rgba(11, 11, 11, 0.7);
+  border: 1px solid rgba(237, 92, 1, 1);  
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 0 5px black;
+  backdrop-filter: blur(2px);
+  max-width: 600px;
 }
+
+
+
+box.main {
+  padding: 5px;
+  margin: 10px;
+}
+
+
+text {
+  min-height: 30px;
+  padding: 5px;
+  border-radius: 5px;
+   color: #cdd6f4;
+}
+
+
+box.plugin.info {
+  min-width: 200px;
+}
+
 
 
 entry {
   background-color: rgba(49, 50, 68, 0.9);
-  background-color: transparent;
   color: #cdd6f4;
-  border-radius: 16px;
-  padding: 16px 24px;
-  min-height: 40px;
-  font-size: 20px;
-  caret-color: #89b4fa;
+  border: 1px solid rgba(250, 179, 135, 0.4);  /* Orange accent */
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px;
+  min-height: 48px;
+  font-size: 18px;
+  caret-color: #fab387;  /* Orange caret */
 }
 
 list {
   background-color: transparent;
-  padding: 8px;
+  padding: 4px;
+  margin-top: 8px;
 }
 
 row {
-  padding: 8px;
-  border-radius: 8px;
-  background-color: #3e1a01;
+  padding: 10px 12px;
+  margin: 2px 4px;
+  border-radius: 6px;
   color: #cdd6f4;
 }
 
 row:selected {
-  background-color: #3e1a01;
-    border: 2px solid rgba(196, 89, 1, 0.836);
-  color: #313244;
+  background-color: rgba(250, 179, 135, 0.3);  /* Orange selection */
+  color: #1e1e2e;
+}
+
+row:hover {
+  background-color: rgba(250, 179, 135, 0.2);  /* Orange hover */
 }
