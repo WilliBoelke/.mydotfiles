@@ -5,15 +5,19 @@
 // |_|  |_|\___/ \__,_|\__,_|_|\___||___/
 //
 //
+
 {
-  // Workspaces
+
+
+  // --- Workspaces ---
+
   "hyprland/workspaces": {
     "on-scroll-up": "hyprctl dispatch workspace r-1",
     "on-scroll-down": "hyprctl dispatch workspace r+1",
     "on-click": "activate",
     "active-only": false,
-    "all-outputs": true,
-    "format": "{}",
+    "all-outputs": false,
+    "format": "",
     "format-icons": {
       "urgent": "",
       "active": "",
@@ -23,22 +27,14 @@
       "*": 4
     }
   },
-  // Group Hardware
-  "group/hardware": {
-    "orientation": "inherit",
 
-    "modules": [
-      "custom/system",
-      "disk",
-      "cpu",
-      "memory",
-      "hyprland/language"
-    ]
-  },
-  // Taskbar
+
+
+  // --- Taskbar ---
+
   "wlr/taskbar": {
     "format": "{icon}",
-    "icon-size": 18,
+    "icon-size": 12,
     "tooltip-format": "{title}",
     "on-click": "activate",
     "on-click-middle": "close",
@@ -50,29 +46,16 @@
       "Foot Server": "Terminal"
     }
   },
-  // Empty
-  "custom/empty": {
-    "format": ""
-  },
-  // Tools
-  "custom/tools": {
-    "format": "",
-    "tooltip-format": "Tools",
-    "on-scroll-up": "true",
-    "on-scroll-down": "true"
-  },
+
+
   // Keybindings
   "custom/keybindings": {
     "format": "",
     "on-click": "~/.config/hypr/scripts/keybindings.sh",
     "tooltip": false
   },
-  // Calculator
-  "custom/calculator": {
-    "format": "",
-    "on-click": "qalculate-gtk",
-    "tooltip-format": "Open calculator"
-  },
+
+
   // Power Menu
   "custom/exit": {
     "format": "",
@@ -80,7 +63,8 @@
     "on-click-right": "hyprlock",
     "tooltip-format": "Left: Power menu\nRight: Lock screen"
   },
-  // SwayNC
+
+  // --- Notidication center ---
   "custom/notification": {
     "tooltip-format": "Left: Notifications\nRight: Do not disturb",
     "format": "{icon}",
@@ -101,6 +85,7 @@
     "on-click-right": "swaync-client -d -sw",
     "escape": true
   },
+
   // Hyprshade
   "custom/hyprshade": {
     "format": "",
@@ -110,6 +95,7 @@
     "on-scroll-up": "true",
     "on-scroll-down": "true"
   },
+
   // Hypridle inhibitor
   "custom/hypridle": {
     "format": "",
@@ -134,11 +120,13 @@
     "on-scroll-up": "true",
     "on-scroll-down": "true"
   },
+
   // System tray
   "tray": {
     "icon-size": 21,
     "spacing": 10
   },
+
   // Clock
   "clock": {
     "format": "{:%H:%M %a}",
@@ -146,64 +134,96 @@
     "timezone": "",
     "tooltip": false
   },
-  // System
+
+
+  // ------- Group Hardware ---------
+
+
+  "group/hardware": {
+    "orientation": "inherit",
+    "modules": [
+      "custom/system",
+      "disk",
+      "cpu",
+      "memory"
+    ]
+  },
+
+
+  // ---System ---
+
   "custom/system": {
-    "format": "",
     "tooltip": false,
     "on-scroll-up": "true",
     "on-scroll-down": "true"
   },
-  // CPU
+
+
+  // --- CPU ---
+
   "cpu": {
-    "format": "/ C {usage}% ",
-    "on-click": "~/.config/ml4w/settings/system-monitor.sh",
+    "format": "\uf2db {usage}% ",
+    "on-click": "add script",
     "on-scroll-up": "true",
     "on-scroll-down": "true"
   },
-  // Memory
+
+
+  // --- Memory ---
+
   "memory": {
-    "format": "/ M {}% ",
-    "on-click": "~/.config/ml4w/settings/system-monitor.sh",
+    "format": "\uf538 {}% ",
+    "on-click": "add script",
     "on-scroll-up": "true",
     "on-scroll-down": "true"
   },
-  // Harddisc space used
+
+
+  // --- Harddisc space used ---
+
   "disk": {
     "interval": 30,
-    "format": "D {percentage_used}% ",
+    "format": "\uf0a0 {percentage_used}% ",
     "path": "/",
-    "on-click": "~/.config/ml4w/settings/system-monitor.sh",
+    "on-click": "add script",
     "on-scroll-up": "true",
     "on-scroll-down": "true"
   },
 
 
-  // Group Tools
-  "group/tools": {
+
+  // --- Tools Rxpanded ---
+
+  "group/hardware-drawer": {
     "orientation": "inherit",
     "drawer": {
-      "transition-duration": 300,
+      "transition-duration": 200,
       "children-class": "not-memory",
       "transition-left-to-right": false
     },
     "modules": [
-      "custom/tools",
-      "custom/cliphist",
+      "custom/hardware-drawer",
       "custom/hypridle",
-      "custom/hyprshade",
-      "power-profiles-daemon"
-    ]
-  },
-  // Group Links
-  "group/links": {
-    "orientation": "horizontal",
-    "modules": [
-      "custom/chatgpt",
-      "custom/empty"
+      "custom/exit"
     ]
   },
 
-  // Network
+  "custom/hardware-drawer": {
+    "format": "\uF105",
+    "tooltip-format": "Hardware",
+    "on-scroll-up": "true",
+    "on-scroll-down": "true"
+  },
+
+
+
+
+
+  // ------- Group Tools ---------
+
+
+  // --- Network ---
+
   "network": {
     "format": "{ifname}",
     "format-wifi": " {signalStrength}%",
@@ -217,7 +237,10 @@
     "on-click": "~/.config/ml4w/settings/networkmanager.sh",
     "on-click-right": "~/.config/ml4w/scripts/nm-applet.sh toggle"
   },
-  // Power Profiles Daemon
+
+
+  // --- Power Profiles Daemon ---
+
   "power-profiles-daemon": {
     "format": "{icon}",
     "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
@@ -231,9 +254,11 @@
     "on-scroll-up": "true",
     "on-scroll-down": "true"
   },
-  // Pulseaudio
+
+
+  // --- Pulseaudio ---
+
   "pulseaudio": {
-    // "scroll-step": 1, // %, can be a float
     "format": "{icon}  {volume}%",
     "format-bluetooth": "{volume}% {icon} {format_source}",
     "format-bluetooth-muted": " {icon} {format_source}",
@@ -255,44 +280,43 @@
     },
     "on-click": "pavucontrol"
   },
-  // Bluetooth
+
+
+  // --- Bluetooth ---
+
   "bluetooth": {
     "format": " {status}",
     "format-disabled": "",
     "format-off": "",
     "interval": 30,
-    "on-click": "sleep 0.1 && ~/.config/ml4w/settings/bluetooth.sh",
+    "on-click": "sleep 0.1 && ~/.dotfiles/hyprland/settings/bluetooth.sh",
     "tooltip-format-connected": "Connected devices: {num_connections} connected\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}",
     "tooltip-format-enumerate-connected-battery": "{device_alias}\t| Battery life: {device_battery_percentage}%",
     "format-no-controller": ""
   },
-  // Other
-  "user": {
-    "format": "{user}",
-    "interval": 60,
-    "icon": false
+
+  // --- Tools Rxpanded ---
+
+  "group/tools-drawer": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 200,
+      "children-class": "not-memory",
+      "transition-left-to-right": false
+    },
+    "modules": [
+      "custom/tools-drawer",
+      "custom/hypridle",
+      "custom/hyprshade",
+      "power-profiles-daemon"
+    ]
   },
-  // backlight:
-  "backlight": {
-    "format": "{icon} {percent}%",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    ],
-    "scroll-step": 1
+
+  "custom/tools-drawer": {
+    "format": "",
+    "tooltip-format": "Tools",
+    "on-scroll-up": "true",
+    "on-scroll-down": "true"
   }
 }

@@ -1,29 +1,26 @@
 
-/* Anyrun with orange accents */
-
 window {
-  background-color: rgba(11, 11, 11, 0.7);
-  border: 1px solid rgba(237, 92, 1, 1);  
-  border-radius: 12px;
-  padding: 12px;
-  box-shadow: 0 0 5px black;
-  backdrop-filter: blur(2px);
   max-width: 600px;
+  background: transparent;
+  border-radius: 12px;
 }
 
 
 
 box.main {
-  padding: 5px;
-  margin: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 
 text {
   min-height: 30px;
+  font-size: 20px;
+  font-weight: bold;
   padding: 5px;
   border-radius: 5px;
-   color: #cdd6f4;
+   color: rgba(237, 92, 1, 1);;
 }
 
 
@@ -36,13 +33,12 @@ box.plugin.info {
 entry {
   background-color: rgba(49, 50, 68, 0.9);
   color: #cdd6f4;
-  border: 1px solid rgba(250, 179, 135, 0.4);  /* Orange accent */
+  border: 1px solid rgba(237, 92, 1, 1);
   border-radius: 8px;
-  padding: 12px 16px;
+  padding: 9px 12px;
   margin: 8px;
-  min-height: 48px;
+  min-height: 32px;
   font-size: 18px;
-  caret-color: #fab387;  /* Orange caret */
 }
 
 list {
@@ -55,14 +51,38 @@ row {
   padding: 10px 12px;
   margin: 2px 4px;
   border-radius: 6px;
-  color: #cdd6f4;
+  color: rgba(237, 92, 1, 1);
+  background-color: #381807;
+  border: 1px solid rgba(237, 92, 1, 0);
 }
 
-row:selected {
-  background-color: rgba(250, 179, 135, 0.3);  /* Orange selection */
-  color: #1e1e2e;
-}
 
 row:hover {
-  background-color: rgba(250, 179, 135, 0.2);  /* Orange hover */
+  background-color: #004f57;
+}
+
+row:hover .description {
+  font-size: 16px;
+  color: rgba(237, 92, 1, 1);
+}
+row:selected {
+  background-color: #381807;
+  border: 1px solid rgba(237, 92, 1, 1);
+}
+
+row:selected:hover {
+  background-color: #381807;
+}
+
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  color: rgba(237, 92, 1, 1);
+  margin-bottom: 8px;
+}
+
+.description {
+  font-size: 16px;
+  color: rgba(237, 92, 1, .5);
 }

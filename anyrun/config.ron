@@ -1,15 +1,16 @@
 Config(
-  width: Absolute(1200),
+  width: Absolute(600),
   position: Top,
-  vertical_offset: Relative(0.35),
-  hide_plugin_info: false,
-  hide_icons: false,
-  show_results_immediately: true,
-  max_entries: Some(10),
+  vertical_offset: 45,
+  hide_plugin_info: true,
+  hide_icons: true,
+  show_results_immediately: false,
+  max_entries: Some(15),
   plugins: [
     "libapplications.so",
     "libshell.so",
+    "libnix_run.so",
     "libwebsearch.so",
-    "libsymbols.so",
+     "libstdin.so"
   ],
 )
