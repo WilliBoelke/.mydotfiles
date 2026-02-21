@@ -43,47 +43,6 @@
             "network",
             "clock"
         ]
-    },
-
-    // --- Bottom Bar ---
-    {
-        // --- General Settings ---
-        "layer": "top",
-        "position": "bottom",
-        "margin-top": 0,
-        "margin-bottom": 0,
-        "margin-left": 0,
-        "margin-right": 0,
-        "spacing": 0,
-
-
-        // --- Load Modules ---
-
-        "include": [
-            "~/.config/waybar/modules.json"
-        ],
-
-
-        // --- Modules Left ---
-
-        "modules-left": [
-        "mpris"
-        ],
-
-
-        // --- Modules Center ---
-
-        "modules-center": [
-            "wlr/taskbar"
-        ],
-
-
-        // --- Modules Right ---
-
-        "modules-right": [
-            "custom/updates",
-            "custom/notification"
-        ]
     }
 ]
 
