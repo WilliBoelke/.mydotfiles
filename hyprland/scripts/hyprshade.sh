@@ -8,7 +8,6 @@
 #
 
 # Notifications
-source "$HOME/.config/ml4w/scripts/ml4w-notification-handler"
 APP_NAME="Hyprshade"
 NOTIFICATION_ICON="video-display-symbolic"
 
@@ -18,14 +17,10 @@ if [ -d $HOME/.config/hypr/shaders ]; then
 fi
 
 if [[ "$1" == "rofi" ]]; then
-
-    # Open rofi to select the Hyprshade filter for toggle
     options="$(hyprshade ls | sed 's/^[ *]*//')\noff"
-
-    # Open rofi
-    choice=$(echo -e "$options" | rofi -dmenu -replace -config ~/.config/rofi/config-hyprshade.rasi -i -no-show-icons -l 4 -width 30 -p "Hyprshade")
+    choice=$(echo -e "$options" | anyrun --plugins libstdin.so --show-results-immediately true)
     if [ ! -z $choice ]; then
-        echo "hyprshade_filter=\"$choice\"" >~/.config/ml4w/settings/hyprshade.sh
+        echo "echo hyprshade_filter=\"$choice\"" >~/.config/ml4w/settings/hyprshade.sh
         if [ "$choice" == "off" ]; then
             hyprshade off
             notify_user --a "${APP_NAME}" \
@@ -40,7 +35,6 @@ if [[ "$1" == "rofi" ]]; then
                 --m "Changing Hyprshade filter to \"$choice.\" \nToggle shader with SUPER+SHIFT+H"
         fi
     fi
-
 else
 
     # Toggle Hyprshade based on the selected filter

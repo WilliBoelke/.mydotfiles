@@ -4,7 +4,7 @@
 #  / _ `/ _ `/  ' \/ -_)  ' \/ _ \/ _  / -_)
 #  \_, /\_,_/_/_/_/\__/_/_/_/\___/\_,_/\__/ 
 # /___/                                     
-# 
+# launch
 
 
 ml4w_cache_folder="$HOME/.cache/ml4w/hyprland-dotfiles"
