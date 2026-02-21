@@ -64,7 +64,7 @@
     "tooltip-format": "Left: Power menu\nRight: Lock screen"
   },
 
-  // --- Notidication center ---
+  // --- sway notification center ---
   "custom/notification": {
     "tooltip-format": "Left: Notifications\nRight: Do not disturb",
     "format": "{icon}",
@@ -318,5 +318,25 @@
     "tooltip-format": "Tools",
     "on-scroll-up": "true",
     "on-scroll-down": "true"
+  },
+
+
+  "mpris": {
+    "format": "{player_icon} {artist} — {title}",
+    "format-paused": "{player_icon} {artist} — {title}",
+    "player-icons": {
+      "default": "▶",
+      "spotify": "",
+      "firefox": "󰈹"
+    },
+    "status-icons": {
+      "paused": "⏸"
+    },
+    "max-length": 40,
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl next",
+    "on-scroll-up": "playerctl volume 0.05+",
+    "on-scroll-down": "playerctl volume 0.05-",
+    "tooltip-format": "{player} | {status}"
   }
 }

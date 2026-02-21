@@ -1,14 +1,14 @@
 # My Dotfiles
 
-Desktop environment configurations for Arch Linux 
+Desktop environment configurations for Arch Linux
 
 ## System Overview
 
 - **OS**: Arch Linux
-- **Desktop Environments**: 
+- **Desktop Environments**:
   - Hyprland (Wayland compositor)
   - KDE Plasma 6.5.5 (alternative DE)
-- **Hardware**: 
+- **Hardware**:
   - Monitors: Triple setup (3440x1440 center, 2560x1440 vertical left, 1920x1080 right)
 
 ## Repository Structure
@@ -20,6 +20,7 @@ dotfiles/
 │   ├── keybinding.conf # Keyboard shortcuts
 │   ├── scripts/        # Utility scripts (launcher, screenshots, etc.)
 │   └── ...             # Additional config modules
+├── swaync/             # Notification center (popups + panel)
 ├── kde/                # KDE Plasma configs (future)
 ├── shared/             # Shared configs (GTK, Qt themes) (future)
 ├── kitty/              # Terminal emulator (future)
@@ -46,6 +47,7 @@ ln -s ~/dotfiles/waybar ~/.config/waybar
 ln -s ~/dotfiles/anyrun ~/.config/anyrun
 ln -s ~/dotfiles/hyprland/hyprpaper.conf ~/.config/hypr/hyprpaper.conf
 ln -s ~/dotfiles/nwg-dock-hyprland ~/.config/nwg-dock-hyprland
+ln -s ~/dotfiles/swaync ~/.config/swaync
 
 # Shell configurations
 ln -s ~/dotfiles/shell/.bashrc ~/.bashrc
@@ -58,6 +60,7 @@ ln -s ~/dotfiles/shell/ohmyposh ~/.config/ohmyposh
 ln -s ~/dotfiles/shared/kdeglobals ~/.config/kdeglobals
 ln -s ~/dotfiles/shared/gtk-3.0/settings.ini ~/.config/gtk-3.0/settings.ini
 ln -s ~/dotfiles/shared/gtk-4.0/settings.ini ~/.config/gtk-4.0/settings.ini
+```
 
 ### KDE Plasma
 (TODO)
