@@ -31,7 +31,8 @@ dotfiles/
 ### Hyprland
 ```bash
 # Install dependencies
-sudo pacman -S hyprland hyprpicker kitty waybar swaync grim slurp wl-clipboard cliphist nwg-displays hyprpaper nwg-dock-hyprland oh-my-posh
+sudo pacman -S hyprland hyprpicker kitty waybar swaync grim slurp wl-clipboard cliphist nwg-displays hyprpaper nwg-dock-hyprland oh-my-posh quickshell
+
  
 # Anyrun launcher 
 yay -S anyrun-git
