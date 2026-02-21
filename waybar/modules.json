@@ -278,7 +278,7 @@
         ""
       ]
     },
-    "on-click": "pavucontrol"
+    "on-click": "~/dotfiles/hyprland/scripts/open_floating_window_at_cursor.sh pavucontrol"
   },
 
 
