@@ -61,12 +61,12 @@ Item {
         // Track info
         Column {
             visible: root.activePlayer !== null
-            spacing: 1
+            spacing: .5
 
             Text {
                 text: root.activePlayer?.trackTitle ?? "Nothing playing"
-                color: "#ffffff"
-                font.pixelSize: 12
+                color: "#C35A24"
+                font.pixelSize: 14
                 font.weight: Font.Medium
                 elide: Text.ElideRight
                 width: Math.min(implicitWidth, 160)
@@ -74,8 +74,8 @@ Item {
 
             Text {
                 text: root.activePlayer?.trackArtist ?? ""
-                color: "#aaaaaa"
-                font.pixelSize: 10
+                color: "#C35A24"
+                font.pixelSize: 12
                 elide: Text.ElideRight
                 width: Math.min(implicitWidth, 160)
             }

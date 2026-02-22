@@ -11,7 +11,7 @@ PopupWindow {
 
     implicitWidth: 600
     implicitHeight: contentCol.implicitHeight + 24
-    color: "#ee1a1a2e"
+    color: "#aa000000"
 
     anchor.window: parentBar ?? null
     // Position: bottom-left of the bar, popup grows upward
