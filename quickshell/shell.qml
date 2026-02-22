@@ -8,30 +8,6 @@ ShellRoot {
 
     Variants {
         model: Quickshell.screens
-
-        delegate: Component {
-            Bar {
-                required property var modelData
-                screen: modelData
-            }
-        }
-    }
-
-    Variants {
-        model: Quickshell.screens
-
-        delegate: Component {
-            SideMenu {
-                required property var modelData
-                screen: modelData
-                open: NotificationService.sideMenuOpen
-            }
-        }
-    }
-
-
-    Variants {
-        model: Quickshell.screens
         delegate: Component {
             NotificationToast {
                 required property var modelData
@@ -40,20 +16,31 @@ ShellRoot {
         }
     }
 
+    // Bar , SideMenu obejct pairing
 
+    Variants {
+        model: Quickshell.screens
+        delegate: Component {
+            QtObject {
+                id : root
+                required property var modelData
+                property bool sideMenuOpen: false
 
-    GlobalShortcut {
-        appid: "quickshell"
-        name: "toggleSideMenu"
-        onPressed: {
-            // Find the focused monitor name
-            var focusedName = Hyprland.focusedMonitor?.name ?? ""
+                property var bar: Bar {
+                    screen: modelData
+                    sideMenuOpen: root.sideMenuOpen
+                    onToggleSideMenu: root.sideMenuOpen = !root.sideMenuOpen
+                }
 
-            // send a tets notification to the notification service
-            console.log("toggleSideMenu pressed for screen: " + focusedName)
-
-            // Emit a signal that SideMenu instances can listen to
-            NotificationService.toggleSideMenuForScreen(focusedName)
+                property var menu: SideMenu {
+                    screen: modelData
+                    open: root.sideMenuOpen
+                }
+            }
         }
     }
+
+
+
+
 }

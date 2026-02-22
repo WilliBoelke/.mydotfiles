@@ -2,7 +2,7 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.Mpris
-
+import Quickshell.Hyprland
 
 PanelWindow {
     id: root
@@ -13,6 +13,7 @@ PanelWindow {
     // Flyout open state lives here so bar and flyout share it
     property bool flyoutOpen: false
     property bool sideMenuOpen: false
+    signal toggleSideMenu()
 
     RowLayout {
         anchors.fill: parent
@@ -35,8 +36,19 @@ PanelWindow {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: NotificationService.sideMenuOpen = !NotificationService.sideMenuOpen
+                onClicked: root.toggleSideMenu()
                 cursorShape: Qt.PointingHandCursor
+            }
+        }
+
+
+        GlobalShortcut {
+            appid: "quickshell"
+            name: "toggleSideMenu"
+            onPressed: {
+                if (root.screen.name === Hyprland.focusedMonitor?.name) {
+                    root.toggleSideMenu()
+                }
             }
         }
     }

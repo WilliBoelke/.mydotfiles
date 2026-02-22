@@ -14,17 +14,9 @@ Singleton {
 
     // Expose the server so other components can check capabilities
     property alias trackedNotifications: server.trackedNotifications
-    property bool sideMenuOpen: false
+
     // Most recent notification for toasts
     property var latestNotification: null
-
-    // the screemt to run on when the side menu is toggled
-    property string sideMenuScreen: ""
-
-    function toggleSideMenuForScreen(screenName) {
-        sideMenuScreen = screenName
-        sideMenuOpen = !sideMenuOpen
-    }
 
     NotificationServer {
         id: server

@@ -8,8 +8,7 @@ PanelWindow {
     id: root
 
     // Just this binding directly
-    property bool open: NotificationService.sideMenuOpen &&
-        NotificationService.sideMenuScreen === screen.name
+    property bool open: false
     property int panelWidth: 600
 
     margins {
@@ -17,8 +16,6 @@ PanelWindow {
         bottom: 20
         right: 20
     }
-
-
 
 
     anchors {
@@ -30,10 +27,13 @@ PanelWindow {
     width: root.panelWidth
     color: "transparent"
     exclusionMode: ExclusionMode.Normal
-
+    mask: Region {
+        item: root.open ? contentRect : null
+    }
     // main penal boxa
     Rectangle {
         radius : 12
+
         anchors {
             top: parent.top
             bottom: parent.bottom
