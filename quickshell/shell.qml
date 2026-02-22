@@ -24,17 +24,25 @@ ShellRoot {
             QtObject {
                 id : root
                 required property var modelData
-                property bool sideMenuOpen: false
+                property bool sideMenuRightOpen: false
+                property bool sideMenuLeftOpen: false
 
                 property var bar: Bar {
                     screen: modelData
-                    sideMenuOpen: root.sideMenuOpen
-                    onToggleSideMenu: root.sideMenuOpen = !root.sideMenuOpen
+                    sideMenuRightOpen: root.sideMenuRightOpen
+                    sideMenuLeftOpen: root.sideMenuLeftOpen
+                    onToggleSideRightMenu: root.sideMenuRightOpen = !root.sideMenuRightOpen
+                    onToggleSideLeftMenu: root.sideMenuLeftOpen = !root.sideMenuLeftOpen
                 }
 
-                property var menu: SideMenu {
+                property var menuLeft: SideMenuLeft {
                     screen: modelData
-                    open: root.sideMenuOpen
+                    open: root.sideMenuLeftOpen
+                }
+
+                property var menuRight: SideMenuRight {
+                    screen: modelData
+                    open: root.sideMenuRightOpen
                 }
             }
         }

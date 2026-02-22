@@ -3,23 +3,13 @@ import Quickshell.Services.Mpris
 import QtQuick
 import QtQuick.Layouts
 
-PopupWindow {
-    id: flyout
-    // These must be set by Bar.qml when it instantiates this
-    property var parentBar: null
+Rectangle    {
 
-
-    implicitWidth: 600
-    implicitHeight: contentCol.implicitHeight + 24
-    color: "#aa000000"
-
-    anchor.window: parentBar ?? null
-    // Position: bottom-left of the bar, popup grows upward
-    anchor.rect.x: 0
-    anchor.rect.y: 0          // y=0 relative to bar = top of bar
-    anchor.edges: Edges.Top   // attach popup's top edge to anchor point
-    anchor.gravity: Edges.Top // popup grows upward from that point
-
+    id: musicPlayer
+    // width fills parent, height depends on content
+    implicitWidth: parent.width
+    implicitHeight: contentCol.height + 16
+    color: "#111"
 
     onVisibleChanged: {
         if (visible) {
@@ -42,10 +32,11 @@ PopupWindow {
         }
         spacing: 12
 
+        // Header
         Text {
-            text: "Players"
+            text: "Now Playing"
             color: "#d55c1b"
-            font.pixelSize: 11
+            font.pixelSize: 24
             font.weight: Font.Bold
             topPadding: 4
         }

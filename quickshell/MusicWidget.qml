@@ -8,8 +8,8 @@ Item {
     implicitWidth: row.implicitWidth + 16
     implicitHeight: parent.height
 
-    property bool flyoutOpen: false
-    signal toggleFlyout()
+    property bool sideMenuOpen: false
+    signal toggleSideMenu()
 
     // Pick the active player: first playing one, or just first available
     property var activePlayer: {
@@ -22,14 +22,14 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: root.toggleFlyout()
+        onClicked: root.toggleSideMenu()
         cursorShape: Qt.PointingHandCursor
     }
 
     RowLayout {
         id: row
         anchors.centerIn: parent
-        spacing: 8
+        spacing: 24
 
         // Album art
         Rectangle {

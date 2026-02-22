@@ -17,7 +17,6 @@ PanelWindow {
         right: 20
     }
 
-
     anchors {
         top: true;
         bottom: true;
@@ -30,8 +29,11 @@ PanelWindow {
     mask: Region {
         item: root.open ? contentRect : null
     }
+
+
     // main penal boxa
     Rectangle {
+        id: contentRect
         radius : 12
 
         anchors {
