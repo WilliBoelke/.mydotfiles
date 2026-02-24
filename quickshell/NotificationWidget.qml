@@ -3,6 +3,7 @@ import Quickshell.Services.Notifications
 import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
+import qs.services
 
 Item {
     id: root

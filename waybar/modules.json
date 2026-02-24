@@ -62,7 +62,7 @@
     "on-click": "~/.config/ml4w/scripts/ml4w-wlogout",
     "on-click-right": "hyprlock",
     "tooltip-format": "Left: Power menu\nRight: Lock screen"
-  },<
+  },
 
   // Hyprshade
   "custom/hyprshade": {

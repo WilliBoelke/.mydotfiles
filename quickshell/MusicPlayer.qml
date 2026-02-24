@@ -3,13 +3,17 @@ import Quickshell.Services.Mpris
 import QtQuick
 import QtQuick.Layouts
 
-Rectangle    {
 
+
+
+Rectangle    {
+    color: "#1a000000"
+    radius: 6
     id: musicPlayer
-    // width fills parent, height depends on content
+    property int outerPadding: 12
     implicitWidth: parent.width
-    implicitHeight: contentCol.height + 16
-    color: "#111"
+    implicitHeight: contentCol.implicitHeight + (outerPadding * 2)
+
 
     onVisibleChanged: {
         if (visible) {
@@ -21,6 +25,10 @@ Rectangle    {
     }
 
 
+    Rectangle    {
+        width: parent.width
+        height: contentCol.implicitHeight + (outerPadding * 2)
+        color: "transparent"
 
     Column {
         id: contentCol
@@ -28,7 +36,7 @@ Rectangle    {
             top: parent.top
             left: parent.left
             right: parent.right
-            margins: 12
+            margins: outerPadding
         }
         spacing: 12
 
@@ -40,11 +48,9 @@ Rectangle    {
             font.weight: Font.Bold
             topPadding: 4
         }
-
         // One card per player
         Repeater {
             model:  Mpris.players.values.filter(p => !p.dbusName.includes("playerctld"))
-
             delegate: Rectangle {
                 required property var modelData
                 property var player: modelData
@@ -60,6 +66,7 @@ Rectangle    {
                         left: parent.left
                         right: parent.right
                         top: parent.top
+                        bottom: parent.bottom
                         margins: 10
                     }
                     spacing: 6
@@ -71,12 +78,13 @@ Rectangle    {
                         spacing: 10
 
                         Rectangle {
-                            Layout.preferredWidth: 56
-                            Layout.preferredHeight: 56
-                            Layout.maximumWidth: 56
-                            Layout.maximumHeight: 56
+                            Layout.preferredWidth: 120
+                            Layout.preferredHeight: 120
+                            Layout.maximumWidth: 120
+                            Layout.maximumHeight: 120
                             Layout.alignment: Qt.AlignVCenter
-                            radius: 6
+                            radius: 12
+
                             color: "#333"
                             layer.enabled: true
 
@@ -86,14 +94,6 @@ Rectangle    {
                                 fillMode: Image.PreserveAspectCrop
                                 visible: source !== ""
                             }
-
-                            Text {
-                                anchors.centerIn: parent
-                                text: "♪"
-                                color: "#d55c1b"
-                                font.pixelSize: 20
-                                visible: (player.trackArtUrl ?? "") === ""
-                            }
                         }
 
                         Column {
@@ -102,61 +102,80 @@ Rectangle    {
 
                             Text {
                                 text: player.trackTitle || "Unknown title"
-                                color: "#ffffff"
-                                font.pixelSize: 13
-                                font.weight: Font.Medium
+                                color: "#d55c1b"
+                                font.pixelSize: 18
+                                font.weight: Font.Bold
                                 elide: Text.ElideRight
                                 width: parent.width
                             }
+
                             Text {
                                 text: player.trackArtist || ""
                                 color: "#aaaaaa"
-                                font.pixelSize: 11
+                                font.pixelSize: 16
                                 elide: Text.ElideRight
                                 width: parent.width
                             }
                             Text {
                                 text: player.identity || player.dbusName || ""
                                 color: "#666"
-                                font.pixelSize: 10
+                                font.pixelSize: 16
                             }
-                        }
 
-                    }
+                            // Controls
+                            RowLayout {
+                                width: parent.width
 
-                    // Controls
-                    RowLayout {
-                        width: parent.width
+                                Item { Layout.fillWidth: true }
 
-                        Item { Layout.fillWidth: true }
+                                Repeater {
+                                    model: [
+                                        {
+                                            label: "⏮",
+                                            action: function() { player.previous()},
+                                            size: 18,
+                                            enabled: player.canGoPrevious
+                                        },
 
-                        Repeater {
-                            model: [
-                                { label: "⏮", action: function() { player.previous() }, enabled: player.canGoPrevious },
-                                { label: player.isPlaying ? "⏸" : "▶", action: function() { player.togglePlaying() }, enabled: player.canTogglePlaying },
-                                { label: "⏭", action: function() { player.next() }, enabled: player.canGoNext }
-                            ]
+                                        {
+                                            label: player.isPlaying ? "⏸" : "▶",
+                                            action: function() {player.togglePlaying()},
+                                            enabled: player.canTogglePlaying,
+                                            size: 24
+                                        },
+                                        {
+                                            label: "⏭", action: function() { player.next() },
+                                            size: 18,
+                                            enabled: player.canGoNext
+                                        }
+                                    ]
 
-                            delegate: Text {
-                                required property var modelData
-                                text: modelData.label
-                                color: modelData.enabled ? "#ffffff" : "#444"
-                                font.pixelSize: 18
-                                leftPadding: 8
-                                rightPadding: 8
+                                    delegate: Text {
+                                        required property var modelData
+                                        text: modelData.label
+                                        color: modelData.enabled ? "#ffffff" : "#444"
+                                        font.pixelSize: modelData.size
+                                        leftPadding: 8
+                                        rightPadding: 8
 
-                                MouseArea {
-                                    anchors.fill: parent
-                                    enabled: modelData.enabled
-                                    onClicked: modelData.action()
-                                    cursorShape: Qt.PointingHandCursor
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            enabled: modelData.enabled
+                                            onClicked: modelData.action()
+                                            cursorShape: Qt.PointingHandCursor
+                                        }
+                                    }
                                 }
+
+                                Item { Layout.fillWidth: true }
                             }
                         }
 
-                        Item { Layout.fillWidth: true }
                     }
+
+
                 }
+            }
             }
         }
 
@@ -167,5 +186,6 @@ Rectangle    {
             font.pixelSize: 12
             bottomPadding: 4
         }
+
     }
 }

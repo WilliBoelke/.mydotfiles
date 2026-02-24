@@ -48,19 +48,26 @@ PanelWindow {
         width: root.panelWidth
         color: "#1a000000"
 
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 12
+            spacing: 12
+
+            // Flyout popup, anchored to this bar's screen
+            MusicPlayer {
+                id: flyout
+                visible: root.flyoutOpen
+                Layout.alignment: Qt.AlignTop
+            }
+
+            Item { Layout.fillHeight: true }
+        }
+
         Behavior on anchors.leftMargin {
             NumberAnimation {
                 duration: 250
                 easing.type: Easing.OutCubic
             }
         }
-
-        // Flyout popup, anchored to this bar's screen
-        MusicPlayer {
-            id: flyout
-            visible: root.flyoutOpen
-        }
-
-
     }
 }
