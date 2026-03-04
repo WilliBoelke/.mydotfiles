@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Widgets
 import qs.services
+import Quickshell.Io
+
 PanelWindow {
     id: root
 
@@ -22,6 +24,8 @@ PanelWindow {
         bottom: true;
         right: true
     }
+
+
 
     width: root.panelWidth
     color: "transparent"
@@ -59,13 +63,46 @@ PanelWindow {
             spacing: 12
 
 
-            StatsCard {
-                accentColor: "#3D7F75"
-                title: "CPU"
-                value: CpuService.cpuUsage
-                Layout.fillWidth : true
-            }
+            RowLayout {
 
+                        StatsCard {
+                            accentColor: "#52E9EB"
+                            title: "CPU"
+                            unit: "%"
+                            value: CpuService.cpuUsage
+                            history: CpuService.history
+                            Layout.fillWidth : true
+                        }
+
+                StatsCard {
+                    accentColor: "#E10C05"
+                    title: "RAM"
+                    unit: "%"
+                    value: MemService.memUsage
+                    history: MemService.history
+                    Layout.fillWidth : true
+                }
+
+            }
+            RowLayout {
+                StatsCard {
+                    accentColor: "#DCD4DD"
+                    title: "GPU"
+                    unit: "%"
+                    value: CpuService.cpuUsage
+                    history: CpuService.history
+                    Layout.fillWidth : true
+                }
+                StatsCard {
+                    accentColor: "#E5790C"
+                    title: "CPU"
+                    unit: "%"
+                    value: CpuService.cpuUsage
+                    history: CpuService.history
+                    Layout.fillWidth : true
+                }
+
+            }
             Notifications {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -73,6 +110,11 @@ PanelWindow {
 
         }
 
-
+        Process {
+            id: btopProcess
+            command: ["kitty", "--hold", "btop"]
+        }
     }
 }
+
+

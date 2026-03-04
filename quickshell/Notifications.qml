@@ -21,6 +21,7 @@ Item {
         implicitHeight: contentCol.implicitHeight + (outerPadding * 2)
 
         ColumnLayout {
+            anchors.margins: 12
             id: contentCol
             implicitHeight: childrenRect.height
             anchors {
