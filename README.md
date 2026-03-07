@@ -24,14 +24,13 @@ dotfiles/
 ├── quickshell/         # My custom shell for hyprland
 ├── shared/             # Shared configs (GTK, Qt themes) (future)
 ├── kitty/              # Terminal emulator
-└── waybar/             # Status bar (to be replaced by quickshell)
 
 ## Installation
 
 ### Hyprland
 ```bash
 # Install dependencies
-sudo pacman -S qt6-svg qt6-multimedia hyprland hyprpicker kitty waybar grim slurp wl-clipboard cliphist nwg-displays hyprpaper nwg-dock-hyprland oh-my-posh quickshell
+sudo pacman -S qt6-svg qt6-multimedia hyprland hyprpicker kitty grim slurp wl-clipboard cliphist nwg-displays hyprpaper nwg-dock-hyprland oh-my-posh quickshell
 
  
 # Anyrun launcher 
@@ -44,7 +43,6 @@ sudo pacman -S ant-dark-gtk-theme
 # Deploy configs
 mv ~/.config/hypr ~/.config/hypr.backup  # backup if needed
 ln -s ~/dotfiles/hyprland ~/.config/hypr
-ln -s ~/dotfiles/waybar ~/.config/waybar
 ln -s ~/dotfiles/anyrun ~/.config/anyrun
 ln -s ~/dotfiles/hyprland/hyprpaper.conf ~/.config/hypr/hyprpaper.conf
 ln -s ~/dotfiles/nwg-dock-hyprland ~/.config/nwg-dock-hyprland

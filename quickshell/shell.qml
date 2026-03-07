@@ -35,6 +35,14 @@ ShellRoot {
                     onToggleSideLeftMenu: root.sideMenuLeftOpen = !root.sideMenuLeftOpen
                 }
 
+                property var topbar: TopBar {
+                    screen: modelData
+                    sideMenuRightOpen: root.sideMenuRightOpen
+                    sideMenuLeftOpen: root.sideMenuLeftOpen
+                    onToggleSideRightMenu: root.sideMenuRightOpen = !root.sideMenuRightOpen
+                    onToggleSideLeftMenu: root.sideMenuLeftOpen = !root.sideMenuLeftOpen
+                }
+
                 property var menuLeft: SideMenuLeft {
                     screen: modelData
                     open: root.sideMenuLeftOpen
@@ -44,12 +52,9 @@ ShellRoot {
                     screen: modelData
                     open: root.sideMenuRightOpen
                 }
+
             }
         }
     }
-
-
-
-
 
 }

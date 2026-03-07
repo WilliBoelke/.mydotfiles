@@ -3,34 +3,43 @@ import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
 
-
 Rectangle {
     id: root
 
+    property color backgroundColor: hoverArea.containsMouse ?  "#20ffffff" : "#15ffffff"
+    property int cardRadius: 6
+    property bool compact: false
     required property var notif
+    property int padding: 12
+    property bool showActions: true
     property bool showDismiss: true
     property bool showTime: true
-    property bool showActions: true
-    property bool compact: false
-    property int padding: 12
-    property color backgroundColor: "#15ffffff"
-    property int cardRadius: 6
 
-    signal dismissRequested()
+    signal dismissRequested
 
-    radius: root.cardRadius
     color: root.backgroundColor
     implicitHeight: contentCol.implicitHeight + (root.padding * 2)
+    radius: root.cardRadius
+
+    MouseArea {
+        id: hoverArea
+
+        anchors.fill: parent
+        hoverEnabled: true  // critical — without this containsMouse never updates
+    }
 
     ColumnLayout {
         id: contentCol
+        spacing: 6
+
         anchors {
             left: parent.left
+            margins: root.padding
             right: parent.right
             top: parent.top
-            margins: root.padding
         }
-        spacing: 6
+
+
 
         // Top row: icon + title + time + dismiss
         RowLayout {
@@ -38,43 +47,39 @@ Rectangle {
             spacing: 8
 
             IconImage {
-                Layout.preferredWidth: 20
-                Layout.preferredHeight: 20
-                Layout.maximumWidth: 20
                 Layout.maximumHeight: 20
+                Layout.maximumWidth: 20
+                Layout.preferredHeight: 20
+                Layout.preferredWidth: 20
                 source: Quickshell.iconPath(root.notif?.appIcon ?? "", "")
                 visible: source !== ""
             }
-
             Text {
                 Layout.fillWidth: true
-                text: root.notif?.summary ?? ""
-                color: "#ffffff"
-                font.pixelSize: 12
-                font.weight: Font.Medium
+                color: "#d55c1b"
                 elide: Text.ElideRight
+                font.pixelSize: 12
+                font.weight: Font.Bold
+                text: root.notif?.summary ?? ""
                 textFormat: Text.PlainText
             }
-
             Text {
-                text: root.notif?.time
-                    ? Qt.formatDateTime(new Date(root.notif.time * 1000), "hh:mm")
-                    : ""
                 color: "#555"
                 font.pixelSize: 10
+                text: root.notif?.time ? Qt.formatDateTime(new Date(root.notif.time * 1000), "hh:mm") : ""
                 visible: root.showTime && text !== ""
             }
-
             Text {
-                text: "✕"
                 color: "#555"
                 font.pixelSize: 11
+                text: "✕"
                 visible: root.showDismiss
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: root.dismissRequested()
                     cursorShape: Qt.PointingHandCursor
+
+                    onClicked: root.dismissRequested()
                 }
             }
         }
@@ -82,14 +87,14 @@ Rectangle {
         // Body
         Text {
             Layout.fillWidth: true
-            text: root.notif?.body ?? ""
             color: "#aaaaaa"
-            font.pixelSize: 11
-            wrapMode: Text.WordWrap
-            maximumLineCount: root.compact ? 3 : 4
             elide: Text.ElideRight
+            font.pixelSize: 11
+            maximumLineCount: root.compact ? 3 : 4
+            text: root.notif?.body ?? ""
             textFormat: Text.PlainText
             visible: text !== ""
+            wrapMode: Text.WordWrap
         }
 
         // Action buttons
@@ -101,28 +106,13 @@ Rectangle {
             Repeater {
                 model: root.notif?.actions ?? []
 
-                delegate: Rectangle {
-                    required property var modelData
+                delegate: BarButton {
                     property var action: modelData
+                    required property var modelData
 
-                    height: 24
-                    implicitWidth: actionLabel.implicitWidth + 16
-                    radius: 4
-                    color: "#22d55c1b"
+                    label: action.text ?? ""
 
-                    Text {
-                        id: actionLabel
-                        anchors.centerIn: parent
-                        text: action.text ?? ""
-                        color: "#d55c1b"
-                        font.pixelSize: 11
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: action.invoke()
-                        cursorShape: Qt.PointingHandCursor
-                    }
+                    onClicked: action.invoke()
                 }
             }
         }

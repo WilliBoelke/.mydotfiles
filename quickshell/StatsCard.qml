@@ -1,4 +1,3 @@
-
 import Quickshell
 import QtQuick
 import QtQuick.Layouts
@@ -22,15 +21,17 @@ Rectangle {
         graphCanvas.requestPaint()
     }
 
+    MouseArea {
+        anchors.fill: parent
+        onClicked: btopProcess.running = true
+        cursorShape: Qt.PointingHandCursor
+    }
+
     ColumnLayout {
         id: contentCol
         spacing: 6
         anchors.fill: parent
-        MouseArea {
-            anchors.fill: parent
-            z: -1
-            onClicked: btopProcess.running = true
-            cursorShape: Qt.PointingHandCursor
+
         // Layout
         RowLayout {
             Layout.preferredHeight: squareSize
@@ -47,15 +48,12 @@ Rectangle {
                     anchors.centerIn: parent
                     id : arcShape
                     ShapePath {
-                        Layout.preferredWidth: squareSize
-                        Layout.preferredHeight: squareSize
                         strokeWidth: 6
                         strokeColor: statsCard.accentColor
                         fillColor: "transparent"
+
                         PathAngleArc {
                             id: arc
-                            Layout.preferredWidth: squareSize
-                            Layout.preferredHeight: squareSize
                             centerX: squareSize / 2
                             centerY: squareSize / 2
                             radiusX: squareSize / 3
@@ -72,15 +70,11 @@ Rectangle {
                     anchors.centerIn: parent
                     id : arcShapeBg
                     ShapePath {
-                        Layout.preferredWidth: squareSize
-                        Layout.preferredHeight: squareSize
                         strokeWidth: 6
                         strokeColor: "#1a000000"
                         fillColor: "transparent"
                         PathAngleArc {
                             id: arcbg
-                            Layout.preferredWidth: squareSize
-                            Layout.preferredHeight: squareSize
                             centerX: squareSize / 2
                             centerY: squareSize / 2
                             radiusX: squareSize / 3
@@ -91,6 +85,7 @@ Rectangle {
                     }
 
                 }
+
                 ColumnLayout {
                     anchors.centerIn: parent
                     spacing: 0
@@ -129,14 +124,14 @@ Rectangle {
                         ctx.lineWidth = 2
                         ctx.lineCap = "round"
                         ctx.lineJoin = "round"
-                        ctx.shadowBlur = 10
+                        ctx.shadowBlur = 5
                         ctx.shadowColor = statsCard.accentColor
 
                         // gradient from center outward
                         const gradient = ctx.createLinearGradient(0, 0, 0, height)
-                        gradient.addColorStop(0, "transparent")
-                        gradient.addColorStop(0.5, statsCard.accentColor)
-                        gradient.addColorStop(1, "transparent")
+                        gradient.addColorStop(0, statsCard.accentColor)
+                        gradient.addColorStop(0.5, "transparent")
+                        gradient.addColorStop(1, statsCard.accentColor)
 
                         // build top and bottom paths
                         const topPoints = statsCard.history.map((item, index) => ({
@@ -144,7 +139,7 @@ Rectangle {
                             y: height / 2 - (height / 2 * (item.usage / 100))
                         }))
 
-                        const bottomPoints = [...topPoints].reverse().map((item, index) => ({
+                        const bottomPoints = [...topPoints].reverse().map(item => ({
                             x: item.x,
                             y: height - item.y
                         }))
@@ -171,7 +166,6 @@ Rectangle {
                 }
             }
         }
-        }
-        }
+    }
 
 }

@@ -36,3 +36,8 @@ if [ -f ~/.bashrc_custom ]; then
     source ~/.bashrc_custom
 fi
 eval "$(oh-my-posh init bash --config $HOME/.config/ohmyposh/zen.toml)"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/wboelke/.lmstudio/bin"
+# End of LM Studio CLI section
+

@@ -3,189 +3,197 @@ import Quickshell.Services.Mpris
 import QtQuick
 import QtQuick.Layouts
 
-
-
-
-Rectangle    {
-    color: "#1a000000"
-    radius: 6
+Rectangle {
     id: musicPlayer
+    visible: Mpris.players.values.length > 0
     property int outerPadding: 12
-    implicitWidth: parent.width
-    implicitHeight: contentCol.implicitHeight + (outerPadding * 2)
 
+    color: "#1a000000"
+    implicitHeight: contentCol.implicitHeight + (outerPadding * 2)
+    implicitWidth: parent.width
+    radius: 6
 
     onVisibleChanged: {
         if (visible) {
             for (var i = 0; i < Mpris.players.values.length; i++) {
-                var p = Mpris.players.values[i]
-                console.log(i, p.identity, p.dbusName, p.trackTitle, p.playbackState)
+                var p = Mpris.players.values[i];
+                console.log(i, p.identity, p.dbusName, p.trackTitle, p.playbackState);
             }
         }
     }
 
-
-    Rectangle    {
-        width: parent.width
-        height: contentCol.implicitHeight + (outerPadding * 2)
+    Rectangle {
         color: "transparent"
+        height: contentCol.implicitHeight + (outerPadding * 2)
+        width: parent.width
 
-    Column {
-        id: contentCol
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-            margins: outerPadding
-        }
-        spacing: 12
+        Column {
+            id: contentCol
 
-        // Header
-        Text {
-            text: "Now Playing"
-            color: "#d55c1b"
-            font.pixelSize: 24
-            font.weight: Font.Bold
-            topPadding: 4
-        }
-        // One card per player
-        Repeater {
-            model:  Mpris.players.values.filter(p => !p.dbusName.includes("playerctld"))
-            delegate: Rectangle {
-                required property var modelData
-                property var player: modelData
-                id : playerCard
-                width: contentCol.width
-                height: playerCol.implicitHeight + 16
-                radius: 6
-                color: player.isPlaying ? "#22d55c1b" : "#15ffffff"
+            spacing: 12
 
-                Column {
-                    id: playerCol
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        top: parent.top
-                        bottom: parent.bottom
-                        margins: 10
-                    }
-                    spacing: 6
+            anchors {
+                left: parent.left
+                margins: outerPadding
+                right: parent.right
+                top: parent.top
+            }
 
-                    // Player name + art row
-                    RowLayout {
-                        id : playerRow
-                        width: playerCard.width
-                        spacing: 10
+            // Header
+            Text {
+                color: "#d55c1b"
+                font.pixelSize: 20
+                font.weight: Font.Bold
+                text: "Now Playing"
+                topPadding: 4
+            }
 
-                        Rectangle {
-                            Layout.preferredWidth: 120
-                            Layout.preferredHeight: 120
-                            Layout.maximumWidth: 120
-                            Layout.maximumHeight: 120
-                            Layout.alignment: Qt.AlignVCenter
-                            radius: 12
+            // One card per player
+            Repeater {
+                model: Mpris.players.values.filter(p => !p.dbusName.includes("playerctld"))
 
-                            color: "#333"
-                            layer.enabled: true
+                delegate: Rectangle {
+                    id: playerCard
 
-                            Image {
-                                anchors.fill: parent
-                                source: player.trackArtUrl ?? ""
-                                fillMode: Image.PreserveAspectCrop
-                                visible: source !== ""
-                            }
+                    required property var modelData
+                    property var player: modelData
+
+                    color: player.isPlaying ? "#22d55c1b" : "#15ffffff"
+                    height: playerCol.implicitHeight + 16
+                    radius: 6
+                    width: contentCol.width
+
+                    Column {
+                        id: playerCol
+
+                        spacing: 6
+
+                        anchors {
+                            bottom: parent.bottom
+                            left: parent.left
+                            margins: 10
+                            right: parent.right
+                            top: parent.top
                         }
 
-                        Column {
-                            Layout.fillWidth: true
-                            spacing: 2
+                        // Player name + art row
+                        RowLayout {
+                            id: playerRow
 
-                            Text {
-                                text: player.trackTitle || "Unknown title"
-                                color: "#d55c1b"
-                                font.pixelSize: 18
-                                font.weight: Font.Bold
-                                elide: Text.ElideRight
-                                width: parent.width
+                            spacing: 10
+                            width: playerCard.width
+
+                            Rectangle {
+                                Layout.alignment: Qt.AlignVCenter
+                                Layout.maximumHeight: 120
+                                Layout.maximumWidth: 120
+                                Layout.preferredHeight: 120
+                                Layout.preferredWidth: 120
+                                color: "#333"
+                                layer.enabled: true
+                                radius: 12
+
+                                Image {
+                                    anchors.fill: parent
+                                    fillMode: Image.PreserveAspectCrop
+                                    source: player.trackArtUrl ?? ""
+                                    visible: source !== ""
+                                }
                             }
+                            Column {
+                                Layout.fillWidth: true
+                                spacing: 2
 
-                            Text {
-                                text: player.trackArtist || ""
-                                color: "#aaaaaa"
-                                font.pixelSize: 16
-                                elide: Text.ElideRight
-                                width: parent.width
-                            }
-                            Text {
-                                text: player.identity || player.dbusName || ""
-                                color: "#666"
-                                font.pixelSize: 16
-                            }
-
-                            // Controls
-                            RowLayout {
-                                width: parent.width
-
-                                Item { Layout.fillWidth: true }
-
-                                Repeater {
-                                    model: [
-                                        {
-                                            label: "⏮",
-                                            action: function() { player.previous()},
-                                            size: 18,
-                                            enabled: player.canGoPrevious
-                                        },
-
-                                        {
-                                            label: player.isPlaying ? "⏸" : "▶",
-                                            action: function() {player.togglePlaying()},
-                                            enabled: player.canTogglePlaying,
-                                            size: 24
-                                        },
-                                        {
-                                            label: "⏭", action: function() { player.next() },
-                                            size: 18,
-                                            enabled: player.canGoNext
-                                        }
-                                    ]
-
-                                    delegate: Text {
-                                        required property var modelData
-                                        text: modelData.label
-                                        color: modelData.enabled ? "#ffffff" : "#444"
-                                        font.pixelSize: modelData.size
-                                        leftPadding: 8
-                                        rightPadding: 8
-
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            enabled: modelData.enabled
-                                            onClicked: modelData.action()
-                                            cursorShape: Qt.PointingHandCursor
-                                        }
-                                    }
+                                Text {
+                                    color: "#d55c1b"
+                                    elide: Text.ElideRight
+                                    font.pixelSize: 18
+                                    font.weight: Font.Bold
+                                    text: player.trackTitle || "Unknown title"
+                                    width: parent.width
+                                }
+                                Text {
+                                    color: "#aaaaaa"
+                                    elide: Text.ElideRight
+                                    font.pixelSize: 16
+                                    text: player.trackArtist || ""
+                                    width: parent.width
+                                }
+                                Text {
+                                    color: "#666"
+                                    font.pixelSize: 16
+                                    text: player.identity || player.dbusName || ""
                                 }
 
-                                Item { Layout.fillWidth: true }
+                                // Controls
+                                RowLayout {
+                                    width: parent.width
+
+                                    Item {
+                                        Layout.fillWidth: true
+                                    }
+                                    Repeater {
+                                        model: [
+                                            {
+                                                label: "⏮",
+                                                action: function () {
+                                                    player.previous();
+                                                },
+                                                size: 18,
+                                                enabled: player.canGoPrevious
+                                            },
+                                            {
+                                                label: player.isPlaying ? "⏸" : "▶",
+                                                action: function () {
+                                                    player.togglePlaying();
+                                                },
+                                                enabled: player.canTogglePlaying,
+                                                size: 24
+                                            },
+                                            {
+                                                label: "⏭",
+                                                action: function () {
+                                                    player.next();
+                                                },
+                                                size: 18,
+                                                enabled: player.canGoNext
+                                            }
+                                        ]
+
+                                        delegate: Text {
+                                            required property var modelData
+
+                                            color: modelData.enabled ? "#ffffff" : "#444"
+                                            font.pixelSize: modelData.size
+                                            leftPadding: 8
+                                            rightPadding: 8
+                                            text: modelData.label
+
+                                            MouseArea {
+                                                anchors.fill: parent
+                                                cursorShape: Qt.PointingHandCursor
+                                                enabled: modelData.enabled
+
+                                                onClicked: modelData.action()
+                                            }
+                                        }
+                                    }
+                                    Item {
+                                        Layout.fillWidth: true
+                                    }
+                                }
                             }
                         }
-
                     }
-
-
                 }
             }
-            }
         }
-
         Text {
-            visible: Mpris.players.values.length === 0
-            text: "No players active"
+            bottomPadding: 4
             color: "#555"
             font.pixelSize: 12
-            bottomPadding: 4
+            text: "No players active"
+            visible: Mpris.players.values.length === 0
         }
-
     }
 }

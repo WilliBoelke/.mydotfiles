@@ -35,3 +35,8 @@ done
 if [ -f ~/.zshrc_custom ]; then
     source ~/.zshrc_custom
 fi
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/wboelke/.lmstudio/bin"
+# End of LM Studio CLI section
+

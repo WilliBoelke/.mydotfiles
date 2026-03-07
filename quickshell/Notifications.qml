@@ -23,7 +23,6 @@ Item {
         ColumnLayout {
             anchors.margins: 12
             id: contentCol
-            implicitHeight: childrenRect.height
             anchors {
                 fill: parent
                 margins: outerPadding
@@ -35,7 +34,7 @@ Item {
                 Text {
                     text: "Notifications"
                     color: "#d55c1b"
-                    font.pixelSize: 24
+                    font.pixelSize: 20
                     font.weight: Font.Bold
                     topPadding: 4
                 }
@@ -44,7 +43,7 @@ Item {
 
                 Text {
                     text: "Clear all"
-                    color: "#666"
+                    color: "#d55c1b"
                     font.pixelSize: 11
                     visible: NotificationService.trackedNotifications.values.length > 0
 
@@ -61,28 +60,34 @@ Item {
                 }
             }
 
+
             ListView {
                 Layout.fillWidth: true
                 implicitHeight: contentHeight
                 Layout.preferredHeight: implicitHeight
                 clip: true
                 spacing: 8
-
                 model: NotificationService.trackedNotifications
-
                 delegate: NotificationCard {
                     required property var modelData
                     notif: modelData
-
                     width: ListView.view.width
                     height: implicitHeight
                     cardRadius: 6
                     showActions: true
                     showTime: true
                     compact: false
-
                     onDismissRequested: notif.tracked = false
                 }
+            }
+
+            // if no notifications, show a message
+            Text {
+                text: "No notifications"
+                anchors.centerIn: parent
+                visible: NotificationService.trackedNotifications.values.length == 0
+                color: "#d55c1b"
+                font.pixelSize: 14
             }
         }
     }

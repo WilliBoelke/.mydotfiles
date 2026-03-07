@@ -3,6 +3,7 @@
 
 SCREENSHOT_DIR="$HOME/Pictures/Screenshots"
 mkdir -p "$SCREENSHOT_DIR"
+  notify-send "Screenshot" "Saved to teas"
 
 FILENAME="$SCREENSHOT_DIR/screenshot-$(date +%Y%m%d-%H%M%S).png"
 
