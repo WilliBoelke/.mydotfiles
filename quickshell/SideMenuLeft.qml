@@ -31,6 +31,28 @@ PanelWindow {
         top: true
     }
 
+    // Track whether content should be loaded:
+    // - Immediately on open
+    // - Delayed unload after close animation finishes
+    property bool contentLoaded: false
+
+    onOpenChanged: {
+        if (open) {
+            contentLoaded = true
+        } else {
+            unloadTimer.start()
+        }
+    }
+
+    Timer {
+        id: unloadTimer
+        interval: 300  // slightly longer than the 250ms close animation
+        onTriggered: {
+            if (!root.open)
+                root.contentLoaded = false
+        }
+    }
+
     // main penal boxa
     Rectangle {
         id: contentRect
@@ -52,33 +74,35 @@ PanelWindow {
             leftMargin: root.open ? 0 : -root.panelWidth
             top: parent.top
         }
-        Flickable {
-            id: menuScroll
-
+        Loader {
             anchors.fill: parent
-            clip: true
-            contentWidth: width
-            contentHeight: menuColumn.implicitHeight + 24
+            active: root.contentLoaded
+            sourceComponent: Flickable {
+                anchors.fill: parent
+                clip: true
+                contentWidth: width
+                contentHeight: menuColumn.implicitHeight + 24
 
-            ColumnLayout {
-                id: menuColumn
+                ColumnLayout {
+                    id: menuColumn
 
-                spacing: 12
-                width: menuScroll.width - 24
-                x: 12
-                y: 12
+                    spacing: 12
+                    width: parent.width - 24
+                    x: 12
+                    y: 12
 
-                // Flyout popup, anchored to this bar's screen
-                MusicPlayer {
-                    id: flyout
+                    // Flyout popup, anchored to this bar's screen
+                    MusicPlayer {
+                        id: flyout
 
-                    Layout.fillWidth: true
-                    visible: root.flyoutOpen
-                }
+                        Layout.fillWidth: true
+                        visible: root.flyoutOpen
+                    }
 
-                SettingsWidget {
-                    id: volumeWidget
-                    Layout.fillWidth: true
+                    SettingsWidget {
+                        id: volumeWidget
+                        Layout.fillWidth: true
+                    }
                 }
             }
         }

@@ -32,6 +32,28 @@ PanelWindow {
         top: true
     }
 
+    // Track whether content should be loaded:
+    // - Immediately on open
+    // - Delayed unload after close animation finishes
+    property bool contentLoaded: false
+
+    onOpenChanged: {
+        if (open) {
+            contentLoaded = true
+        } else {
+            unloadTimer.start()
+        }
+    }
+
+    Timer {
+        id: unloadTimer
+        interval: 300  // slightly longer than the 250ms close animation
+        onTriggered: {
+            if (!root.open)
+                root.contentLoaded = false
+        }
+    }
+
     // main penal boxa
     Rectangle {
         id: contentRect
@@ -53,81 +75,83 @@ PanelWindow {
             rightMargin: root.open ? 0 : -root.panelWidth
             top: parent.top
         }
-        Flickable {
-            id: menuScroll
-
+        Loader {
             anchors.fill: parent
-            clip: true
-            contentWidth: width
-            contentHeight: menuColumn.implicitHeight + 24
+            active: root.contentLoaded
+            sourceComponent: Flickable {
+                anchors.fill: parent
+                clip: true
+                contentWidth: width
+                contentHeight: menuColumn.implicitHeight + 24
 
-            ColumnLayout {
-                id: menuColumn
+                ColumnLayout {
+                    id: menuColumn
 
-                spacing: 12
-                width: menuScroll.width - 24
-                x: 12
-                y: 12
+                    spacing: 12
+                    width: parent.width - 24
+                    x: 12
+                    y: 12
 
-                RowLayout {
-                    Layout.fillWidth: true
+                    RowLayout {
+                        Layout.fillWidth: true
 
-                    StatsCard {
-                        Layout.fillWidth: true
-                        accentColor: "#52E9EB"
-                        history: CpuService.history
-                        title: "CPU"
-                        unit: "%"
-                        value: CpuService.cpuUsage
+                        StatsCard {
+                            Layout.fillWidth: true
+                            accentColor: "#52E9EB"
+                            history: CpuService.history
+                            title: "CPU"
+                            unit: "%"
+                            value: CpuService.cpuUsage
+                        }
+                        StatsCard {
+                            Layout.fillWidth: true
+                            accentColor: "#E10C05"
+                            history: MemService.history
+                            title: "RAM"
+                            unit: "%"
+                            value: MemService.memUsage
+                        }
                     }
-                    StatsCard {
+                    RowLayout {
                         Layout.fillWidth: true
-                        accentColor: "#E10C05"
-                        history: MemService.history
-                        title: "RAM"
-                        unit: "%"
-                        value: MemService.memUsage
-                    }
-                }
-                RowLayout {
-                    Layout.fillWidth: true
 
-                    StatsCard {
-                        Layout.fillWidth: true
-                        accentColor: "#DCD4DD"
-                        history: NvidiaGpuService.history
-                        title: "GPU"
-                        unit: "%"
-                        value: NvidiaGpuService.gpuUsage
+                        StatsCard {
+                            Layout.fillWidth: true
+                            accentColor: "#DCD4DD"
+                            history: NvidiaGpuService.history
+                            title: "GPU"
+                            unit: "%"
+                            value: NvidiaGpuService.gpuUsage
+                        }
+                        StatsCard {
+                            Layout.fillWidth: true
+                            accentColor: "#d55c1b"
+                            history: CpuService.history
+                            title: "CPU"
+                            unit: "%"
+                            value: CpuService.cpuUsage
+                        }
                     }
-                    StatsCard {
+                    RowLayout {
                         Layout.fillWidth: true
-                        accentColor: "#d55c1b"
-                        history: CpuService.history
-                        title: "CPU"
-                        unit: "%"
-                        value: CpuService.cpuUsage
-                    }
-                }
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: 8
+                        spacing: 8
 
-                    InfoCard {
-                        Layout.fillWidth: true
-                        accentColor: "#d55c1b"
-                        title: "Uptime"
-                        value: UptimeService.uptime
+                        InfoCard {
+                            Layout.fillWidth: true
+                            accentColor: "#d55c1b"
+                            title: "Uptime"
+                            value: UptimeService.uptime
+                        }
+                        InfoCard {
+                            Layout.fillWidth: true
+                            accentColor: "#d55c1b"
+                            title: "Boottime"
+                            value: BootTimeService.bootTime
+                        }
                     }
-                    InfoCard {
+                    Notifications {
                         Layout.fillWidth: true
-                        accentColor: "#d55c1b"
-                        title: "Boottime"
-                        value: BootTimeService.bootTime
                     }
-                }
-                Notifications {
-                    Layout.fillWidth: true
                 }
             }
         }

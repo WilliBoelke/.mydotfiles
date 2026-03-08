@@ -18,7 +18,13 @@ Rectangle {
     implicitHeight: squareSize
 
     onHistoryChanged: {
-        graphCanvas.requestPaint()
+        if (statsCard.visible && statsCard.width > 0)
+            graphCanvas.requestPaint()
+    }
+
+    onVisibleChanged: {
+        if (visible && history.length > 0)
+            graphCanvas.requestPaint()
     }
 
     MouseArea {
@@ -119,6 +125,7 @@ Rectangle {
                     height: parent.height
 
                     onPaint: {
+                        console.log("painting")
                         const ctx = getContext("2d")
                         ctx.clearRect(0, 0, width, height)
                         ctx.lineWidth = 2
