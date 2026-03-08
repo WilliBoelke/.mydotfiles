@@ -2,16 +2,26 @@ import Quickshell
 import Quickshell.Services.Mpris
 import QtQuick
 import QtQuick.Layouts
+import Quickshell.Widgets
+import qs.consts
+import QtQuick.Effects
 
 Rectangle {
     id: musicPlayer
-    visible: Mpris.players.values.length > 0
+
+    property int cardPadding: 6
+    property int cardSpacing: 6
+    property int emptyStateBottomPadding: 4
+    property int headerTopPadding: 4
+    property int mediaRowSpacing: 10
     property int outerPadding: 12
+    property int sectionSpacing: 12
 
     color: "#1a000000"
     implicitHeight: contentCol.implicitHeight + (outerPadding * 2)
     implicitWidth: parent.width
     radius: 6
+    visible: Mpris.players.values.length > 0
 
     onVisibleChanged: {
         if (visible) {
@@ -30,7 +40,7 @@ Rectangle {
         Column {
             id: contentCol
 
-            spacing: 12
+            spacing: sectionSpacing
 
             anchors {
                 left: parent.left
@@ -45,7 +55,7 @@ Rectangle {
                 font.pixelSize: 20
                 font.weight: Font.Bold
                 text: "Now Playing"
-                topPadding: 4
+                topPadding: headerTopPadding
             }
 
             // One card per player
@@ -55,23 +65,48 @@ Rectangle {
                 delegate: Rectangle {
                     id: playerCard
 
+                    property color backgroundColor: hoverArea.containsMouse ? "#20ffffff" : "#15ffffff"
                     required property var modelData
                     property var player: modelData
 
-                    color: player.isPlaying ? "#22d55c1b" : "#15ffffff"
-                    height: playerCol.implicitHeight + 16
-                    radius: 6
+                    color: backgroundColor
+                    height: playerCol.implicitHeight + (cardPadding * 2)
+                    radius: 12
                     width: contentCol.width
 
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: 200
+                        }
+                    }
+
+
+                    layer.enabled: true
+
+                    layer.effect: MultiEffect {
+                        shadowBlur: 1
+                        shadowColor: "#80000000"
+                        shadowEnabled: true
+                        shadowHorizontalOffset: 0
+                        shadowVerticalOffset: 4
+                    }
+
+                    MouseArea {
+                        id: hoverArea
+
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                    }
                     Column {
                         id: playerCol
 
-                        spacing: 6
+                        spacing: cardSpacing
 
                         anchors {
                             bottom: parent.bottom
                             left: parent.left
-                            margins: 10
+                            margins: cardPadding
                             right: parent.right
                             top: parent.top
                         }
@@ -80,16 +115,16 @@ Rectangle {
                         RowLayout {
                             id: playerRow
 
-                            spacing: 10
+                            spacing: mediaRowSpacing
                             width: playerCard.width
 
-                            Rectangle {
+                            ClippingRectangle {
                                 Layout.alignment: Qt.AlignVCenter
                                 Layout.maximumHeight: 120
                                 Layout.maximumWidth: 120
                                 Layout.preferredHeight: 120
                                 Layout.preferredWidth: 120
-                                color: "#333"
+                                color: "transparent"
                                 layer.enabled: true
                                 radius: 12
 
@@ -139,7 +174,7 @@ Rectangle {
                                                 action: function () {
                                                     player.previous();
                                                 },
-                                                size: 18,
+                                                size: 24,
                                                 enabled: player.canGoPrevious
                                             },
                                             {
@@ -155,7 +190,7 @@ Rectangle {
                                                 action: function () {
                                                     player.next();
                                                 },
-                                                size: 18,
+                                                size: 24,
                                                 enabled: player.canGoNext
                                             }
                                         ]
@@ -163,10 +198,12 @@ Rectangle {
                                         delegate: Text {
                                             required property var modelData
 
-                                            color: modelData.enabled ? "#ffffff" : "#444"
+                                            color: Colors.accent
+                                            font.family: "JetBrainsMono Nerd Font"
                                             font.pixelSize: modelData.size
-                                            leftPadding: 8
-                                            rightPadding: 8
+                                            font.weight: Font.Bold
+                                            leftPadding: 12
+                                            rightPadding: 12
                                             text: modelData.label
 
                                             MouseArea {
@@ -189,7 +226,7 @@ Rectangle {
             }
         }
         Text {
-            bottomPadding: 4
+            bottomPadding: emptyStateBottomPadding
             color: "#555"
             font.pixelSize: 12
             text: "No players active"

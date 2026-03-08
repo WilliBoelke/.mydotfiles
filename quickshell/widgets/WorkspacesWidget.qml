@@ -56,7 +56,6 @@ Row {
             Behavior on color {
                 ColorAnimation {
                     duration: 200
-
                 }
             }
 

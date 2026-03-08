@@ -9,7 +9,7 @@ Rectangle {
     id: root
 
     property color backgroundColor: hoverArea.containsMouse ?  "#20ffffff" : "#15ffffff"
-    property int cardRadius: 6
+    property int cardRadius: 62
     property bool compact: false
     required property var notif
     property int padding: 12
@@ -23,13 +23,17 @@ Rectangle {
     implicitHeight: contentCol.implicitHeight + (root.padding * 2)
     radius: root.cardRadius
 
-    MouseArea {
-        id: hoverArea
-
-        anchors.fill: parent
-        hoverEnabled: true  // critical — without this containsMouse never updates
+    Behavior on color {
+        ColorAnimation {
+            duration: 200
+        }
     }
 
+    MouseArea {
+        id: hoverArea
+        anchors.fill: parent
+        hoverEnabled: true
+    }
     ColumnLayout {
         id: contentCol
         spacing: 6
