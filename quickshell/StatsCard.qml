@@ -120,19 +120,18 @@ Rectangle {
                 Layout.preferredWidth: squareSize * 1.5
                 anchors.margins: 12
                 Canvas {
-                    id: graphCanvas
+                    id: graphCanvasa
                     width: parent.width
                     height: parent.height
 
                     onPaint: {
-                        console.log("painting")
                         const ctx = getContext("2d")
                         ctx.clearRect(0, 0, width, height)
                         ctx.lineWidth = 2
                         ctx.lineCap = "round"
                         ctx.lineJoin = "round"
                         ctx.shadowBlur = 5
-                        ctx.shadowColor = statsCard.accentColor
+                        ctx.shadowColor = statsCard.accentColorGr
 
                         // gradient from center outward
                         const gradient = ctx.createLinearGradient(0, 0, 0, height)
