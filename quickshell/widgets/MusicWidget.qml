@@ -3,6 +3,7 @@ import Quickshell.Services.Mpris
 import QtQuick
 import QtQuick.Layouts
 
+
 Item {
     id: root
     implicitWidth: row.implicitWidth + 16

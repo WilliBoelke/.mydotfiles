@@ -1,6 +1,7 @@
 import Quickshell
 import QtQuick
 import Quickshell.Hyprland
+import qs.bars
 
 ShellRoot {
 
@@ -27,7 +28,7 @@ ShellRoot {
                 property bool sideMenuRightOpen: false
                 property bool sideMenuLeftOpen: false
 
-                property var bar: Bar {
+                property var bar: BottomBar {
                     screen: modelData
                     sideMenuRightOpen: root.sideMenuRightOpen
                     sideMenuLeftOpen: root.sideMenuLeftOpen

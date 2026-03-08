@@ -53,67 +53,82 @@ PanelWindow {
             rightMargin: root.open ? 0 : -root.panelWidth
             top: parent.top
         }
-        ColumnLayout {
+        Flickable {
+            id: menuScroll
+
             anchors.fill: parent
-            anchors.margins: 12
-            spacing: 12
+            clip: true
+            contentWidth: width
+            contentHeight: menuColumn.implicitHeight + 24
 
-            RowLayout {
-                StatsCard {
-                    Layout.fillWidth: true
-                    accentColor: "#52E9EB"
-                    history: CpuService.history
-                    title: "CPU"
-                    unit: "%"
-                    value: CpuService.cpuUsage
-                }
-                StatsCard {
-                    Layout.fillWidth: true
-                    accentColor: "#E10C05"
-                    history: MemService.history
-                    title: "RAM"
-                    unit: "%"
-                    value: MemService.memUsage
-                }
-            }
-            RowLayout {
-                StatsCard {
-                    Layout.fillWidth: true
-                    accentColor: "#DCD4DD"
-                    history: NvidiaGpuService.history
-                    title: "GPU"
-                    unit: "%"
-                    value: NvidiaGpuService.gpuUsage
-                }
-                StatsCard {
-                    Layout.fillWidth: true
-                    accentColor: "#d55c1b"
-                    history: CpuService.history
-                    title: "CPU"
-                    unit: "%"
-                    value: CpuService.cpuUsage
-                }
-            }
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 8
+            ColumnLayout {
+                id: menuColumn
 
-                InfoCard {
+                spacing: 12
+                width: menuScroll.width - 24
+                x: 12
+                y: 12
+
+                RowLayout {
                     Layout.fillWidth: true
-                    accentColor: "#d55c1b"
-                    title: "Uptime"
-                    value: UptimeService.uptime
+
+                    StatsCard {
+                        Layout.fillWidth: true
+                        accentColor: "#52E9EB"
+                        history: CpuService.history
+                        title: "CPU"
+                        unit: "%"
+                        value: CpuService.cpuUsage
+                    }
+                    StatsCard {
+                        Layout.fillWidth: true
+                        accentColor: "#E10C05"
+                        history: MemService.history
+                        title: "RAM"
+                        unit: "%"
+                        value: MemService.memUsage
+                    }
                 }
-                InfoCard {
+                RowLayout {
                     Layout.fillWidth: true
-                    accentColor: "#d55c1b"
-                    title: "Boottime"
-                    value: BootTimeService.bootTime
+
+                    StatsCard {
+                        Layout.fillWidth: true
+                        accentColor: "#DCD4DD"
+                        history: NvidiaGpuService.history
+                        title: "GPU"
+                        unit: "%"
+                        value: NvidiaGpuService.gpuUsage
+                    }
+                    StatsCard {
+                        Layout.fillWidth: true
+                        accentColor: "#d55c1b"
+                        history: CpuService.history
+                        title: "CPU"
+                        unit: "%"
+                        value: CpuService.cpuUsage
+                    }
                 }
-            }
-            Notifications {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 8
+
+                    InfoCard {
+                        Layout.fillWidth: true
+                        accentColor: "#d55c1b"
+                        title: "Uptime"
+                        value: UptimeService.uptime
+                    }
+                    InfoCard {
+                        Layout.fillWidth: true
+                        accentColor: "#d55c1b"
+                        title: "Boottime"
+                        value: BootTimeService.bootTime
+                    }
+                }
+                Notifications {
+                    Layout.fillWidth: true
+                }
             }
         }
         Process {
@@ -123,4 +138,3 @@ PanelWindow {
         }
     }
 }
-

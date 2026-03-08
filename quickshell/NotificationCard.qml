@@ -2,6 +2,8 @@ import Quickshell
 import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
+import qs.widgets
+import qs.consts
 
 Rectangle {
     id: root
@@ -56,7 +58,7 @@ Rectangle {
             }
             Text {
                 Layout.fillWidth: true
-                color: "#d55c1b"
+                color: Colors.accent
                 elide: Text.ElideRight
                 font.pixelSize: 12
                 font.weight: Font.Bold

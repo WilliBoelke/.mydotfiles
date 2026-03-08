@@ -3,6 +3,7 @@ import Quickshell.Services.Notifications
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Widgets
+import qs.widgets
 
 PanelWindow {
     id: root
@@ -11,62 +12,74 @@ PanelWindow {
     property bool open: false
     property int panelWidth: 600
 
-    margins {
-        top: 20
-        bottom: 20
-        left: 20
-    }
-
-
-    anchors {
-        top: true;
-        bottom: true;
-        left: true
-    }
-
-    width: root.panelWidth
     color: "transparent"
     exclusionMode: ExclusionMode.Normal
+    width: root.panelWidth
+
     mask: Region {
         item: root.open ? contentRect : null
+    }
+
+    margins {
+        bottom: 20
+        left: 20
+        top: 20
+    }
+    anchors {
+        bottom: true
+        left: true
+        top: true
     }
 
     // main penal boxa
     Rectangle {
         id: contentRect
-        radius : 12
 
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            left: parent.left
-            leftMargin: root.open ? 0 : -root.panelWidth
-        }
-
-
-
-        width: root.panelWidth
         color: "#1a000000"
-
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 12
-            spacing: 12
-
-            // Flyout popup, anchored to this bar's screen
-            MusicPlayer {
-                id: flyout
-                visible: root.flyoutOpen
-                Layout.alignment: Qt.AlignTop
-            }
-
-            Item { Layout.fillHeight: true }
-        }
+        radius: 12
+        width: root.panelWidth
 
         Behavior on anchors.leftMargin {
             NumberAnimation {
                 duration: 250
                 easing.type: Easing.OutCubic
+            }
+        }
+
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            leftMargin: root.open ? 0 : -root.panelWidth
+            top: parent.top
+        }
+        Flickable {
+            id: menuScroll
+
+            anchors.fill: parent
+            clip: true
+            contentWidth: width
+            contentHeight: menuColumn.implicitHeight + 24
+
+            ColumnLayout {
+                id: menuColumn
+
+                spacing: 12
+                width: menuScroll.width - 24
+                x: 12
+                y: 12
+
+                // Flyout popup, anchored to this bar's screen
+                MusicPlayer {
+                    id: flyout
+
+                    Layout.fillWidth: true
+                    visible: root.flyoutOpen
+                }
+
+                SettingsWidget {
+                    id: volumeWidget
+                    Layout.fillWidth: true
+                }
             }
         }
     }
