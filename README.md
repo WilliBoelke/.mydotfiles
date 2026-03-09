@@ -42,7 +42,6 @@ sudo pacman -S ant-dark-gtk-theme
 mv ~/.config/hypr ~/.config/hypr.backup  # backup if needed
 ln -s ~/dotfiles/hyprland ~/.config/hypr
 ln -s ~/dotfiles/anyrun ~/.config/anyrun
-ln -s ~/dotfiles/hyprland/hyprpaper.conf ~/.config/hypr/hyprpaper.conf
 
 # Quickshell
 ln -s ~/dotfiles/quickshell ~/.config/quickshell

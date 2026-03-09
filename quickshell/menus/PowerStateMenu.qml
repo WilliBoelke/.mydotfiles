@@ -60,6 +60,6 @@ Drawer {
     }
     Process {
         id: procLogout
-        command: ["hyprctl", "dispatch", "exit"]
+        command: ["sh", "-c", "pidof hyprlock || hyprlock"]
     }
 }
