@@ -25,14 +25,13 @@ Item {
             id: contentCol
 
             anchors.margins: 12
-            spacing: 12
 
             anchors {
                 fill: parent
                 margins: outerPadding
             }
             RowLayout {
-                width: parent.width
+                Layout.fillWidth: true
 
                 Text {
                     color: "#d55c1b"
@@ -44,8 +43,13 @@ Item {
             }
 
             ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 12
                 VolumeWidget {
                     id: volumeWidget
+                    Layout.fillWidth: true
+                }
+                BluetoothWidget {
                     Layout.fillWidth: true
                 }
             }
