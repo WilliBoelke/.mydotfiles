@@ -25,6 +25,14 @@ QtObject {
     readonly property color gray600: "#666666"
     readonly property color gray300: "#aaaaaa"
 
+    // System
+    readonly property color green: "#46a86a"
+    readonly property color red: "#e10c05"
+    readonly property color yellow: "#a3a304"
+    readonly property color blue: "#52e9eb"
+    readonly property color purple: "#610a61"
+
+
     // Text
     readonly property color textPrimary: accent
     readonly property color textSecondary: gray300

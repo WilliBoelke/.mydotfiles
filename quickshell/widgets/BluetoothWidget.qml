@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 import Quickshell.Io
 import Quickshell.Bluetooth
-import Quickshell
+import QtQuick.Controls
 
 Rectangle {
     id: root
@@ -13,26 +13,117 @@ Rectangle {
     property bool btConnected: Bluetooth.defaultAdapter.connected
     property string btName: Bluetooth.defaultAdapter.name
     property var connectedDevices: Bluetooth.defaultAdapter.devices.values.filter(d => d.connected)
+    property bool expanded: false
 
     color: "transparent"
-    implicitHeight: 120
+    implicitHeight: expanded ? 120 + 300 : 120
     implicitWidth: 200
 
-    // the menu
-    RowLayout {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: 120
+    // transition height
+    Behavior on implicitHeight {
+        NumberAnimation {
+            duration: 200
+        }
+    }
+
+    ColumnLayout {
+        anchors.fill: parent
         spacing: 8
 
-        Repeater {
-            model: root.connectedDevices
+        // the menu
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.maximumHeight: 120
+            Layout.preferredHeight: 120
+            spacing: 8
 
-            delegate: BluetoothDeviceItem {
-                Layout.fillWidth: true
+            Repeater {
+                model: root.connectedDevices
+
+                delegate: BluetoothDeviceItem {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    cardMode: true
+                    device: modelData
+                }
+            }
+            Rectangle {
                 Layout.fillHeight: true
-                cardMode: true
-                device: modelData
+                Layout.preferredWidth: 120
+                border.width: 1
+                border.color: "#33d55c1b"
+                color: hoverArea.containsMouse ? "#20ffffff" : "#15ffffff"
+                radius: 10
+
+                // clicked on the expand button
+                MouseArea {
+                    id: hoverArea
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+
+                    onClicked: {
+                        root.expanded = !root.expanded;
+                        if (root.expanded) {
+                            Bluetooth.defaultAdapter.discovering = true;
+                        } else {
+                            Bluetooth.defaultAdapter.discovering = false;
+                        }
+                    }
+                }
+
+                // Nerdmont settings icon
+                Text {
+                    anchors.centerIn: parent
+                    color: "#d55c1b"
+                    font.family: "JetBrainsMono Nerd Font"
+                    font.pixelSize: 46
+                    horizontalAlignment: Text.AlignHCenter
+                    text: "󰂳"
+                }
+            }
+        }
+
+
+        // expanded layout for further settings
+        ColumnLayout {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            spacing: 8
+            visible: root.expanded
+
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 30
+                Layout.maximumHeight: 30
+                spacing: 8
+
+                // A SETTINGS ROW?
+            }
+            Flickable {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                clip: true
+                contentHeight: deviceList.implicitHeight
+                contentWidth: width
+
+                ColumnLayout {
+                    id: deviceList
+                    width: parent.width
+                    spacing: 8
+
+                    // List discovered devices
+                    Repeater {
+                        model: Bluetooth.defaultAdapter.devices.values
+
+                        delegate: BluetoothDeviceItem {
+                            Layout.fillWidth: true
+                            implicitHeight: 52
+                            cardMode: false
+                            device: modelData
+                        }
+                    }
+                }
             }
         }
     }

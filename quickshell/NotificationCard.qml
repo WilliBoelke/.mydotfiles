@@ -34,6 +34,7 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
     }
+
     ColumnLayout {
         id: contentCol
         spacing: 6

@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import Quickshell.Services.Mpris
 import Quickshell.Hyprland
 import qs.widgets
+import qs.menus
+import qs.consts
 
 PanelWindow {
     id: root
@@ -25,12 +27,11 @@ PanelWindow {
         top: true
     }
     margins {
-        top: 6
+        bottom: 0
         left: 20
         right: 20
-        bottom: 0
+        top: 6
     }
-
     Rectangle {
         anchors.fill: parent
         color: "#15000000"
@@ -42,6 +43,8 @@ PanelWindow {
 
             // Left: music widget
             QuickSettingsWidget {
+            }
+            PowerStateMenu{
             }
             Item {
                 Layout.fillWidth: true
