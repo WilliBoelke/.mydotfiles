@@ -3,8 +3,8 @@ Config(
   position: Top,
   vertical_offset: 45,
   hide_plugin_info: true,
-  hide_icons: true,
-  show_results_immediately: false,
+  hide_icons: false,
+  show_results_immediately: true,
   max_entries: Some(15),
   plugins: [
     "libapplications.so",
