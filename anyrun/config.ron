@@ -6,6 +6,7 @@ Config(
   hide_icons: false,
   show_results_immediately: true,
   max_entries: Some(15),
+  close_on_click: true,
   plugins: [
     "libapplications.so",
     "libshell.so",

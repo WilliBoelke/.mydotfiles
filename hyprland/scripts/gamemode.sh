@@ -6,39 +6,34 @@
 # /___/                                     
 # launch
 
-
-ml4w_cache_folder="$HOME/.cache/ml4w/hyprland-dotfiles"
+cache_folder="$HOME/.cache/hyprland"
 gamemode_monitor="$HOME/.config/hypr/conf/monitors/gamemode.conf"
+gamemode_flag="$cache_folder/gamemode-enabled"
 
-# Notifications
-source "$HOME/.config/ml4w/scripts/ml4w-notification-handler"
-APP_NAME="System"
-NOTIFICATION_ICON="joystick"
+mkdir -p "$cache_folder"
 
-
-if [ -f $HOME/.config/ml4w/settings/gamemode-enabled ]; then
-  if [ -f $ml4w_cache_folder/last_monitor.conf ]; then
-    cat $ml4w_cache_folder/last_monitor.conf > $HOME/.config/hypr/conf/monitor.conf
-    rm $ml4w_cache_folder/last_monitor.conf
+if [ -f "$gamemode_flag" ]; then
+  # Gamemode is ON → turn it OFF
+  if [ -f "$cache_folder/last_monitor.conf" ]; then
+    cat "$cache_folder/last_monitor.conf" > "$HOME/.config/hypr/conf/monitor.conf"
+    rm "$cache_folder/last_monitor.conf"
   fi
-  if [ -f $ml4w_cache_folder/restart-wpauto ]; then
-    rm $ml4w_cache_folder/restart-wpauto
-    $HOME/.config/hypr/scripts/wallpaper-automation.sh &
+  if [ -f "$cache_folder/restart-wpauto" ]; then
+    rm "$cache_folder/restart-wpauto"
+    "$HOME/.config/hypr/scripts/wallpaper-automation.sh" &
   fi
   hyprctl reload
-  rm $HOME/.config/ml4w/settings/gamemode-enabled
-  notify_user --a "${APP_NAME}" \
-            --i "${NOTIFICATION_ICON}" \
-            --s "Gamemode deactivated" \
-            --m "Animations and blur are now enabled."
+  rm "$gamemode_flag"
+  notify-send -a "System" -i "joystick" "Gamemode deactivated" "Animations and blur are now enabled."
 else
-  if [ -f $gamemode_monitor ]; then
-    cat $HOME/.config/hypr/conf/monitor.conf > $ml4w_cache_folder/last_monitor.conf
-    echo "source = $gamemode_monitor" > $HOME/.config/hypr/conf/monitor.conf
+  # Gamemode is OFF → turn it ON
+  if [ -f "$gamemode_monitor" ]; then
+    cat "$HOME/.config/hypr/conf/monitor.conf" > "$cache_folder/last_monitor.conf"
+    echo "source = $gamemode_monitor" > "$HOME/.config/hypr/conf/monitor.conf"
   fi
-  if [ -f $ml4w_cache_folder/wallpaper-automation ]; then
-    touch $ml4w_cache_folder/restart-wpauto
-    $HOME/.config/hypr/scripts/wallpaper-automation.sh
+  if [ -f "$cache_folder/wallpaper-automation" ]; then
+    touch "$cache_folder/restart-wpauto"
+    "$HOME/.config/hypr/scripts/wallpaper-automation.sh"
   fi
   hyprctl --batch "\
     keyword animations:enabled 0;\
@@ -51,9 +46,7 @@ else
     keyword decoration:inactive_opacity 1;\
     keyword decoration:fullscreen_opacity 1;\
     keyword decoration:rounding 0"
-  touch $HOME/.config/ml4w/settings/gamemode-enabled
-  notify_user --a "${APP_NAME}" \
-          --i "${NOTIFICATION_ICON}" \
-          --s "Gamemode activated" \
-          --m "Animations and blur are now disabled."
+  touch "$gamemode_flag"
+  notify-send -a "System" -i "joystick" "Gamemode activated" "Animations and blur are now disabled."
 fi
+
