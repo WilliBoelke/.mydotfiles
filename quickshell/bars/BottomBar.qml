@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import Quickshell.Services.Mpris
 import Quickshell.Hyprland
 import qs.widgets
+import qs.services
+
 PanelWindow {
     id: root
 
@@ -31,7 +33,8 @@ PanelWindow {
     }
     Rectangle {
         anchors.fill: parent
-        color: "#15000000"
+        color: ThemeService.active.bgBase
+
         radius: 12
 
         RowLayout {

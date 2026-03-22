@@ -45,6 +45,7 @@ PanelWindow {
         }
     }
 
+
     Timer {
         id: unloadTimer
         interval: 300  // slightly longer than the 250ms close animation
@@ -58,7 +59,7 @@ PanelWindow {
     Rectangle {
         id: contentRect
 
-        color: "#1a000000"
+        color: ThemeService.active.bgBase
         radius: 12
         width: root.panelWidth
 
@@ -68,6 +69,8 @@ PanelWindow {
                 easing.type: Easing.OutCubic
             }
         }
+
+
 
         anchors {
             bottom: parent.bottom

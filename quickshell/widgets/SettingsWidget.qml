@@ -4,6 +4,9 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Widgets
 import qs.services
+import qs.controls
+import QtQuick.Controls
+import Quickshell.Io
 
 Item {
     id: root
@@ -52,8 +55,35 @@ Item {
                 BluetoothWidget {
                     Layout.fillWidth: true
                 }
+                RowLayout {
+                    spacing: 12
+                    IconButton {
+                        Layout.fillWidth: true
+                        iconText: "󰺶"
+                        title: "GameMode"
+                        subtitle: "Improve performance for games"
+                        active: GameModeService.enabled
+                        onClicked: {
+                            gameModeProcess.running = true;
+                        }
+                    }
+                    IconButton {
+                        Layout.fillWidth: true
+                        iconText: "\uf1e6"
+                        title: ""
+                        subtitle: "View and manage notifications"
+                        onClicked: {
+                            Notifications.showCenter = true;
+                        }
+                    }
+                }
             }
 
         }
+    }
+    Process {
+        id: gameModeProcess
+
+        command: ["sh", "-c", "~/.config/hypr/scripts/gamemode.sh"]
     }
 }

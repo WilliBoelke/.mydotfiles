@@ -12,8 +12,9 @@ gamemode_flag="$cache_folder/gamemode-enabled"
 
 mkdir -p "$cache_folder"
 
+
+# Gamemode is ON → turn it OFF
 if [ -f "$gamemode_flag" ]; then
-  # Gamemode is ON → turn it OFF
   if [ -f "$cache_folder/last_monitor.conf" ]; then
     cat "$cache_folder/last_monitor.conf" > "$HOME/.config/hypr/conf/monitor.conf"
     rm "$cache_folder/last_monitor.conf"
@@ -25,8 +26,9 @@ if [ -f "$gamemode_flag" ]; then
   hyprctl reload
   rm "$gamemode_flag"
   notify-send -a "System" -i "joystick" "Gamemode deactivated" "Animations and blur are now enabled."
+
+# Gamemode is OFF → turn it ON
 else
-  # Gamemode is OFF → turn it ON
   if [ -f "$gamemode_monitor" ]; then
     cat "$HOME/.config/hypr/conf/monitor.conf" > "$cache_folder/last_monitor.conf"
     echo "source = $gamemode_monitor" > "$HOME/.config/hypr/conf/monitor.conf"

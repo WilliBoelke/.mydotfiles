@@ -1,4 +1,4 @@
-pragma Singleton
+
 import QtQuick
 
 QtObject {
@@ -32,26 +32,27 @@ QtObject {
     readonly property color accentSubtle: Qt.rgba(0.835, 0.361, 0.106, 0.2)
 
     // --- Surfaces (blur-dependent in default theme) ---
-    readonly property color bgBase: Qt.rgba(0, 0, 0, 0.10)  // panels, sidebars
+    readonly property color bgBase: Qt.rgba(0, 0, 0, 0.2)  // panels, sidebars
+
+    // --- cards ---
+    readonly property color bgCard:      _gray800
+    readonly property color bgCardHover: _gray700
 
     // --- Buttons ---
     readonly property color bgButton: "#381807"
     readonly property color bgButtonActive: accentSubtle
     readonly property color bgButtonHover: accentSubtle
-    readonly property color bgCard: Qt.rgba(1, 1, 1, 0.07)  // cards
-    readonly property color bgCardHover: Qt.rgba(1, 1, 1, 0.12)
+
     readonly property color bgImagePlaceholder: _gray900
 
     // --- Specials ---
-    readonly property color bgMediaPlaying: Qt.rgba(0.835, 0.361, 0.106, 0.13)
     readonly property color bgOverlay: Qt.rgba(0, 0, 0, 0.40)  // modals, overlays
-
     readonly property color borderAccent: Qt.rgba(1, 0.45, 0.1, 0.55)
     readonly property color borderButton: Qt.rgba(1, 0.45, 0.1, 0.35)
     readonly property color borderButtonHover: Qt.rgba(1, 0.45, 0.1, 0.75)
 
     // --- Generic interactive surfaces ---
-    readonly property color borderSubtle: Qt.rgba(1, 1, 1, 0.12)
+    readonly property color borderSubtle: _gray700
     readonly property color statusBlue: _blue
 
     // --- Status ---

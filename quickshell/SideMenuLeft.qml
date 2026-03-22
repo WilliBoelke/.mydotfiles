@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Widgets
 import qs.widgets
+import qs.services
 
 PanelWindow {
     id: root
@@ -57,7 +58,7 @@ PanelWindow {
     Rectangle {
         id: contentRect
 
-        color: "#1a000000"
+        color: ThemeService.active.bgBase
         radius: 12
         width: root.panelWidth
 
