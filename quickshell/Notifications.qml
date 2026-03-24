@@ -4,90 +4,102 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Widgets
 import qs.services
+import qs.decoratives
 
 Item {
     id: root
 
-    implicitWidth: container.implicitWidth
     implicitHeight: container.implicitHeight
+    implicitWidth: container.implicitWidth
 
-
-    Rectangle {
+    Card {
         id: container
-        color: "#1a000000"
-        radius: 12
-        width: parent.width
+
         property int outerPadding: 12
+
         implicitHeight: contentCol.implicitHeight + (outerPadding * 2)
+        width: parent.width
 
         ColumnLayout {
-            anchors.margins: 12
             id: contentCol
+
+            anchors.margins: 12
+            spacing: 12
+
             anchors {
                 fill: parent
                 margins: outerPadding
             }
-            spacing: 12
             RowLayout {
                 width: parent.width
 
                 Text {
-                    text: "Notifications"
                     color: "#d55c1b"
                     font.pixelSize: 20
                     font.weight: Font.Bold
+                    text: "Notifications"
                     topPadding: 4
                 }
-
-                Item { Layout.fillWidth: true }
-
+                Item {
+                    Layout.fillWidth: true
+                }
                 Text {
-                    text: "Clear all"
                     color: "#d55c1b"
                     font.pixelSize: 11
+                    text: "Clear all"
                     visible: NotificationService.trackedNotifications.values.length > 0
 
                     MouseArea {
                         anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+
                         onClicked: {
-                            var notifs = NotificationService.trackedNotifications.values
+                            var notifs = NotificationService.trackedNotifications.values;
                             for (var i = notifs.length - 1; i >= 0; i--) {
-                                notifs[i].tracked = false
+                                notifs[i].tracked = false;
                             }
                         }
-                        cursorShape: Qt.PointingHandCursor
                     }
                 }
             }
-
-
-            ListView {
+            Item {
                 Layout.fillWidth: true
-                implicitHeight: contentHeight
-                Layout.preferredHeight: implicitHeight
-                clip: true
-                spacing: 8
-                model: NotificationService.trackedNotifications
-                delegate: NotificationCard {
-                    required property var modelData
-                    notif: modelData
-                    width: ListView.view.width
-                    height: implicitHeight
-                    cardRadius: 6
-                    showActions: true
-                    showTime: true
-                    compact: false
-                    onDismissRequested: notif.tracked = false
-                }
-            }
+                implicitHeight: notifList.visible ? notifList.implicitHeight : fallback.implicitHeight
 
-            // if no notifications, show a message
-            Text {
-                text: "No notifications"
-                anchors.centerIn: parent
-                visible: NotificationService.trackedNotifications.values.length == 0
-                color: "#d55c1b"
-                font.pixelSize: 14
+                ListView {
+                    id: notifList
+
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    clip: true
+                    implicitHeight: contentHeight
+                    model: NotificationService.trackedNotifications
+                    spacing: 8
+                    visible: NotificationService.trackedNotifications.values.length > 0
+
+                    delegate: NotificationCard {
+                        required property var modelData
+
+                        compact: false
+                        height: implicitHeight
+                        notif: modelData
+                        showActions: true
+                        showTime: true
+                        width: ListView.view.width
+
+                        onDismissRequested: notif.tracked = false
+                    }
+                }
+                Text {
+                    id: fallback
+
+                    anchors.centerIn: parent
+                    color: "#d55c1b"
+                    font.pixelSize: 14
+                    text: "No notifications"
+                    visible: !notifList.visible
+                }
             }
         }
     }

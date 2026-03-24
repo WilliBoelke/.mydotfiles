@@ -2,20 +2,18 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Bluetooth
+import qs.decoratives
 
-Rectangle {
+InteractableCard {
     id: item
 
     property bool cardMode: true  // true = card, false = list item
 
     property BluetoothDevice device
 
-    border.color: device.connected ? "#33d55c1b" : "#22ffffff"
-    border.width: 1
-    color: hoverArea.containsMouse ? "#20ffffff" : "#15ffffff"
+    height: cardMode ? 120 : 52
     implicitHeight: cardMode ? 120 : 52
     implicitWidth: cardMode ? 140 : 280
-    height: cardMode ? 120 : 52
     radius: 8
 
     Behavior on color {

@@ -16,16 +16,16 @@ Rectangle {
 
     PwObjectTracker {
         id: tracker
+
         objects: Pipewire.defaultAudioSink ? [Pipewire.defaultAudioSink] : []
     }
-
     MouseArea {
         id: hoverArea
+
         anchors.fill: parent
     }
-
     EmberSlider {
-              anchors.fill: parent
+        anchors.fill: parent
         value: Pipewire.defaultAudioSink ? Pipewire.defaultAudioSink.audio.volume : 0
     }
 }

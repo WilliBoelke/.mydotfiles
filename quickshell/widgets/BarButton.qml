@@ -26,7 +26,6 @@ Rectangle {
 
         onClicked: barButton.clicked()
     }
-
     Row {
         id: buttonLayout
 

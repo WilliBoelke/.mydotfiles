@@ -46,6 +46,7 @@ Row {
     BarButton {
         icon: "\uf294"
         label: btConnectedToo ? Bluetooth.defaultAdapter.devices.values.filter(d => d.connected)[0].name : "not connected"
+
         onClicked: console.log("volume clicked")
     }
     BarButton {

@@ -9,8 +9,6 @@ Singleton {
 
     property QtObject active: GameModeService.enabled ? gameModeTheme : defaultTheme
 
-
-
     ThemeDefault {
         id: defaultTheme
 

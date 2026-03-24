@@ -5,6 +5,7 @@ import Quickshell.Widgets
 import Quickshell.Io
 import Quickshell.Bluetooth
 import QtQuick.Controls
+import qs.decoratives
 
 Rectangle {
     id: root
@@ -35,7 +36,7 @@ Rectangle {
             Layout.fillWidth: true
             Layout.maximumHeight: 120
             Layout.preferredHeight: 120
-            spacing: 8
+            spacing: 12
 
             Repeater {
                 model: root.connectedDevices
@@ -47,17 +48,14 @@ Rectangle {
                     device: modelData
                 }
             }
-            Rectangle {
+            InteractableCard {
                 Layout.fillHeight: true
                 Layout.preferredWidth: 120
-                border.width: 1
-                border.color: "#33d55c1b"
-                color: hoverArea.containsMouse ? "#20ffffff" : "#15ffffff"
-                radius: 10
 
                 // clicked on the expand button
                 MouseArea {
                     id: hoverArea
+
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     hoverEnabled: true
@@ -84,7 +82,6 @@ Rectangle {
             }
         }
 
-
         // expanded layout for further settings
         ColumnLayout {
             Layout.fillHeight: true
@@ -94,8 +91,8 @@ Rectangle {
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 30
                 Layout.maximumHeight: 30
+                Layout.preferredHeight: 30
                 spacing: 8
 
                 // A SETTINGS ROW?
@@ -104,13 +101,14 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 clip: true
-                contentHeight: deviceList.implicitHeight
+                contentHeight: deviceList.implicitHeightd
                 contentWidth: width
 
                 ColumnLayout {
                     id: deviceList
-                    width: parent.width
+
                     spacing: 8
+                    width: parent.width
 
                     // List discovered devices
                     Repeater {
@@ -118,9 +116,9 @@ Rectangle {
 
                         delegate: BluetoothDeviceItem {
                             Layout.fillWidth: true
-                            implicitHeight: 52
                             cardMode: false
                             device: modelData
+                            implicitHeight: 52
                         }
                     }
                 }

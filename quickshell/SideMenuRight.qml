@@ -9,6 +9,11 @@ import Quickshell.Io
 PanelWindow {
     id: root
 
+    // Track whether content should be loaded:
+    // - Immediately on open
+    // - Delayed unload after close animation finishes
+    property bool contentLoaded: false
+
     // Just this binding directly
     property bool open: false
     property int panelWidth: 600
@@ -21,6 +26,14 @@ PanelWindow {
         item: root.open ? contentRect : null
     }
 
+    onOpenChanged: {
+        if (open) {
+            contentLoaded = true;
+        } else {
+            unloadTimer.start();
+        }
+    }
+
     margins {
         bottom: 20
         right: 20
@@ -31,27 +44,14 @@ PanelWindow {
         right: true
         top: true
     }
-
-    // Track whether content should be loaded:
-    // - Immediately on open
-    // - Delayed unload after close animation finishes
-    property bool contentLoaded: false
-
-    onOpenChanged: {
-        if (open) {
-            contentLoaded = true
-        } else {
-            unloadTimer.start()
-        }
-    }
-
-
     Timer {
         id: unloadTimer
+
         interval: 300  // slightly longer than the 250ms close animation
+
         onTriggered: {
             if (!root.open)
-                root.contentLoaded = false
+                root.contentLoaded = false;
         }
     }
 
@@ -70,8 +70,6 @@ PanelWindow {
             }
         }
 
-
-
         anchors {
             bottom: parent.bottom
             right: parent.right
@@ -79,13 +77,14 @@ PanelWindow {
             top: parent.top
         }
         Loader {
-            anchors.fill: parent
             active: root.contentLoaded
+            anchors.fill: parent
+
             sourceComponent: Flickable {
                 anchors.fill: parent
                 clip: true
-                contentWidth: width
                 contentHeight: menuColumn.implicitHeight + 24
+                contentWidth: width
 
                 ColumnLayout {
                     id: menuColumn
@@ -97,6 +96,7 @@ PanelWindow {
 
                     RowLayout {
                         Layout.fillWidth: true
+                        spacing: 12
 
                         StatsCard {
                             Layout.fillWidth: true
@@ -117,6 +117,7 @@ PanelWindow {
                     }
                     RowLayout {
                         Layout.fillWidth: true
+                        spacing: 12
 
                         StatsCard {
                             Layout.fillWidth: true

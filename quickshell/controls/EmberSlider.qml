@@ -55,5 +55,4 @@ Slider {
         visible: false
         width: 0
     }
-
 }

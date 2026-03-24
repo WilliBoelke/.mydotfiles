@@ -3,10 +3,10 @@ import Quickshell.Services.Mpris
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Widgets
-import qs.consts
 import QtQuick.Effects
+import qs.decoratives
 
-Rectangle {
+Card {
     id: musicPlayer
 
     property int cardPadding: 6
@@ -17,17 +17,14 @@ Rectangle {
     property int outerPadding: 12
     property int sectionSpacing: 12
 
-    color: "#1a000000"
     implicitHeight: contentCol.implicitHeight + (outerPadding * 2)
     implicitWidth: parent.width
-    radius: 6
     visible: Mpris.players.values.length > 0
 
     onVisibleChanged: {
         if (visible) {
             for (var i = 0; i < Mpris.players.values.length; i++) {
                 var p = Mpris.players.values[i];
-                console.log(i, p.identity, p.dbusName, p.trackTitle, p.playbackState);
             }
         }
     }
@@ -71,6 +68,7 @@ Rectangle {
 
                     color: backgroundColor
                     height: playerCol.implicitHeight + (cardPadding * 2)
+                    layer.enabled: true
                     radius: 12
                     width: contentCol.width
 
@@ -79,10 +77,6 @@ Rectangle {
                             duration: 200
                         }
                     }
-
-
-                    layer.enabled: true
-
                     layer.effect: MultiEffect {
                         shadowBlur: 1
                         shadowColor: "#80000000"
@@ -198,7 +192,6 @@ Rectangle {
                                         delegate: Text {
                                             required property var modelData
 
-                                            color: Colors.accent
                                             font.family: "JetBrainsMono Nerd Font"
                                             font.pixelSize: modelData.size
                                             font.weight: Font.Bold
@@ -224,13 +217,6 @@ Rectangle {
                     }
                 }
             }
-        }
-        Text {
-            bottomPadding: emptyStateBottomPadding
-            color: "#555"
-            font.pixelSize: 12
-            text: "No players active"
-            visible: Mpris.players.values.length === 0
         }
     }
 }

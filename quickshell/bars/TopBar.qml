@@ -8,7 +8,7 @@ import qs.menus
 import qs.services
 
 PanelWindow {
-    id: root
+    id: topBar
 
     property bool sideMenuLeftOpen: false
 
@@ -41,10 +41,9 @@ PanelWindow {
             anchors.fill: parent
             anchors.margins: 12
 
-            // Left: music widget
             QuickSettingsWidget {
             }
-            PowerStateMenu{
+            PowerStateMenu {
             }
             Item {
                 Layout.fillWidth: true
@@ -56,8 +55,8 @@ PanelWindow {
             Item {
                 Layout.fillWidth: true
             }
-
-            // Left: music widget
+            TrayMenu {
+            }
             Row {
                 spacing: 12
 

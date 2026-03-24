@@ -15,13 +15,13 @@ Row {
     height: 50
     spacing: 10
 
-
     /**
      * Repeater over the workspaces. this filters workspaces per monitor,
      * so each monitor only shows workspaces from itself
      */
     Repeater {
         model: 5 // num of workspaces
+
         delegate: Rectangle {
             property bool isActive: workspace !== undefined && workspace !== null && workspace.monitor?.activeWorkspace?.id === wsId
             property var workspace: Hyprland.workspaces.values.find(ws => ws.id === wsId)
@@ -44,21 +44,19 @@ Row {
             height: 18
             radius: 12.5
             width: isActive ? 36 : 18
-            // add glow / shadow when active
 
-
-            Behavior on width {
-                NumberAnimation {
-                    duration: 200
-
-                }
-            }
             Behavior on color {
                 ColorAnimation {
                     duration: 200
                 }
             }
+            // add glow / shadow when active
 
+            Behavior on width {
+                NumberAnimation {
+                    duration: 200
+                }
+            }
 
             MouseArea {
                 anchors.fill: parent

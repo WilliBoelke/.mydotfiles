@@ -1,36 +1,35 @@
 import QtQuick
 import QtQuick.Layouts
+import qs.decoratives
 
-Rectangle {
+Card {
     id: infoCard
-    color: "#1a000000"
-    radius: 6
 
+    property color accentColor: "#ffffff"
     property string title: ""
     property string value: ""
-    property color accentColor: "#ffffff"
 
     implicitHeight: contentCol.implicitHeight + 24
     implicitWidth: contentCol.implicitWidth + 24
 
     ColumnLayout {
         id: contentCol
+
         anchors.centerIn: parent
         spacing: 4
 
         Text {
-            text: infoCard.value
+            Layout.alignment: Qt.AlignHCenter
             color: infoCard.accentColor
             font.pixelSize: 16
             font.weight: Font.Bold
-            Layout.alignment: Qt.AlignHCenter
+            text: infoCard.value
         }
-
         Text {
-            text: infoCard.title
+            Layout.alignment: Qt.AlignHCenter
             color: infoCard.accentColor
             font.pixelSize: 10
-            Layout.alignment: Qt.AlignHCenter
+            text: infoCard.title
         }
     }
 }

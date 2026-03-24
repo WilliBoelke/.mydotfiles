@@ -9,8 +9,6 @@ Rectangle {
     id: root
 
     property color backgroundColor: hoverArea.containsMouse ? "#20ffffff" : "transparent"
-    radius: 4
-    color: backgroundColor
     property var lastNotification: {
         var notifs = NotificationService.trackedNotifications.values;
         return notifs.length > 0 ? notifs[notifs.length - 1] : null;
@@ -19,8 +17,10 @@ Rectangle {
 
     signal toggleSideMenu
 
+    color: backgroundColor
     implicitHeight: parent.height
     implicitWidth: row.implicitWidth + 16
+    radius: 4
 
     MouseArea {
         id: hoverArea
@@ -31,13 +31,11 @@ Rectangle {
 
         onClicked: root.toggleSideMenu()
     }
-
     RowLayout {
         id: row
 
         anchors.centerIn: parent
         spacing: 24
-
 
         ColumnLayout {
             spacing: 0.5

@@ -17,7 +17,6 @@ Singleton {
 
         path: StandardPaths.writableLocation(StandardPaths.HomeLocation).toString().replace("file://", "") + "/.cache/hyprland/gamemode-enabled"
         printErrors: false
-
         watchChanges: true
 
         onFileChanged: this.reload()

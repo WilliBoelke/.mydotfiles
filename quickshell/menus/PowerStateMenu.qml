@@ -2,14 +2,14 @@ import Quickshell
 import Quickshell.Widgets
 import Quickshell.Io
 import QtQuick
-import qs.consts
+import qs.services
 
 Drawer {
     direction: "right"
 
     // Shutdown
     Text {
-        color: Colors.red
+        color: ThemeService.active.accent
         font.family: "JetBrainsMono Nerd Font"
         font.pixelSize: 20
         text: "\uf011"
@@ -25,10 +25,10 @@ Drawer {
     }
     // Reboot
     Text {
-        color: Colors.green
+        color: ThemeService.active.accent
         font.family: "JetBrainsMono Nerd Font"
         font.pixelSize: 20
-        text: "\uf012"
+        text: "\udb81\udf09"
 
         MouseArea {
             anchors.fill: parent
@@ -41,7 +41,7 @@ Drawer {
     }
     // Logout
     Text {
-        color: Colors.yellow
+        color: ThemeService.active.accent
         font.family: "JetBrainsMono Nerd Font"
         font.pixelSize: 20
         text: "\uf08b"

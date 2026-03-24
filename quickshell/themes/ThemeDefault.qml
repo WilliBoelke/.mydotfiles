@@ -1,4 +1,3 @@
-
 import QtQuick
 
 QtObject {
@@ -34,15 +33,13 @@ QtObject {
     // --- Surfaces (blur-dependent in default theme) ---
     readonly property color bgBase: Qt.rgba(0, 0, 0, 0.2)  // panels, sidebars
 
-    // --- cards ---
-    readonly property color bgCard:      _gray800
-    readonly property color bgCardHover: _gray700
-
     // --- Buttons ---
     readonly property color bgButton: "#381807"
     readonly property color bgButtonActive: accentSubtle
     readonly property color bgButtonHover: accentSubtle
 
+    // --- cards ---
+    readonly property color bgCard: "#1a000000"
     readonly property color bgImagePlaceholder: _gray900
 
     // --- Specials ---
@@ -53,6 +50,8 @@ QtObject {
 
     // --- Generic interactive surfaces ---
     readonly property color borderSubtle: _gray700
+    readonly property color cardBorder: "#1a26282b"
+    readonly property color cardBorderHover: "#26282b"
     readonly property color statusBlue: _blue
 
     // --- Status ---

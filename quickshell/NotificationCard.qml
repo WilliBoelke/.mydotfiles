@@ -3,13 +3,13 @@ import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
 import qs.widgets
-import qs.consts
+import qs.decoratives
+import qs.services
+import QtQuick.Effects
 
-Rectangle {
+InteractableCard {
     id: root
 
-    property color backgroundColor: hoverArea.containsMouse ?  "#20ffffff" : "#15ffffff"
-    property int cardRadius: 62
     property bool compact: false
     required property var notif
     property int padding: 12
@@ -19,9 +19,7 @@ Rectangle {
 
     signal dismissRequested
 
-    color: root.backgroundColor
     implicitHeight: contentCol.implicitHeight + (root.padding * 2)
-    radius: root.cardRadius
 
     Behavior on color {
         ColorAnimation {
@@ -31,12 +29,13 @@ Rectangle {
 
     MouseArea {
         id: hoverArea
+
         anchors.fill: parent
         hoverEnabled: true
     }
-
     ColumnLayout {
         id: contentCol
+
         spacing: 6
 
         anchors {
@@ -46,24 +45,30 @@ Rectangle {
             top: parent.top
         }
 
-
-
         // Top row: icon + title + time + dismiss
         RowLayout {
             Layout.fillWidth: true
             spacing: 8
 
-            IconImage {
+            Image {
                 Layout.maximumHeight: 20
                 Layout.maximumWidth: 20
                 Layout.preferredHeight: 20
                 Layout.preferredWidth: 20
+                layer.enabled: true
                 source: Quickshell.iconPath(root.notif?.appIcon ?? "", "")
                 visible: source !== ""
+
+                layer.effect: MultiEffect {
+                    brightness: 0.0
+                    colorization: 1.0
+                    colorizationColor: ThemeService.active.accent
+                    saturation: .000001
+                }
             }
             Text {
                 Layout.fillWidth: true
-                color: Colors.accent
+                color: ThemeService.active.accent
                 elide: Text.ElideRight
                 font.pixelSize: 12
                 font.weight: Font.Bold

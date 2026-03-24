@@ -4,14 +4,13 @@ import Quickshell.Hyprland
 import qs.bars
 
 ShellRoot {
-
-
-
     Variants {
         model: Quickshell.screens
+
         delegate: Component {
             NotificationToast {
                 required property var modelData
+
                 screen: modelData
             }
         }
@@ -21,41 +20,40 @@ ShellRoot {
 
     Variants {
         model: Quickshell.screens
+
         delegate: Component {
             QtObject {
-                id : root
-                required property var modelData
-                property bool sideMenuRightOpen: false
-                property bool sideMenuLeftOpen: false
+                id: root
 
                 property var bar: BottomBar {
                     screen: modelData
-                    sideMenuRightOpen: root.sideMenuRightOpen
                     sideMenuLeftOpen: root.sideMenuLeftOpen
-                    onToggleSideRightMenu: root.sideMenuRightOpen = !root.sideMenuRightOpen
-                    onToggleSideLeftMenu: root.sideMenuLeftOpen = !root.sideMenuLeftOpen
-                }
+                    sideMenuRightOpen: root.sideMenuRightOpen
 
+                    onToggleSideLeftMenu: root.sideMenuLeftOpen = !root.sideMenuLeftOpen
+                    onToggleSideRightMenu: root.sideMenuRightOpen = !root.sideMenuRightOpen
+                }
+                property var menuLeft: SideMenuLeft {
+                    open: root.sideMenuLeftOpen
+                    screen: modelData
+                }
+                property var menuRight: SideMenuRight {
+                    open: root.sideMenuRightOpen
+                    screen: modelData
+                }
+                required property var modelData
+                property bool sideMenuLeftOpen: false
+                property bool sideMenuRightOpen: false
                 property var topbar: TopBar {
                     screen: modelData
-                    sideMenuRightOpen: root.sideMenuRightOpen
                     sideMenuLeftOpen: root.sideMenuLeftOpen
-                    onToggleSideRightMenu: root.sideMenuRightOpen = !root.sideMenuRightOpen
+                    sideMenuRightOpen: root.sideMenuRightOpen
+
                     onToggleSideLeftMenu: root.sideMenuLeftOpen = !root.sideMenuLeftOpen
+                    onToggleSideRightMenu: root.sideMenuRightOpen = !root.sideMenuRightOpen
                 }
-
-                property var menuLeft: SideMenuLeft {
-                    screen: modelData
-                    open: root.sideMenuLeftOpen
-                }
-
-                property var menuRight: SideMenuRight {
-                    screen: modelData
-                    open: root.sideMenuRightOpen
-                }
-
             }
         }
     }
-
 }
+

@@ -11,49 +11,56 @@ PanelWindow {
     // Only show on the primary screen
     property bool isPrimary: screen === Quickshell.screens[1]
 
-    anchors { bottom: true; right: true }
-    implicitWidth: 360
-    implicitHeight: toastCard.implicitHeight + 24
     color: "transparent"
+    implicitHeight: toastCard.implicitHeight + 24
+    implicitWidth: 360
+    visible: false
+
+    anchors {
+        bottom: true
+        right: true
+    }
 
     // Auto-dismiss timer
     Timer {
         id: dismissTimer
+
         interval: 5000
+
         onTriggered: root.visible = false
     }
 
     // Watch for new notifications
     Connections {
-        target: NotificationService
         function onLatestNotificationChanged() {
-            if (!root.isPrimary) return
-            if (NotificationService.latestNotification === null) return
-            root.visible = true
-            dismissTimer.restart()
+            if (!root.isPrimary)
+                return;
+            if (NotificationService.latestNotification === null)
+                return;
+            root.visible = true;
+            dismissTimer.restart();
         }
+
+        target: NotificationService
     }
-
-    visible: false
-
     NotificationCard {
         id: toastCard
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-            margins: 12
-        }
+
+        compact: true
         notif: NotificationService.latestNotification
-        backgroundColor: "#1aee1a1a"
-        cardRadius: 8
         showActions: false
         showTime: false
-        compact: true
 
         onDismissRequested: {
-            dismissTimer.stop()
-            root.visible = false
+            dismissTimer.stop();
+            root.visible = false;
+        }
+
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            margins: 12
+            right: parent.right
         }
     }
 }

@@ -1,7 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
+import qs.decoratives
 
-Rectangle {
+InteractableCard {
     id: root
 
     property bool active: false
@@ -9,29 +10,9 @@ Rectangle {
     property string subtitle: ""
     property string title: ""
 
-    signal clicked
-
-    border.color: active ? Qt.rgba(1, 0.45, 0, 0.9) : mouseArea.containsMouse ? Qt.rgba(1, 0.45, 0, 0.55) : Qt.rgba(1, 1, 1, 0.12)
-    border.width: 1
-    color: active ? Qt.rgba(1, 0.4, 0, 0.35) : mouseArea.containsMouse ? Qt.rgba(1, 0.4, 0, 0.18) : Qt.rgba(1, 1, 1, 0.07)
     height: 64
-    radius: 12
-
-    // --- Dimensions ---
     width: 220
 
-    Behavior on border.color {
-        ColorAnimation {
-            duration: 150
-        }
-    }
-    Behavior on color {
-        ColorAnimation {
-            duration: 150
-        }
-    }
-
-    // --- Layout: icon | title + subtitle ---
     RowLayout {
         anchors.fill: parent
         anchors.margins: 14
@@ -68,16 +49,5 @@ Rectangle {
                 text: root.subtitle
             }
         }
-    }
-
-    // --- Interaction ---
-    MouseArea {
-        id: mouseArea
-
-        anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
-        hoverEnabled: true
-
-        onClicked: root.clicked()
     }
 }

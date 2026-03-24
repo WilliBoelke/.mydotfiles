@@ -2,64 +2,68 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Shapes
+import qs.decoratives
 
-Rectangle {
+Card {
     id: statsCard
-    color: "#1a000000"
-    radius: 6
 
-    property int value: 0
+    property color accentColor: "#ffffff"
+    property var history: []
+    property int squareSize: statsCard.width * 0.35
     property string title: ""
     property string unit: ""
-    property var history: []
-    property color accentColor: "#ffffff"
-    property int squareSize: statsCard.width * 0.35
+    property int value: 0
 
     implicitHeight: squareSize
 
     onHistoryChanged: {
         if (statsCard.visible && statsCard.width > 0)
-            graphCanvas.requestPaint()
+            graphCanvas.requestPaint();
     }
-
     onVisibleChanged: {
         if (visible && history.length > 0)
-            graphCanvas.requestPaint()
+            graphCanvas.requestPaint();
     }
 
     MouseArea {
         anchors.fill: parent
-        onClicked: btopProcess.running = true
         cursorShape: Qt.PointingHandCursor
-    }
 
+        onClicked: btopProcess.running = true
+    }
     ColumnLayout {
         id: contentCol
-        spacing: 6
+
         anchors.fill: parent
+        spacing: 6
 
         // Layout
         RowLayout {
-            Layout.preferredHeight: squareSize
             Layout.fillWidth: true
+            Layout.preferredHeight: squareSize
+
             Component.onCompleted: console.log("row width:", width, "row height:", height)
 
             Rectangle {
-                Layout.preferredWidth: squareSize
                 Layout.preferredHeight: squareSize
+                Layout.preferredWidth: squareSize
                 color: "transparent"
+
                 Shape {
-                    width: squareSize
-                    height: squareSize
+                    id: arcShape
+
                     anchors.centerIn: parent
-                    id : arcShape
+                    height: squareSize
+                    width: squareSize
+
                     ShapePath {
-                        strokeWidth: 6
-                        strokeColor: statsCard.accentColor
                         fillColor: "transparent"
+                        strokeColor: statsCard.accentColor
+                        strokeWidth: 6
 
                         PathAngleArc {
                             id: arc
+
                             centerX: squareSize / 2
                             centerY: squareSize / 2
                             radiusX: squareSize / 3
@@ -68,19 +72,22 @@ Rectangle {
                             sweepAngle: (statsCard.value / 100) * 360
                         }
                     }
-
                 }
                 Shape {
-                    width: squareSize
-                    height: squareSize
+                    id: arcShapeBg
+
                     anchors.centerIn: parent
-                    id : arcShapeBg
+                    height: squareSize
+                    width: squareSize
+
                     ShapePath {
-                        strokeWidth: 6
-                        strokeColor: "#1a000000"
                         fillColor: "transparent"
+                        strokeColor: "#1a000000"
+                        strokeWidth: 6
+
                         PathAngleArc {
                             id: arcbg
+
                             centerX: squareSize / 2
                             centerY: squareSize / 2
                             radiusX: squareSize / 3
@@ -89,89 +96,85 @@ Rectangle {
                             sweepAngle: 360
                         }
                     }
-
                 }
-
                 ColumnLayout {
                     anchors.centerIn: parent
                     spacing: 0
 
                     Text {
-                        text: `${statsCard.value} ${statsCard.unit}`
+                        Layout.alignment: Qt.AlignHCenter
                         color: statsCard.accentColor
                         font.pixelSize: 20
                         font.weight: Font.Bold
-                        Layout.alignment: Qt.AlignHCenter
+                        text: `${statsCard.value} ${statsCard.unit}`
                     }
-
                     Text {
-                        text: `${statsCard.title}`
+                        Layout.alignment: Qt.AlignHCenter
                         color: statsCard.accentColor
                         font.pixelSize: 10
                         font.weight: Font.Bold
-                        Layout.alignment: Qt.AlignHCenter
+                        text: `${statsCard.title}`
                     }
                 }
-
             }
             Rectangle {
-                color: "transparent"
                 Layout.preferredHeight: squareSize
                 Layout.preferredWidth: squareSize * 1.5
                 anchors.margins: 12
+                color: "transparent"
+
                 Canvas {
                     id: graphCanvasa
-                    width: parent.width
+
                     height: parent.height
+                    width: parent.width
 
                     onPaint: {
-                        const ctx = getContext("2d")
-                        ctx.clearRect(0, 0, width, height)
-                        ctx.lineWidth = 2
-                        ctx.lineCap = "round"
-                        ctx.lineJoin = "round"
-                        ctx.shadowBlur = 5
-                        ctx.shadowColor = statsCard.accentColorGr
+                        const ctx = getContext("2d");
+                        ctx.clearRect(0, 0, width, height);
+                        ctx.lineWidth = 2;
+                        ctx.lineCap = "round";
+                        ctx.lineJoin = "round";
+                        ctx.shadowBlur = 5;
+                        ctx.shadowColor = statsCard.accentColorGr;
 
                         // gradient from center outward
-                        const gradient = ctx.createLinearGradient(0, 0, 0, height)
-                        gradient.addColorStop(0, statsCard.accentColor)
-                        gradient.addColorStop(0.5, "transparent")
-                        gradient.addColorStop(1, statsCard.accentColor)
+                        const gradient = ctx.createLinearGradient(0, 0, 0, height);
+                        gradient.addColorStop(0, statsCard.accentColor);
+                        gradient.addColorStop(0.5, "transparent");
+                        gradient.addColorStop(1, statsCard.accentColor);
 
                         // build top and bottom paths
                         const topPoints = statsCard.history.map((item, index) => ({
-                            x: width * (index / statsCard.history.length),
-                            y: height / 2 - (height / 2 * (item.usage / 100))
-                        }))
+                                    x: width * (index / statsCard.history.length),
+                                    y: height / 2 - (height / 2 * (item.usage / 100))
+                                }));
 
                         const bottomPoints = [...topPoints].reverse().map(item => ({
-                            x: item.x,
-                            y: height - item.y
-                        }))
-
+                                    x: item.x,
+                                    y: height - item.y
+                                }));
 
                         // draw filled shape
-                        ctx.beginPath()
-                        topPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
-                        bottomPoints.forEach(p => ctx.lineTo(p.x, p.y))
-                        ctx.closePath()
-                        ctx.fillStyle = gradient
-                        ctx.fill()
+                        ctx.beginPath();
+                        topPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+                        bottomPoints.forEach(p => ctx.lineTo(p.x, p.y));
+                        ctx.closePath();
+                        ctx.fillStyle = gradient;
+                        ctx.fill();
 
                         // draw lines on top
-                        ctx.strokeStyle = statsCard.accentColor
-                        ctx.beginPath()
-                        topPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
-                        ctx.stroke()
+                        ctx.strokeStyle = statsCard.accentColor;
+                        ctx.beginPath();
+                        topPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+                        ctx.stroke();
 
-                        ctx.beginPath()
-                        bottomPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
-                        ctx.stroke()
+                        ctx.beginPath();
+                        bottomPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+                        ctx.stroke();
                     }
                 }
             }
         }
     }
-
 }
