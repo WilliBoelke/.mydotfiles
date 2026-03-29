@@ -7,11 +7,11 @@ import qs.services
 import QtQuick.Effects
 
 Drawer {
+    property var window: null
     direction: "left"
 
     Repeater {
         model: SystemTray.items
-
         delegate: Item {
             required property SystemTrayItem modelData
 
@@ -33,7 +33,9 @@ Drawer {
             QsMenuAnchor {
                 id: menuAnchor
 
-                anchor.window: topBar
+                anchor.edges: Edges.Bottom
+                anchor.gravity: Edges.Bottom
+                anchor.window: window
                 menu: modelData.menu
             }
             MouseArea {
@@ -41,11 +43,29 @@ Drawer {
                 anchors.fill: parent
 
                 onClicked: {
-                    if (modelData.hasMenu)
-                        menuAnchor.open();
-                    else
+                    if (modelData.hasMenu) {
+                        var pos = parent.mapToItem(null, 0, 0);
+                        menuAnchor.anchor.rect.x = pos.x;
+                        menuAnchor.anchor.rect.y = pos.y;
+                        menuAnchor.anchor.rect.width = parent.width;
+                        menuAnchor.anchor.rect.height = parent.height;
+                        openTimer.start();
+                    } else {
                         modelData.activate();
+                    }
                 }
+            }
+            Timer {
+                id: openTimer
+
+                interval: 200
+                repeat: false
+
+                onTriggered: {
+                        console.log("opening at rect:", menuAnchor.anchor.rect.x, menuAnchor.anchor.rect.y);
+                        menuAnchor.open();
+                    }
+
             }
         }
     }

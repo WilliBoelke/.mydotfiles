@@ -18,23 +18,18 @@ PanelWindow {
     signal toggleSideRightMenu
 
     color: "transparent"
-    implicitHeight: 40
+    implicitHeight: 44
 
     anchors {
         bottom: true
         left: true
         right: true
     }
-    margins {
-        bottom: 6
-        left: 20
-        right: 20
-        top: 0
-    }
+
     Rectangle {
         anchors.fill: parent
         color: ThemeService.active.bgBase
-        radius: 12
+
 
         RowLayout {
             anchors.fill: parent

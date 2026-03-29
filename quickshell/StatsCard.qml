@@ -6,7 +6,6 @@ import qs.decoratives
 
 Card {
     id: statsCard
-
     property color accentColor: "#ffffff"
     property var history: []
     property int squareSize: statsCard.width * 0.35
@@ -124,7 +123,7 @@ Card {
                 color: "transparent"
 
                 Canvas {
-                    id: graphCanvasa
+                    id: graphCanvas
 
                     height: parent.height
                     width: parent.width

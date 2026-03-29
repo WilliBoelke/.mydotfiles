@@ -34,11 +34,6 @@ PanelWindow {
         }
     }
 
-    margins {
-        bottom: 20
-        left: 20
-        top: 20
-    }
     anchors {
         bottom: true
         left: true
@@ -58,9 +53,7 @@ PanelWindow {
     // main penal boxa
     Rectangle {
         id: contentRect
-
         color: ThemeService.active.bgBase
-        radius: 12
         width: root.panelWidth
 
         Behavior on anchors.leftMargin {

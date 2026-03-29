@@ -34,11 +34,7 @@ PanelWindow {
         }
     }
 
-    margins {
-        bottom: 20
-        right: 20
-        top: 20
-    }
+
     anchors {
         bottom: true
         right: true
