@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Widgets
 import qs.services
+import qs.widgets
 import Quickshell.Io
 
 PanelWindow {
@@ -56,7 +57,6 @@ PanelWindow {
         id: contentRect
 
         color: ThemeService.active.bgBase
-        radius: 12
         width: root.panelWidth
 
         Behavior on anchors.rightMargin {
@@ -142,14 +142,11 @@ PanelWindow {
                             title: "Uptime"
                             value: UptimeService.uptime
                         }
-                        InfoCard {
-                            Layout.fillWidth: true
-                            accentColor: "#d55c1b"
-                            title: "Boottime"
-                            value: BootTimeService.bootTime
-                        }
                     }
                     Notifications {
+                        Layout.fillWidth: true
+                    }
+                    UpdateWidget {
                         Layout.fillWidth: true
                     }
                 }

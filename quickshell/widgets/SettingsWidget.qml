@@ -52,9 +52,6 @@ Item {
 
                     Layout.fillWidth: true
                 }
-                BluetoothWidget {
-                    Layout.fillWidth: true
-                }
                 RowLayout {
                     spacing: 12
 

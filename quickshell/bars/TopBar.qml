@@ -55,12 +55,33 @@ PanelWindow {
             Row {
                 spacing: 12
 
-                BarButton {
+                StatsCardCompact {
+                    Layout.fillWidth: true
+                    accentColor: "#52E9EB"
+                    history: CpuService.history
+                    unit: "%"
+                    value: CpuService.cpuUsage
+                }
+                StatsCardCompact {
+                    Layout.fillWidth: true
+                    accentColor: "#E10C05"
+                    history: MemService.history
+                    unit: "%"
+                    value: MemService.memUsage
+                }
+                StatsCardCompact {
+                    Layout.fillWidth: true
+                    accentColor: "#DCD4DD"
+                    history: NvidiaGpuService.history
+                    unit: "%"
+                    value: NvidiaGpuService.gpuUsage
+                }
+                StatsCardCompact {
+                    Layout.fillWidth: true
                     accentColor: "#d55c1b"
-                    icon: "audio-volume-high"
-                    label: "100%"
-
-                    onClicked: console.log("volume clicked")
+                    history: CpuService.history
+                    unit: "%"
+                    value: CpuService.cpuUsage
                 }
             }
         }

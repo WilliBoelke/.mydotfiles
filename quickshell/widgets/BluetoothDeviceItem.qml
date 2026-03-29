@@ -7,14 +7,13 @@ import qs.decoratives
 InteractableCard {
     id: item
 
-    property bool cardMode: true  // true = card, false = list item
+    property bool cardMode: true
 
     property BluetoothDevice device
 
     height: cardMode ? 120 : 52
     implicitHeight: cardMode ? 120 : 52
     implicitWidth: cardMode ? 140 : 280
-    radius: 8
 
     Behavior on color {
         ColorAnimation {

@@ -99,6 +99,9 @@ PanelWindow {
 
                         Layout.fillWidth: true
                     }
+                    BluetoothWidget {
+                        Layout.fillWidth: true
+                    }
                 }
             }
         }

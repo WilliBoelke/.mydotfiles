@@ -134,16 +134,11 @@ Card {
                         ctx.lineWidth = 2;
                         ctx.lineCap = "round";
                         ctx.lineJoin = "round";
-                        ctx.shadowBlur = 5;
-                        ctx.shadowColor = statsCard.accentColorGr;
 
-                        // gradient from center outward
-                        const gradient = ctx.createLinearGradient(0, 0, 0, height);
-                        gradient.addColorStop(0, statsCard.accentColor);
-                        gradient.addColorStop(0.5, "transparent");
-                        gradient.addColorStop(1, statsCard.accentColor);
+                        // Extract RGB from Qt color for alpha-aware gradient
+                        const c = statsCard.accentColor;
+                        const rgb = `${Math.round(c.r * 255)}, ${Math.round(c.g * 255)}, ${Math.round(c.b * 255)}`;
 
-                        // build top and bottom paths
                         const topPoints = statsCard.history.map((item, index) => ({
                                     x: width * (index / statsCard.history.length),
                                     y: height / 2 - (height / 2 * (item.usage / 100))
@@ -154,7 +149,13 @@ Card {
                                     y: height - item.y
                                 }));
 
-                        // draw filled shape
+                        // Gradient: transparent at top/bottom edges, accent at vertical center
+                        const gradient = ctx.createLinearGradient(0, 0, 0, height);
+                        gradient.addColorStop(0, `rgba(${rgb}, 0)`);
+                        gradient.addColorStop(0.5, `rgba(${rgb}, 0.35)`);
+                        gradient.addColorStop(1, `rgba(${rgb}, 0)`);
+
+                        // Filled lens between the two lines
                         ctx.beginPath();
                         topPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
                         bottomPoints.forEach(p => ctx.lineTo(p.x, p.y));
@@ -162,12 +163,13 @@ Card {
                         ctx.fillStyle = gradient;
                         ctx.fill();
 
-                        // draw lines on top
-                        ctx.strokeStyle = statsCard.accentColor;
+                        // Top line
+                        ctx.strokeStyle = `rgba(${rgb}, 1)`;
                         ctx.beginPath();
                         topPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
                         ctx.stroke();
 
+                        // Bottom line
                         ctx.beginPath();
                         bottomPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
                         ctx.stroke();

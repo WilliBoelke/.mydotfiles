@@ -31,6 +31,7 @@ Row {
              * Those indices appear to change. i hardcode it "for now" but its really not nice
              */
             property int wsOffset: {
+                if(!screen) return 0;
                 if (screen.name === "DP-1")
                     return 0;
                 if (screen.name === "DP-2")

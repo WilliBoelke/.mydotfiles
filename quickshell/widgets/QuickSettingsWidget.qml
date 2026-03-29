@@ -27,7 +27,6 @@ Row {
 
     PwObjectTracker {
         id: tracker
-
         objects: Pipewire.defaultAudioSink ? [Pipewire.defaultAudioSink] : []
     }
     Connections {

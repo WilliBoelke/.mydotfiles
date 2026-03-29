@@ -4,9 +4,10 @@ import qs.services
 Rectangle {
     id: cardRect
 
-    border.color: mouseArea.containsMouse ? ThemeService.active.borderCardHovered : ThemeService.active.borderCard
+    border.color: mouseArea.containsMouse ? ThemeService.active.cardBorderHover : ThemeService.active.cardBorder
     border.width: 1
     color: ThemeService.active.bgCard
+    height: implicitHeight
     radius: 11
 
     // --- Interaction ---
