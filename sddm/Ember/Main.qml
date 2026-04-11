@@ -31,7 +31,7 @@ Item {
     // Dark overlay
     Rectangle {
         anchors.fill: parent
-        color: "#1e282c"
+        color: "#191a1c"
         opacity: 0.5
     }
 
