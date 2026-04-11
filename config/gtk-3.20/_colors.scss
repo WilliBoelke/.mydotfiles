@@ -2,24 +2,24 @@
 // it gets @if ed depending on $variant
 
 // Main definitions
-$base_color                      : if($variant == 'light', #f8f8f8, lighten(#191a1c, 2%));
-$text_color                      : if($variant == 'light', #31363D, #C3C7D1);
-$bg_color                        : if($variant == 'light', #EEEEEE, #191a1c);
+$base_color                      : if($variant == 'light', #f8f8f8, #1e1f22);
+$text_color                      : if($variant == 'light', #1e1f22, #C3C7D1);
+$bg_color                        : if($variant == 'light', #EEEEEE, #1e1f22);
 $fg_color                        : if($variant == 'light', #31363d, #C3C7D1);
 
 // Primary colors
 $lime                            : #B3E235;
 $red                             : #FF044A;
-$orange                          : #f39c12;
+$orange                          : #E9643A;
 $yellow                          : #f1c40f;
 $purple                          : #9b59b6;
 $darkpurple                      : #7b7bbd;
 $cyan                            : #00b0ff;
 $blue                            : #13b1d5;
-$slider                          : #7b7bbd;
+$slider                          : #cb591f;
 
 $selected_fg_color               : #fefefe;
-$selected_bg_color               : if($variant == 'light', #ff5d73, #76A7A7);
+$selected_bg_color               : if($variant == 'light', #E9643A, #cb591f);
 $selected_borders_color          : darken($selected_bg_color, 10%);
 $borders_color                   : if($variant == 'light', transparentize(black, 0.8), darken($bg_color, 7%));
 $borders_edge                    : if($variant == 'light', transparentize(white, 0.8), transparentize(white, 0.9));
@@ -70,9 +70,9 @@ $info_color                      : $lime;
 $question_color                  : $cyan;
 
 // Panel colors
-$panel_bg_color                  : rgba(235, 235, 235, 0.7);
+$panel_bg_color                  : #191a1c;
 $panel_fg_color                  : $fg_color;
-$panel_borders_color             : rgba(235, 235, 235, 0.7);
+$panel_borders_color             : #191a1c;
 
 // Disabled state colors
 $insensitive_fg_color            : mix($fg_color, $bg_color, 50%);

@@ -18,8 +18,9 @@
     border-left-style : none;
   }
 
-  @at-root %sidebar_right&:dir(rtl),
-  &.right {
+  @at-root %sidebar_right,
+    &:dir(rtl),
+    &.right {
     border-left        : 1px solid $borders_color;
     border-right-style : none;
   }
