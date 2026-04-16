@@ -23,7 +23,11 @@ Row {
         model: 5 // num of workspaces
 
         delegate: Rectangle {
-            property bool isActive: workspace !== undefined && workspace !== null && workspace.monitor?.activeWorkspace?.id === wsId
+            property bool isActive: workspace !== undefined && workspace !== null && workspace.monitor
+            ?.
+            activeWorkspace
+            ?.
+                id === wsId
             property var workspace: Hyprland.workspaces.values.find(ws => ws.id === wsId)
             property int wsId: wsOffset + index + 1
 
@@ -31,7 +35,7 @@ Row {
              * Those indices appear to change. i hardcode it "for now" but its really not nice
              */
             property int wsOffset: {
-                if(!screen) return 0;
+                if (!screen) return 0;
                 if (screen.name === "DP-1")
                     return 0;
                 if (screen.name === "DP-2")

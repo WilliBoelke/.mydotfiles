@@ -17,10 +17,10 @@ Card {
     property int outerPadding: 12
     property int sectionSpacing: 12
 
+    property bool hasPlayers: Mpris.players.values.length > 0
     implicitHeight: contentCol.implicitHeight + (outerPadding * 2)
-    implicitWidth: parent.width
-    visible: Mpris.players.values.length > 0
 
+    visible: Mpris.players.values.length > 0
     onVisibleChanged: {
         if (visible) {
             for (var i = 0; i < Mpris.players.values.length; i++) {
@@ -51,7 +51,7 @@ Card {
                 color: "#d55c1b"
                 font.pixelSize: 20
                 font.weight: Font.Bold
-                text: "Now Playing"
+                text: "Now Playing " + Mpris.players.values.length + " " + musicPlayer.hasPlayers
                 topPadding: headerTopPadding
             }
 

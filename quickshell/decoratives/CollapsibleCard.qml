@@ -17,6 +17,7 @@ Card {
         collapsibleCard.expanded = !collapsibleCard.expanded
     }
 
+
     ColumnLayout {
         id: outerLayout
 

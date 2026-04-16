@@ -64,6 +64,11 @@ QtObject {
     readonly property color textDisabled: "#555555"
     readonly property color textMuted: _gray600
 
+    // --- Semantic text colors ---
+    readonly property color notification: _blue
+    readonly property color error: _red
+    readonly property color success: _green
+
     // --- Text ---
     readonly property color textPrimary: _white
     readonly property color textSecondary: _gray300

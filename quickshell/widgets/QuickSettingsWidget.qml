@@ -34,6 +34,7 @@ Row {
             quickSettings.currentVolume = Pipewire.defaultAudioSink.audio.volume;
         }
 
+
         target: Pipewire.defaultAudioSink ? Pipewire.defaultAudioSink.audio : null
     }
     BarButton {

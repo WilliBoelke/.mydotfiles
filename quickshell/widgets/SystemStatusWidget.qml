@@ -16,7 +16,8 @@ Card {
     }
     property bool sideMenuOpen: false
 
-    signal toggleSideMenu
+        signal
+    toggleSideMenu
 
     implicitHeight: parent.height
     implicitWidth: row.implicitWidth + 16
@@ -47,11 +48,6 @@ Card {
     }
 
 
-
-
-
-
-
     RowLayout {
         id: row
 
@@ -69,7 +65,9 @@ Card {
                 font.pixelSize: 14
                 font.weight: Font.Medium
                 horizontalAlignment: Text.AlignRight
-                text: root.lastNotification?.summary ?? ""
+                text: root.lastNotification
+                ?.
+                    summary ?? ""
             }
             Text {
                 Layout.maximumWidth: 160
@@ -78,7 +76,9 @@ Card {
                 elide: Text.ElideRight
                 font.pixelSize: 12
                 horizontalAlignment: Text.AlignRight
-                text: root.lastNotification?.appName ?? ""
+                text: root.lastNotification
+                ?.
+                    appName ?? ""
             }
         }
         Rectangle {
@@ -94,7 +94,11 @@ Card {
                 color: "#d55c1b"
                 font.pixelSize: 24
                 text: "󰎟"
-                visible: (root.lastNotification?.appIcon ?? "") === ""
+                visible: (root.lastNotification
+                ?.
+                    appIcon ?? ""
+                ) ===
+                ""
             }
         }
     }

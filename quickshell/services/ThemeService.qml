@@ -4,7 +4,8 @@ import QtQuick
 import qs.themes
 import qs.services
 
-Singleton {
+Singleton
+{
     id: themeService
 
     property QtObject active: GameModeService.enabled ? gameModeTheme : defaultTheme

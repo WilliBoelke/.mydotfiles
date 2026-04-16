@@ -13,7 +13,8 @@ Rectangle {
     property string label: ""
     property int value: 0
 
-    signal clicked
+        signal
+    clicked
 
     color: barButton.value > 0 ? barButton.accentColor : barButton.bgColor
     height: 32

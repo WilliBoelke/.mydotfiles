@@ -92,7 +92,6 @@ PanelWindow {
                         id: flyout
 
                         Layout.fillWidth: true
-                        visible: root.flyoutOpen
                     }
                     SettingsWidget {
                         id: volumeWidget

@@ -9,7 +9,8 @@ import Qt.labs.platform
  This Service pulls the CPU stats from `proc/stat`
  and exposes them to the UI.
  */
-Singleton {
+Singleton
+{
     id: cpuService
 
     property int cpuUsage: 0
@@ -63,7 +64,7 @@ Singleton {
                 const parts = line.split(",");
                 return {
                     timestamp: parseInt(parts[0]),
-                    usage: parseInt(parts[1])
+                    usage    : parseInt(parts[1])
                 };
             });
         }

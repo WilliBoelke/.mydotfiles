@@ -4,11 +4,11 @@ import QtQuick
 
 Text {
     property string icon: ""
-    property int size : 14
+    property int size: 14
     property color mColor: ThemeService.active.accent
-
+    font.family: "Agave Nerd Font"
     anchors.centerIn: parent
-    color:  mColor
+    color: mColor
     font.pixelSize: size
     text: icon
 }

@@ -56,30 +56,29 @@ CollapsibleCard {
             spacing: 8
 
 
-
             Text {
-            color: "#d55c1b"
-            font.pixelSize: 20
-            font.weight: Font.Bold
-            text: UpdateService.updates.length + " updates available"
-            topPadding: 4
-        }
-
-        InteractableCard {
-            Layout.preferredHeight: 42
-            Layout.preferredWidth: 42
-
-            onClicked: {
-                UpdateService.checkUpdates();
-                updateWidget.toggle();
+                color: "#d55c1b"
+                font.pixelSize: 20
+                font.weight: Font.Bold
+                text: UpdateService.updates.length + " updates available"
+                topPadding: 4
             }
 
-            Icon {
-                anchors.centerIn: parent
-                icon: "󰚰"
-                size: 20
+            InteractableCard {
+                Layout.preferredHeight: 42
+                Layout.preferredWidth: 42
+
+                onClicked: {
+                    UpdateService.checkUpdates();
+                    updateWidget.toggle();
+                }
+
+                Icon {
+                    anchors.centerIn: parent
+                    icon: "󰚰"
+                    size: 20
+                }
             }
-        }
         }
     }
 

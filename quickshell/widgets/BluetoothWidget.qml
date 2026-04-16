@@ -19,7 +19,6 @@ CollapsibleCard {
         Layout.fillHeight: true
         Layout.fillWidth: true
         spacing: 8
-        visible: bluetoothWidget.expanded
 
         RowLayout {
             Layout.fillWidth: true
@@ -29,29 +28,22 @@ CollapsibleCard {
 
             // A SETTINGS ROW?
         }
-        Flickable {
-            Layout.fillHeight: true
+
+        ColumnLayout {
+            id: deviceList
+
             Layout.fillWidth: true
-            clip: true
-            contentHeight: deviceList.implicitHeight
-            contentWidth: width
+            spacing: 8
 
-            ColumnLayout {
-                id: deviceList
+            // List discovered devices
+            Repeater {
+                model: Bluetooth.defaultAdapter.devices.values
 
-                spacing: 8
-                width: parent.width
-
-                // List discovered devices
-                Repeater {
-                    model: Bluetooth.defaultAdapter.devices.values
-
-                    delegate: BluetoothDeviceItem {
-                        Layout.fillWidth: true
-                        cardMode: false
-                        device: modelData
-                        implicitHeight: 52
-                    }
+                delegate: BluetoothDeviceItem {
+                    Layout.fillWidth: true
+                    cardMode: false
+                    device: modelData
+                    implicitHeight: 52
                 }
             }
         }
@@ -87,28 +79,28 @@ CollapsibleCard {
                 Layout.fillHeight: true
                 Layout.preferredWidth: 64
 
-            // clicked on the expand button
-            MouseArea {
-                id: hoverArea
+                // clicked on the expand button
+                MouseArea {
+                    id: hoverArea
 
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
 
-                onClicked: {
-                    bluetoothWidget.toggle();
-                    if (bluetoothWidget.expanded) {
-                        Bluetooth.defaultAdapter.discovering = true;
-                    } else {
-                        Bluetooth.defaultAdapter.discovering = false;
+                    onClicked: {
+                        bluetoothWidget.toggle();
+                        if (bluetoothWidget.expanded) {
+                            Bluetooth.defaultAdapter.discovering = true;
+                        } else {
+                            Bluetooth.defaultAdapter.discovering = false;
+                        }
                     }
                 }
-            }
-            Icon {
-                icon: "󰂳"
-                size: 22
+                Icon {
+                    icon: "󰂳"
+                    size: 22
+                }
             }
         }
     }
-}
 }

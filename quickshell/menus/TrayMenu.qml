@@ -62,9 +62,9 @@ Drawer {
                 repeat: false
 
                 onTriggered: {
-                        console.log("opening at rect:", menuAnchor.anchor.rect.x, menuAnchor.anchor.rect.y);
-                        menuAnchor.open();
-                    }
+                    console.log("opening at rect:", menuAnchor.anchor.rect.x, menuAnchor.anchor.rect.y);
+                    menuAnchor.open();
+                }
 
             }
         }

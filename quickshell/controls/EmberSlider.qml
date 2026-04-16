@@ -21,7 +21,9 @@ Slider {
         radius: 12
         width: parent.availableWidth
 
-        Behavior on border.color {
+        Behavior on border
+        .
+        color {
             ColorAnimation {
                 duration: 150
             }
@@ -33,8 +35,8 @@ Slider {
         }
 
         Rectangle {
-            color:  ThemeService.active.accent
-            radius:  12
+            color: ThemeService.active.accent
+            radius: 12
             height: parent.height - 6
             width: (parent.width - 4) * parent.parent.visualPosition
 

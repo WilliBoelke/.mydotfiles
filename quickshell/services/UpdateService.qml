@@ -5,14 +5,17 @@ import QtQuick.Controls
 import Quickshell.Io
 import Qt.labs.platform
 
-Singleton {
+Singleton
+{
     id: updateService
 
     property var updates: []
 
+
     function checkUpdates() {
         checUpdateProcess.running = true;
     }
+
 
     Process {
         id: checUpdateProcess
@@ -21,7 +24,7 @@ Singleton {
 
         stdout: StdioCollector {
             id: stdoutCollector
-            onStreamFinished:  {
+            onStreamFinished: {
 
                 const result = [];
 
@@ -33,8 +36,8 @@ Singleton {
 
                     const lnArr = line.split(" ");
                     result.push({
-                        package: lnArr[0],
-                        version: lnArr[1],
+                        package   : lnArr[0],
+                        version   : lnArr[1],
                         newVersion: lnArr[3]
                     });
                 });

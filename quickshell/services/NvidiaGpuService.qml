@@ -9,7 +9,8 @@ import Qt.labs.platform
  This Service pulls the GPU utilization using nvidia-smi
  and exposes them to the UI.
  */
-Singleton {
+Singleton
+{
     id: gpuService
 
     property int gpuUsage: 0
@@ -40,7 +41,7 @@ Singleton {
                 const parts = line.split(",");
                 return {
                     timestamp: parseInt(parts[0]),
-                    usage: parseInt(parts[1])
+                    usage    : parseInt(parts[1])
                 };
             });
         }

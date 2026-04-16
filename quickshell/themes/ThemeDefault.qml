@@ -56,6 +56,12 @@ QtObject {
     readonly property color cardBorderHover: "#26282b"
     readonly property color statusBlue: _blue
 
+    // --- Semantic text colors ---
+    readonly property color notification: _blue
+    readonly property color error: _red
+    readonly property color success: _green
+
+
     // --- Status ---
     readonly property color statusGreen: _green
     readonly property color statusRed: _red

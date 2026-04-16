@@ -48,9 +48,9 @@ Card {
                 const toX = i => pad + (i / (data.length - 1)) * (width - 2 * pad);
                 const toY = v => (height - pad) - (v / 100) * (height - 2 * pad);
                 const points = data.map((item, i) => ({
-                            x: toX(i),
-                            y: toY(item.usage)
-                        }));
+                    x: toX(i),
+                    y: toY(item.usage)
+                }));
 
                 // Fill under line
                 const gradient = ctx.createLinearGradient(0, 0, 0, height);
@@ -88,6 +88,7 @@ Card {
                     if (miniGraph.width > 0 && miniGraph.height > 0)
                         miniGraph.requestPaint();
                 }
+
 
                 target: compactStatsCard
             }

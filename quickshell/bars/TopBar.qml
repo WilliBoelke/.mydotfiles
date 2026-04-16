@@ -15,8 +15,10 @@ PanelWindow {
     // Flyout open state lives here so bar and flyout share it
     property bool sideMenuRightOpen: false
 
-    signal toggleSideLeftMenu
-    signal toggleSideRightMenu
+        signal
+    toggleSideLeftMenu
+        signal
+    toggleSideRightMenu
 
     color: "transparent"
     implicitHeight: 44

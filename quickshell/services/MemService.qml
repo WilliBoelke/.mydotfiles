@@ -9,7 +9,8 @@ import Qt.labs.platform
  This Service pulls the Memory stats from `proc/meminfo`
  and exposes them to the UI.
  */
-Singleton {
+Singleton
+{
     id: memService
 
     property var history: []
@@ -58,7 +59,7 @@ Singleton {
                 const parts = line.split(",");
                 return {
                     timestamp: parseInt(parts[0]),
-                    usage: parseInt(parts[1])
+                    usage    : parseInt(parts[1])
                 };
             });
         }

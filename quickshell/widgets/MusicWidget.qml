@@ -4,7 +4,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.decoratives
 
-Card{
+Card {
     id: musicWidget
 
     // Pick the active player: first playing one, or just first available
@@ -17,7 +17,8 @@ Card{
     }
 
     property bool sideMenuOpen: false
-    signal toggleSideMenu
+        signal
+    toggleSideMenu
 
     implicitHeight: parent.height
     implicitWidth: row.implicitWidth + 16
@@ -48,7 +49,9 @@ Card{
                 fillMode: Image.PreserveAspectCrop
                 layer.effect: null  // rounded clipping via parent Rectangle
                 layer.enabled: true
-                source: root.activePlayer?.trackArtUrl ?? ""
+                source: root.activePlayer
+                ?.
+                    trackArtUrl ?? ""
                 visible: source !== ""
             }
 
@@ -57,7 +60,11 @@ Card{
                 anchors.centerIn: parent
                 color: "#d55c1b"
                 text: "♪"
-                visible: root.activePlayer?.trackArtUrl === "" || root.activePlayer?.trackArtUrl === undefined
+                visible: root.activePlayer
+                ?.
+                    trackArtUrl === "" || root.activePlayer
+                ?.
+                    trackArtUrl === undefined
             }
         }
 
@@ -71,14 +78,18 @@ Card{
                 elide: Text.ElideRight
                 font.pixelSize: 14
                 font.weight: Font.Medium
-                text: root.activePlayer?.trackTitle ?? "Nothing playing"
+                text: root.activePlayer
+                ?.
+                    trackTitle ?? "Nothing playing"
                 width: Math.min(implicitWidth, 160)
             }
             Text {
                 color: "#C35A24"
                 elide: Text.ElideRight
                 font.pixelSize: 12
-                text: root.activePlayer?.trackArtist ?? ""
+                text: root.activePlayer
+                ?.
+                    trackArtist ?? ""
                 width: Math.min(implicitWidth, 160)
             }
         }
@@ -87,7 +98,9 @@ Card{
         Text {
             color: root.flyoutOpen ? "#d55c1b" : "#ffffff"
             font.pixelSize: 14
-            text: root.activePlayer?.isPlaying ? "⏸" : "▶"
+            text: root.activePlayer
+            ?.
+            isPlaying ? "⏸" : "▶"
             visible: root.activePlayer !== null
 
             MouseArea {

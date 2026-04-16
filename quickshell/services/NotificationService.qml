@@ -9,7 +9,8 @@ import QtQuick.Controls
  * This is a singleton that lives for the lifetime of the shell,
  * and manages all notifications.
  */
-Singleton {
+Singleton
+{
     id: root
 
     // Most recent notification for toasts
