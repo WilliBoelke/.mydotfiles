@@ -68,12 +68,13 @@ InteractableCard {
             }
             Text {
                 Layout.fillWidth: true
-                color: ThemeService.active.accent
                 elide: Text.ElideRight
-                font.pixelSize: 12
-                font.weight: Font.Bold
+                color: ThemeService.active.accent
+                font.family: "JetBrainsMono Nerd Font"
+                font.pixelSize: 16
+                font.weight: Font.ExtraBold
+
                 text: root.notif?.summary ?? ""
-                textFormat: Text.PlainText
             }
             Text {
                 color: "#555"

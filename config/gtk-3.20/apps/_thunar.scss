@@ -24,7 +24,7 @@ scrolledwindow.sidebar treeview.view {
 
 /* path-bar of thunar */
 window.thunar toolbar#location-toolbar > toolitem > widget > widget.linked.path-bar > button.toggle.path-bar-button, .thunar toolbar .path-bar-button {
-  color : $headerbar_fg_color;
+  color : $panel_bg_color;
 
   &:hover, &:checked, &:checked:backdrop {
     background : transparent;

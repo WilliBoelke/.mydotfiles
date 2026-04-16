@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.decoratives
+import qs.services
+
 
 InteractableCard {
     id: root
@@ -21,11 +23,12 @@ InteractableCard {
         // Icon
         Text {
             Layout.alignment: Qt.AlignVCenter
-            color: "#FF7F00"
+            color: ThemeService.active.accent
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: 22
             text: root.iconText
         }
+
 
         // Title + Subtitle
         ColumnLayout {
@@ -34,15 +37,15 @@ InteractableCard {
             spacing: 2
 
             Text {
-                color: "#FFFFFF"
+                color: ThemeService.active.accent
                 font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 13
-                font.weight: Font.Medium
+                font.pixelSize: 16
+                font.weight: Font.ExtraBold
                 text: root.title
             }
             Text {
                 Layout.fillWidth: true
-                color: "#AAAAAA"
+                color: ThemeService.active.accent
                 elide: Text.ElideRight
                 font.family: "JetBrainsMono Nerd Font"
                 font.pixelSize: 10

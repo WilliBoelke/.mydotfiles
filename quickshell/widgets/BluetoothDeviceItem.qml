@@ -11,9 +11,8 @@ InteractableCard {
 
     property BluetoothDevice device
 
-    height: cardMode ? 120 : 52
-    implicitHeight: cardMode ? 120 : 52
-    implicitWidth: cardMode ? 140 : 280
+    height: parent.height
+    width: parent.width
 
     Behavior on color {
         ColorAnimation {
@@ -30,11 +29,11 @@ InteractableCard {
     }
 
     // Card layout
-    ColumnLayout {
+    RowLayout {
         anchors.centerIn: parent
-        spacing: 6
+        spacing: 12
         visible: item.cardMode
-        width: parent.width - 16
+
 
         Text {
             Layout.fillWidth: true
@@ -44,6 +43,11 @@ InteractableCard {
             horizontalAlignment: Text.AlignHCenter
             text: "\uf293"
         }
+
+        ColumnLayout {
+        spacing: 3
+        visible: item.cardMode
+
         Text {
             Layout.fillWidth: true
             color: "#ffffff"
@@ -85,6 +89,7 @@ InteractableCard {
                     duration: 150
                 }
             }
+        }
         }
     }
 

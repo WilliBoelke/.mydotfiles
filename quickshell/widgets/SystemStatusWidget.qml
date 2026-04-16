@@ -4,11 +4,12 @@ import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
 import qs.services
+import qs.decoratives
 
-Rectangle {
+Card {
     id: root
 
-    property color backgroundColor: hoverArea.containsMouse ? "#20ffffff" : "transparent"
+
     property var lastNotification: {
         var notifs = NotificationService.trackedNotifications.values;
         return notifs.length > 0 ? notifs[notifs.length - 1] : null;
@@ -17,7 +18,6 @@ Rectangle {
 
     signal toggleSideMenu
 
-    color: backgroundColor
     implicitHeight: parent.height
     implicitWidth: row.implicitWidth + 16
     radius: 4
@@ -25,12 +25,33 @@ Rectangle {
     MouseArea {
         id: hoverArea
 
+        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         hoverEnabled: true
 
-        onClicked: root.toggleSideMenu()
+        onClicked: mouse => {
+            if (mouse.button === Qt.MiddleButton) {
+                root.lastNotification.dismiss();
+            } else {
+                root.toggleSideMenu();
+            }
+        }
     }
+
+    // Auto-dismiss timer
+    Timer {
+        id: dismissTimer
+        interval: 20000
+        onTriggered: root.visible = false
+    }
+
+
+
+
+
+
+
     RowLayout {
         id: row
 
@@ -71,18 +92,10 @@ Rectangle {
             Text {
                 anchors.centerIn: parent
                 color: "#d55c1b"
-                font.pixelSize: 14
+                font.pixelSize: 24
                 text: "󰎟"
                 visible: (root.lastNotification?.appIcon ?? "") === ""
             }
-        }
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            color: "#d55c1b"
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 14
-            font.weight: Font.Bold
-            text: "󰎟"
         }
     }
 }

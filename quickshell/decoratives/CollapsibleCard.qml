@@ -9,7 +9,7 @@ Card {
     property bool expanded: false
     property Component header
     property int maxHeight: 10000
-    height: outerLayout.implicitHeight
+    height: outerLayout.implicitHeight + 16
     width: parent.width
 
 
@@ -20,8 +20,9 @@ Card {
     ColumnLayout {
         id: outerLayout
 
-        spacing: 12
-        width: parent.width
+        spacing: collapsibleCard.expanded ? 12 : 0
+        width: parent.width - 16
+        anchors.centerIn: parent
 
         // Header — always visible, click toggles expansion
 

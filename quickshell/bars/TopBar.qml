@@ -33,7 +33,8 @@ PanelWindow {
 
         RowLayout {
             anchors.fill: parent
-            anchors.margins: 12
+            anchors.leftMargin: 16
+            anchors.rightMargin: 16
 
             QuickSettingsWidget {
             }

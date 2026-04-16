@@ -10,6 +10,7 @@ Rectangle {
     height: implicitHeight
     radius: 11
 
+
     // --- Interaction ---
     MouseArea {
         id: mouseArea

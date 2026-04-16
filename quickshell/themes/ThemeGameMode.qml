@@ -7,6 +7,7 @@ QtObject {
     // =========================================================
 
     readonly property color _accent: "#d55c1b"
+    readonly property color _accentDark: "#381807"
     readonly property color _black: "#000000"
     readonly property color _blue: "#52e9eb"
     readonly property color _gray300: "#aaaaaa"
@@ -27,6 +28,7 @@ QtObject {
 
     // --- Accent ---
     readonly property color accent: _accent
+    readonly property color accentDark: _accentDark
     readonly property color accentFaint: Qt.rgba(0.835, 0.361, 0.106, 1)
     readonly property color accentSubtle: Qt.rgba(0.835, 0.361, 0.106, 1)
 

@@ -47,7 +47,7 @@ PanelWindow {
             }
 
             // Right: placeholder for notifications later
-            NotificationWidget {
+            SystemStatusWidget {
                 sideMenuOpen: root.sideMenuLeftOpen
 
                 onToggleSideMenu: root.toggleSideRightMenu()

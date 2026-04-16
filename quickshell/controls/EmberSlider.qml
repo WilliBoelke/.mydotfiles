@@ -1,8 +1,10 @@
 import QtQuick
 import QtQuick.Controls
+import qs.services
 
 Slider {
     id: root
+    height: 12
 
     readonly property string icon: {
         if (root.value <= 0.0)
@@ -13,10 +15,9 @@ Slider {
     }
 
     background: Rectangle {
-        border.color: root.hovered ? "#8CFF7300" : "#1FFFFFFF"
         border.width: 1
-        color: root.hovered ? Qt.rgba(1, 0.45, 0, 0.55) : Qt.rgba(1, 1, 1, 0.12)
-        height: parent.height
+        color: ThemeService.active.accentDark
+        height: 12
         radius: 12
         width: parent.availableWidth
 
@@ -32,8 +33,9 @@ Slider {
         }
 
         Rectangle {
-            color: root.pressed ? "#381807" : "#381807"
-            radius: 10
+            color:  ThemeService.active.accent
+            radius:  12
+            height: parent.height - 6
             width: (parent.width - 4) * parent.parent.visualPosition
 
             Behavior on color {

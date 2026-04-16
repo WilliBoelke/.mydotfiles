@@ -16,7 +16,7 @@ Rectangle {
     signal clicked
 
     color: barButton.value > 0 ? barButton.accentColor : barButton.bgColor
-    height: 20
+    height: 32
     implicitWidth: buttonLayout.implicitWidth + 16
     radius: 6
 

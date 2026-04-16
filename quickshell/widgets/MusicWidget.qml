@@ -2,9 +2,10 @@ import Quickshell
 import Quickshell.Services.Mpris
 import QtQuick
 import QtQuick.Layouts
+import qs.decoratives
 
-Item {
-    id: root
+Card{
+    id: musicWidget
 
     // Pick the active player: first playing one, or just first available
     property var activePlayer: {
@@ -14,8 +15,8 @@ Item {
         }
         return Mpris.players.values.length > 0 ? Mpris.players.values[0] : null;
     }
-    property bool sideMenuOpen: false
 
+    property bool sideMenuOpen: false
     signal toggleSideMenu
 
     implicitHeight: parent.height
@@ -27,9 +28,9 @@ Item {
 
         onClicked: root.toggleSideMenu()
     }
+
     RowLayout {
         id: row
-
         anchors.centerIn: parent
         spacing: 24
 

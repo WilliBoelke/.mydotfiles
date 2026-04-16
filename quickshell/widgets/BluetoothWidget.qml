@@ -15,25 +15,77 @@ CollapsibleCard {
     property string btName: Bluetooth.defaultAdapter.name
     property var connectedDevices: Bluetooth.defaultAdapter.devices.values.filter(d => d.connected)
 
-    header: RowLayout {
+    body: ColumnLayout {
+        Layout.fillHeight: true
         Layout.fillWidth: true
-        Layout.maximumHeight: 120
-        Layout.preferredHeight: 120
-        spacing: 12
+        spacing: 8
+        visible: bluetoothWidget.expanded
 
-        Repeater {
-            model: bluetoothWidget.connectedDevices
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.maximumHeight: 30
+            Layout.preferredHeight: 30
+            spacing: 8
 
-            delegate: BluetoothDeviceItem {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                cardMode: true
-                device: modelData
+            // A SETTINGS ROW?
+        }
+        Flickable {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            clip: true
+            contentHeight: deviceList.implicitHeight
+            contentWidth: width
+
+            ColumnLayout {
+                id: deviceList
+
+                spacing: 8
+                width: parent.width
+
+                // List discovered devices
+                Repeater {
+                    model: Bluetooth.defaultAdapter.devices.values
+
+                    delegate: BluetoothDeviceItem {
+                        Layout.fillWidth: true
+                        cardMode: false
+                        device: modelData
+                        implicitHeight: 52
+                    }
+                }
             }
         }
-        InteractableCard {
-            Layout.fillHeight: true
-            Layout.preferredWidth: 120
+    }
+
+
+    header: Item {
+        width: parent.width
+        implicitHeight: 64
+
+        RowLayout {
+            anchors.fill: parent
+            spacing: 8
+
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter
+                spacing: 8
+
+                Repeater {
+                    model: bluetoothWidget.connectedDevices
+
+                    delegate: BluetoothDeviceItem {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        cardMode: true
+                        device: modelData
+                    }
+                }
+            }
+
+            InteractableCard {
+                Layout.fillHeight: true
+                Layout.preferredWidth: 64
 
             // clicked on the expand button
             MouseArea {
@@ -54,8 +106,9 @@ CollapsibleCard {
             }
             Icon {
                 icon: "󰂳"
-                size: 46
+                size: 22
             }
         }
     }
+}
 }

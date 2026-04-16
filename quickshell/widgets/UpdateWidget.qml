@@ -13,7 +13,6 @@ CollapsibleCard {
     body: ColumnLayout {
         spacing: 4
         width: parent.width
-
         Repeater {
             model: UpdateService.updates
 
@@ -46,18 +45,26 @@ CollapsibleCard {
             }
         }
     }
-    header: RowLayout {
-        id: header
 
-        Layout.fillWidth: true
-        spacing: 12
+    header: Item {
+        width: parent.width
+        implicitHeight: 64
 
-        Text {
-            Layout.fillWidth: true
-            color: ThemeService.active.textPrimary
-            font.bold: true
+        RowLayout {
+            anchors.fill: parent
+            anchors.margins: 8
+            spacing: 8
+
+
+
+            Text {
+            color: "#d55c1b"
+            font.pixelSize: 20
+            font.weight: Font.Bold
             text: UpdateService.updates.length + " updates available"
+            topPadding: 4
         }
+
         InteractableCard {
             Layout.preferredHeight: 42
             Layout.preferredWidth: 42
@@ -72,6 +79,7 @@ CollapsibleCard {
                 icon: "󰚰"
                 size: 20
             }
+        }
         }
     }
 

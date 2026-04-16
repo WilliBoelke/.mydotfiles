@@ -47,11 +47,6 @@ Item {
                 Layout.fillWidth: true
                 spacing: 12
 
-                VolumeWidget {
-                    id: volumeWidget
-
-                    Layout.fillWidth: true
-                }
                 RowLayout {
                     spacing: 12
 
@@ -111,6 +106,12 @@ Item {
                             procLogout.running = true;
                         }
                     }
+                }
+
+                VolumeWidget {
+                    id: volumeWidget
+
+                    Layout.fillWidth: true
                 }
             }
         }
