@@ -1,0 +1,59 @@
+# Ember theme for btop
+# Based on the Ember design system - warm orange accent, dark glassmorphism
+
+# Main background
+theme[main_bg]="#1E282C"
+
+# Main foreground
+theme[main_fg]="#ffaa42"
+
+# Title color
+theme[title]="#E9643A"
+
+# Selected item background
+theme[hi_bg]="#381807"
+theme[hi_fg]="#12b0d7"
+# Selected item foreground
+theme[selected_bg]="#381807"
+theme[selected_fg]="#ffaa42"
+
+# Inactive/unfocused foreground
+theme[inactive_fg]="#71787f"
+
+# Graph colors (gradient from dark to bright orange)
+theme[proc_misc]="#C3C7D1"
+
+# CPU graph colors
+theme[cpu_box]="#243035"
+theme[mem_box]="#243035"
+theme[net_box]="#243035"
+theme[proc_box]="#243035"
+theme[div_line]="#101517"
+
+# Temperature colors (cool to hot)
+theme[temp_start]="#13b1d5"
+theme[temp_mid]="#E9643A"
+theme[temp_end]="#FF044A"
+
+# CPU graph gradient
+theme[cpu_start]="#8B3A1F"
+theme[cpu_mid]="#cb591f"
+theme[cpu_end]="#E9643A"
+
+# Memory graph gradient
+theme[mem_start]="#8B3A1F"
+theme[mem_mid]="#cb591f"
+theme[mem_end]="#E9643A"
+
+# Network graph gradient
+theme[download_start]="#8B3A1F"
+theme[download_mid]="#cb591f"
+theme[download_end]="#E9643A"
+theme[upload_start]="#13b1d5"
+theme[upload_mid]="#00b0ff"
+theme[upload_end]="#C3C7D1"
+
+# Process list
+theme[proc_start]="#8B3A1F"
+theme[proc_mid]="#cb591f"
+theme[proc_end]="#E9643A"

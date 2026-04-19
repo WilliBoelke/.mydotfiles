@@ -124,6 +124,9 @@ ln -s ~/dotfiles/shell/.zshrc ~/.zshrc
 ln -s ~/dotfiles/shell/bashrc ~/.config/bashrc
 ln -s ~/dotfiles/shell/zshrc ~/.config/zshrc
 ln -s ~/dotfiles/shell/ohmyposh ~/.config/ohmyposh
+
+#btop
+ln -s ~/dotfiles/btop/ ~/.config/btop
 ```
 
 ### Post-Install: Apply gsettings

@@ -13,11 +13,11 @@
 @define-color text_color #C3C7D1;
 @define-color borders #101517;
 @define-color header_bg_color #191a1c;
-@define-color header_fg_color #C3C7D1;
+@define-color header_fg_color #f1a13f;
 @define-color selected_bg_color #cb591f;
 @define-color selected_fg_color #fefefe;
 @define-color tooltip_bg_color #191a1c;
-@define-color tooltip_fg_color #C3C7D1;
+@define-color tooltip_fg_color #f1a13f;
 
 /* colormap actually used by the theme, to be overridden in other css files */
 @define-color theme_bg_color @bg_color;
@@ -34,7 +34,7 @@
 @define-color dark_shadow rgba(0,0,0,0.5);
 
 /* misc colors */
-@define-color info_fg_color #C3C7D1;
+@define-color info_fg_color #f1a13f;
 @define-color info_bg_color #1e1f22;
 @define-color warning_fg_color #fefefe;
 @define-color warning_bg_color #c87f0a;
@@ -51,17 +51,17 @@
 /* widget colors */
 @define-color button_bg_color #1e1f22;
 @define-color menubar_bg_color #191a1c;
-@define-color menubar_fg_color #C3C7D1;
+@define-color menubar_fg_color #f1a13f;
 @define-color toolbar_bg_color #191a1c;
-@define-color toolbar_fg_color #C3C7D1;
+@define-color toolbar_fg_color #f1a13f;
 @define-color menu_bg_color #191a1c;
-@define-color menu_fg_color #C3C7D1;
+@define-color menu_fg_color #f1a13f;
 @define-color panel_bg_color #191a1c;
-@define-color panel_fg_color #C3C7D1;
+@define-color panel_fg_color #f1a13f;
 @define-color menu_selected_bg_color #cb591f;
 @define-color menu_selected_fg_color #fefefe;
 @define-color titlebar_bg_color #191a1c;
-@define-color titlebar_fg_color #C3C7D1;
+@define-color titlebar_fg_color #f1a13f;
 
 /* osd */
 @define-color osd_base #1e1f22;
@@ -72,9 +72,9 @@
 @define-color wm_bg #191a1c;
 @define-color wm_border_focused #cb591f;
 @define-color wm_border_unfocused #101517;
-@define-color wm_title_focused #C3C7D1;
+@define-color wm_title_focused #f1a13f;
 @define-color wm_title_unfocused #71787f;
-@define-color wm_icons_focused #C3C7D1;
+@define-color wm_icons_focused #f1a13f;
 @define-color wm_icons_focused_prelight #E9643A;
 @define-color wm_icons_focused_pressed #cb591f;
 @define-color wm_icons_unfocused #71787f;

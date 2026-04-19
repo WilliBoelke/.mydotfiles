@@ -23,7 +23,7 @@ Card {
 
         Text {
             Layout.alignment: Qt.AlignVCenter
-            color: compactStatsCard.accentColor
+            color: "#ffaa42"
             font.pixelSize: 11
             font.weight: Font.Bold
             text: `${compactStatsCard.value}${compactStatsCard.unit}`
@@ -54,7 +54,7 @@ Card {
 
                 // Fill under line
                 const gradient = ctx.createLinearGradient(0, 0, 0, height);
-                gradient.addColorStop(0, compactStatsCard.accentColor);
+                gradient.addColorStop(0, "#ffaa42");
                 gradient.addColorStop(1, "transparent");
 
                 ctx.beginPath();
@@ -69,7 +69,7 @@ Card {
 
                 // Line
                 ctx.globalAlpha = 1.0;
-                ctx.strokeStyle = compactStatsCard.accentColor;
+                ctx.strokeStyle = "#ffaa42";
                 ctx.lineWidth = 1.5;
                 ctx.lineCap = "round";
                 ctx.lineJoin = "round";

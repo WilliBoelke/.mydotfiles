@@ -57,7 +57,7 @@ Card {
 
                     ShapePath {
                         fillColor: "transparent"
-                        strokeColor: statsCard.accentColor
+                        strokeColor: "#d55c1b"
                         strokeWidth: 6
 
                         PathAngleArc {
@@ -102,14 +102,14 @@ Card {
 
                     Text {
                         Layout.alignment: Qt.AlignHCenter
-                        color: statsCard.accentColor
+                        color: "#d55c1b"
                         font.pixelSize: 20
                         font.weight: Font.Bold
                         text: `${statsCard.value} ${statsCard.unit}`
                     }
                     Text {
                         Layout.alignment: Qt.AlignHCenter
-                        color: statsCard.accentColor
+                        color: "#d55c1b"
                         font.pixelSize: 10
                         font.weight: Font.Bold
                         text: `${statsCard.title}`
@@ -149,22 +149,9 @@ Card {
                                     y: height - item.y
                                 }));
 
-                        // Gradient: transparent at top/bottom edges, accent at vertical center
-                        const gradient = ctx.createLinearGradient(0, 0, 0, height);
-                        gradient.addColorStop(0, `rgba(${rgb}, 0)`);
-                        gradient.addColorStop(0.5, `rgba(${rgb}, 0.35)`);
-                        gradient.addColorStop(1, `rgba(${rgb}, 0)`);
-
-                        // Filled lens between the two lines
-                        ctx.beginPath();
-                        topPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
-                        bottomPoints.forEach(p => ctx.lineTo(p.x, p.y));
-                        ctx.closePath();
-                        ctx.fillStyle = gradient;
-                        ctx.fill();
-
                         // Top line
-                        ctx.strokeStyle = `rgba(${rgb}, 1)`;
+                        ctx.strokeStyle = `#ffaa42`
+                        ctx.strokeWidth = 1;
                         ctx.beginPath();
                         topPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
                         ctx.stroke();
