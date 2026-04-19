@@ -1,8 +1,5 @@
 import os
 import sqlite3
-
-import load_config
-
 from funke.app_entry import AppEntry
 from funke import load_config
 
@@ -26,55 +23,30 @@ def create_db_if_not_exists(db_path: str = "index.db") -> sqlite3.Connection:
     conn.execute("""
                  CREATE TABLE IF NOT EXISTS apps
                  (
-                     id
-                     INTEGER
-                     PRIMARY
-                     KEY
-                     AUTOINCREMENT,
-                     name
-                     TEXT,
-                     comment
-                     TEXT,
-                     icon
-                     TEXT,
-                     exec
-                     TEXT,
-                     try_exec
-                     TEXT,
-                     path
-                     TEXT,
-                     created_at
-                     INTEGER,
-                     last_modified
-                     INTEGER
+                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+                     name TEXT,
+                     comment TEXT,
+                     icon TEXT,
+                     exec TEXT,
+                     try_exec TEXT,
+                     path TEXT UNIQUE,
+                     created_at INTEGER,
+                     last_modified INTEGER
                  )
                  """)
 
     conn.execute("""
                  CREATE TABLE IF NOT EXISTS app_actions
                  (
-                     id
-                     INTEGER
-                     PRIMARY
-                     KEY
-                     AUTOINCREMENT,
-                     application_id
-                     INTEGER
-                     NOT
-                     NULL,
-                     name
-                     TEXT,
-                     exec
-                     TEXT,
-                     FOREIGN
-                     KEY
+                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+                     application_id INTEGER NOT NULL,
+                     name TEXT,
+                     exec TEXT,
+                     FOREIGN KEY
                  (
                      application_id
-                 ) REFERENCES apps
-                 (
-                     id
-                 )
-                     )
+                 ) REFERENCES apps( id )
+                    )
                  """)
 
     conn.commit()
@@ -103,3 +75,28 @@ class IndexDatabase:
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """, (app.name, app.comment, app.icon, app.app_exec, app.try_exec, app.path, app.created_at, app.last_modified))
 
+    def update_app(self, app: AppEntry):
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            UPDATE apps
+            SET name = ?, comment = ?, icon = ?, exec = ?, try_exec = ?, last_modified = ?
+            WHERE path = ?
+        """, (app.name, app.comment, app.icon, app.app_exec, app.try_exec, app.last_modified, app.path))
+
+    def delete_app(self, path: str):
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            DELETE FROM apps
+            WHERE path = ?
+        """, (path,))
+
+    def get_indexed_app_paths(self) -> list[str]:
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT path FROM apps")
+        return [row[0] for row in cursor.fetchall()]
+
+
+    def get_app_last_modified(self, path: str) -> int:
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT last_modified FROM apps WHERE path = ?", (path,))
+        return cursor.fetchone()[0]
