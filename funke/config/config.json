@@ -1,0 +1,11 @@
+{
+  "index_path": "~/.local/share/funke/index",
+  "exclude_paths" : [
+    "*/node_modules/",
+    "*/.git/",
+    "*/.idea/"
+  ],
+  "index_interval": "10000",
+  "index_timeout": "100"
+
+}
