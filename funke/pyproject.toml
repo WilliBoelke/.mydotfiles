@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "funke"
+version = "1.0.0"
+
+requires-python = ">=3.14"
+authors = [
+  {name = "Willi Boelke"}
+]
+maintainers = [
+  {name = "Willi Boelke"}
+]
+
+description = "Funk search"
+license = "MIT"
+license-files = ["LICEN[CS]E.*"]
+
+[project.scripts]
+fk = "funke.cli:main"

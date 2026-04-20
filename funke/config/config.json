@@ -1,5 +1,5 @@
 {
-  "index_path": "~/.local/share/funke/index",
+  "index_path": "~/.local/share/funke/index.db",
   "exclude_paths" : [
     "*/node_modules/",
     "*/.git/",

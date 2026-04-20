@@ -57,7 +57,6 @@ class IndexDatabase:
         config = load_config()
         self.conn = create_db_if_not_exists(config.get("index_path"))
 
-
     def get_conn(self) -> sqlite3.Connection:
         return self.conn
 
@@ -94,7 +93,6 @@ class IndexDatabase:
         cursor = self.conn.cursor()
         cursor.execute("SELECT path FROM apps")
         return [row[0] for row in cursor.fetchall()]
-
 
     def get_app_last_modified(self, path: str) -> int:
         cursor = self.conn.cursor()

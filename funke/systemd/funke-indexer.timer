@@ -1,1 +1,9 @@
-v 
+[Unit]
+Description=Run Funke indexer periodically
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=10min
+
+[Install]
+WantedBy=timers.target
