@@ -4,6 +4,7 @@ Description=Run Funke indexer periodically
 [Timer]
 OnBootSec=1min
 OnUnitActiveSec=10min
+Unit=funke-indexers.service
 
 [Install]
 WantedBy=timers.target

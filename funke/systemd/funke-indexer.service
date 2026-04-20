@@ -3,5 +3,5 @@ Description=Funke app and file indexer
 
 [Service]
 Type=oneshot
-ExecStart=/
+ExecStart= %h/.local/bin/fk index
 

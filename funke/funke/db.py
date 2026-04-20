@@ -16,6 +16,8 @@ def create_db_if_not_exists(db_path: str = "index.db") -> sqlite3.Connection:
 
     # establish connection
     conn = sqlite3.connect(path)
+    # i want dicts !
+    conn.row_factory = sqlite3.Row
     # Enable fk
     conn.execute(""" PRAGMA foreign_keys = ON; """)
 
@@ -98,3 +100,10 @@ class IndexDatabase:
         cursor = self.conn.cursor()
         cursor.execute("SELECT last_modified FROM apps WHERE path = ?", (path,))
         return cursor.fetchone()[0]
+
+    def get_apps_with_text(self, partial_name: str):
+        cursor = self.conn.cursor()
+
+        cursor.execute("SELECT * FROM apps WHERE name LIKE ? OR comment LIKE ?",
+                       (f"%{partial_name}%", f"%{partial_name}%"))
+        return [row for row in cursor.fetchall()]
