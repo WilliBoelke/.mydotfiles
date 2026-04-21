@@ -11,10 +11,32 @@ ShellRoot {
 
     Variants {
         model: Quickshell.screens
-
         delegate: Component {
             QtObject {
                 id: root
+
+                required property var modelData
+
+                property bool sideMenuLeftOpen: false
+                property bool sideMenuRightOpen: false
+                property bool funkeOpen: false
+
+
+
+                // --- panels ---
+
+
+                property var menuLeft: SideMenuLeft
+                {
+                    open: root.sideMenuLeftOpen
+                    screen: modelData
+                }
+
+                property var menuRight: SideMenuRight
+                {
+                    open: root.sideMenuRightOpen
+                    screen: modelData
+                }
 
                 property var bar: BottomBar
                 {
@@ -24,20 +46,8 @@ ShellRoot {
 
                     onToggleSideLeftMenu: root.sideMenuLeftOpen = !root.sideMenuLeftOpen
                     onToggleSideRightMenu: root.sideMenuRightOpen = !root.sideMenuRightOpen
+                    onToggleFunke: root.funkeOpen = !root.funkeOpen
                 }
-                property var menuLeft: SideMenuLeft
-                {
-                    open: root.sideMenuLeftOpen
-                    screen: modelData
-                }
-                property var menuRight: SideMenuRight
-                {
-                    open: root.sideMenuRightOpen
-                    screen: modelData
-                }
-                required property var modelData
-                property bool sideMenuLeftOpen: false
-                property bool sideMenuRightOpen: false
                 property var topbar: TopBar
                 {
                     screen: modelData
