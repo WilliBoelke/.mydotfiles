@@ -6,6 +6,7 @@ import Quickshell.Wayland
 import Quickshell.Io
 import qs.services
 import Quickshell.Io
+import qs.decoratives
 
 PanelWindow {
     id: funkeLauncher
@@ -42,7 +43,6 @@ PanelWindow {
     property var resultApps: []
 
 
-
     WlrLayershell.keyboardFocus: open ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
     WlrLayershell.screen: screen
 
@@ -63,7 +63,7 @@ PanelWindow {
     }
 
     onQueryStringChanged: {
-        if(queryString === "" || queryString === undefined) {
+        if (queryString === "" || queryString === undefined) {
             resultApps = []
 
         }
@@ -80,8 +80,6 @@ PanelWindow {
             }
         }
     }
-
-
 
 
     // --- processes --- //
@@ -111,9 +109,7 @@ PanelWindow {
                 funkeLauncher.open = false
             }
         }
-
     }
-
 
 
     // --- content --- //
@@ -133,36 +129,65 @@ PanelWindow {
             Column {
                 width: parent.width
                 height: parent.height
-                Repeater {
-                    id: resultRepeater
-                    model: funkeLauncher.resultApps
-                    delegate: Rectangle {
 
+
+                // scrollable
+                Flickable {
+                    anchors.fill: parent
+                    clip: true
+                    contentHeight: resultColumn.implicitHeight
+                    contentWidth: width
+                    anchors.margins: 8
+                    Column {
+                        id: resultColumn
                         width: parent.width
-                        implicitHeight: 40
-                        color: index === funkeResults.currentIndex ? ThemeService.active.accent : ThemeService.active.bgBase
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.leftMargin: 12
-                            text: modelData.name
-                            color: "#ffffff"
-                            font.family: "JetBrainsMono Nerd Font"
-                            font.pixelSize: 14
-                        }
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                procFunkeAppOpen.command = ["bash", "-c", modelData.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
-                                procFunkeAppOpen.running = true
+                        anchors.margins: 8
+                        spacing: 8
+                        Repeater {
+                            id: resultRepeater
+                            model: funkeLauncher.resultApps
+                            delegate: InteractableCard {
+                                width: parent.width
+                                height: 64
+                                color: index === funkeResults.currentIndex ? ThemeService.active.accentDark : ThemeService.active.bgBase
+                                Column {
+                                    anchors.fill: parent
+                                    anchors.margins: 8
+                                    spacing: 8
+                                    Row {
+                                        Text {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            anchors.leftMargin: 12
+                                            text: modelData.name
+                                            color: ThemeService.active.accent
+                                            font.family: "JetBrainsMono Nerd Font"
+                                            font.pixelSize: 16
+                                            font.weight: Font.ExtraBold
+                                        }
+                                    }
+                                    Row {
+                                        Text {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            anchors.leftMargin: 12
+                                            text: modelData.comment
+                                            color: "#faa42F"
+                                            font.family: "JetBrainsMono Nerd Font"
+                                            font.pixelSize: 14
+                                        }
+                                    }
+                                }
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        procFunkeAppOpen.command = ["bash", "-c", modelData.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
+                                        procFunkeAppOpen.running = true
+                                    }
+                                }
                             }
                         }
-
                     }
-
                 }
             }
-
-
         }
 
 
@@ -227,15 +252,12 @@ PanelWindow {
                     // -- keyboad control for navigating results -- //
 
                     Keys.onDownPressed: {
-                        console.log("down")
                         funkeResults.currentIndex = Math.min(funkeResults.currentIndex + 1, funkeLauncher.resultApps.length - 1)
                     }
                     Keys.onUpPressed: {
-                        console.log("up")
                         funkeResults.currentIndex = Math.max(funkeResults.currentIndex - 1, 0)
                     }
                     Keys.onReturnPressed: {
-                        console.log("enter")
                         if (funkeResults.currentIndex !== undefined) {
                             const app = funkeLauncher.resultApps[funkeResults.currentIndex]
                             procFunkeAppOpen.command = ["bash", "-c", app.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
