@@ -96,7 +96,6 @@ PanelWindow {
 
                         StatsCard {
                             Layout.fillWidth: true
-                            accentColor: "#52E9EB"
                             history: CpuService.history
                             title: "CPU"
                             unit: "%"
@@ -104,7 +103,6 @@ PanelWindow {
                         }
                         StatsCard {
                             Layout.fillWidth: true
-                            accentColor: "#E10C05"
                             history: MemService.history
                             title: "RAM"
                             unit: "%"
@@ -117,7 +115,6 @@ PanelWindow {
 
                         StatsCard {
                             Layout.fillWidth: true
-                            accentColor: "#DCD4DD"
                             history: NvidiaGpuService.history
                             title: "GPU"
                             unit: "%"
@@ -125,7 +122,6 @@ PanelWindow {
                         }
                         StatsCard {
                             Layout.fillWidth: true
-                            accentColor: "#d55c1b"
                             history: CpuService.history
                             title: "CPU"
                             unit: "%"

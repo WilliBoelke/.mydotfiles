@@ -4,6 +4,7 @@ import Quickshell
 import QtQuick
 import Quickshell.Hyprland
 import qs.bars
+import qs.funke
 
 ShellRoot {
 
@@ -19,7 +20,6 @@ ShellRoot {
 
                 property bool sideMenuLeftOpen: false
                 property bool sideMenuRightOpen: false
-                property bool funkeOpen: false
 
 
 
@@ -38,6 +38,11 @@ ShellRoot {
                     screen: modelData
                 }
 
+                property var funke: FunkeLauncher
+                {
+                    screen: modelData
+                }
+
                 property var bar: BottomBar
                 {
                     screen: modelData
@@ -46,7 +51,6 @@ ShellRoot {
 
                     onToggleSideLeftMenu: root.sideMenuLeftOpen = !root.sideMenuLeftOpen
                     onToggleSideRightMenu: root.sideMenuRightOpen = !root.sideMenuRightOpen
-                    onToggleFunke: root.funkeOpen = !root.funkeOpen
                 }
                 property var topbar: TopBar
                 {
@@ -57,6 +61,7 @@ ShellRoot {
                     onToggleSideLeftMenu: root.sideMenuLeftOpen = !root.sideMenuLeftOpen
                     onToggleSideRightMenu: root.sideMenuRightOpen = !root.sideMenuRightOpen
                 }
+
             }
         }
     }
