@@ -42,7 +42,7 @@ PanelWindow {
     property var queryString
     property var resultApps: []
 
-
+    WlrLayershell.namespace: "funke"
     WlrLayershell.keyboardFocus: open ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
     WlrLayershell.screen: screen
 
@@ -56,6 +56,7 @@ PanelWindow {
     onOpenChanged: {
         if (open) {
             input.forceActiveFocus()
+
         } else {
             input.text = ""
             funkeLauncher.resultApps = []
@@ -126,6 +127,7 @@ PanelWindow {
             implicitHeight: parent.height - 44
             color: ThemeService.active.bgBase
             visible: open
+
             Column {
                 width: parent.width
                 height: parent.height
@@ -292,7 +294,6 @@ PanelWindow {
                     onClicked: funkeLauncher.open = !funkeLauncher.open
                 }
             }
-
         }
     }
 }
