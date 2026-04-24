@@ -26,11 +26,12 @@ def index_apps():
 
     for app_dir_path in APP_DIRS:
         print(app_dir_path)
-        ## open dir from path
-        filesList = os.listdir(os.path.expanduser(app_dir_path))
+
+        expanded_dir = os.path.expanduser(app_dir_path)
+        filesList = os.listdir(expanded_dir)
 
         for file in filesList:
-            file = os.path.join(app_dir_path, file)
+            file = os.path.join(expanded_dir, file)
             if file.endswith('.desktop'):
                 try:
 
