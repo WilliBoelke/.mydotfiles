@@ -7,6 +7,8 @@ import Quickshell.Io
 import qs.services
 import Quickshell.Io
 import qs.decoratives
+import Quickshell.Widgets
+import QtQuick.Effects
 
 PanelWindow {
     id: funkeLauncher
@@ -24,7 +26,7 @@ PanelWindow {
     // --- dimensions --- //alias
 
     width: 600
-    implicitHeight: resultApps.length > 0 ? 400 : 44
+    implicitHeight: resultApps.length > 0 ? 780 : 44
 
     // --- visuals --- //
 
@@ -139,44 +141,65 @@ PanelWindow {
                     clip: true
                     contentHeight: resultColumn.implicitHeight
                     contentWidth: width
-                    anchors.margins: 8
+                    anchors.margins: 12
                     Column {
                         id: resultColumn
                         width: parent.width
-                        anchors.margins: 8
-                        spacing: 8
+                        spacing: 12
                         Repeater {
                             id: resultRepeater
                             model: funkeLauncher.resultApps
                             delegate: InteractableCard {
                                 width: parent.width
-                                height: 64
-                                color: index === funkeResults.currentIndex ? ThemeService.active.accentDark : ThemeService.active.bgBase
-                                Column {
-                                    anchors.fill: parent
-                                    anchors.margins: 8
-                                    spacing: 8
+                                active : index === funkeResults.currentIndex
+                                implicitHeight: contentRow.implicitHeight + 24
                                     Row {
-                                        Text {
+                                        id: contentRow
+                                        anchors.fill: parent
+                                        anchors.margins: 12
+                                        spacing: 12
+
+                                        Item {
+                                            width: 32
+                                            height: 32
                                             anchors.verticalCenter: parent.verticalCenter
-                                            anchors.leftMargin: 12
-                                            text: modelData.name
-                                            color: ThemeService.active.accent
-                                            font.family: "JetBrainsMono Nerd Font"
-                                            font.pixelSize: 16
-                                            font.weight: Font.ExtraBold
+
+                                            IconImage {
+                                                anchors.fill: parent
+                                                source: "image://icon/" + modelData.icon
+                                                layer.enabled: true
+                                                layer.effect: MultiEffect {
+                                                    colorization: 0.7  // subtle tint, keeps original colors
+                                                    colorizationColor: ThemeService.active.accent
+                                                }
+                                            }
                                         }
-                                    }
-                                    Row {
-                                        Text {
-                                            anchors.verticalCenter: parent.verticalCenter
-                                            anchors.leftMargin: 12
-                                            text: modelData.comment
-                                            color: "#faa42F"
-                                            font.family: "JetBrainsMono Nerd Font"
-                                            font.pixelSize: 14
+
+                                        Column {
+                                            Row {
+                                                Text {
+                                                    anchors.verticalCenter: parent.verticalCenter
+                                                    anchors.leftMargin: 12
+                                                    text: modelData.name
+                                                    color: ThemeService.active.accent
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 16
+                                                    font.weight: Font.ExtraBold
+                                                }
+                                            }
+                                            Row {
+                                                Text {
+                                                    anchors.verticalCenter: parent.verticalCenter
+                                                    anchors.leftMargin: 12
+                                                    text: modelData.comment
+                                                    color: "#faa42F"
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 12
+                                                }
+                                            }
                                         }
-                                    }
+
+
                                 }
                                 MouseArea {
                                     anchors.fill: parent
@@ -196,7 +219,7 @@ PanelWindow {
         // --- search bar ---
 
         Rectangle {
-            width: 600
+            width: 800
             implicitHeight: 44
             anchors.horizontalCenter: parent.horizontalCenter
             color: "transparent"
@@ -240,7 +263,6 @@ PanelWindow {
                     verticalAlignment: Text.AlignVCenter
                     anchors.fill: parent
                     onTextChanged: {
-                        console.log("text changed", text)
                         if (text.length > 0) {
                             funkeLauncher.queryString = text
                             procFunkeAppSearch.running = true

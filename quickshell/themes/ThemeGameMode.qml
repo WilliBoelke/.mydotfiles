@@ -33,6 +33,7 @@ QtObject {
     readonly property color accentSubtle: Qt.rgba(0.835, 0.361, 0.106, 1)
 
     // --- Surfaces (blur-dependent in default theme) ---
+    readonly property color bgBase: "#191a1c" // panels, sidebars
 
     // --- Buttons ---
     readonly property color bgButton: "#381807"

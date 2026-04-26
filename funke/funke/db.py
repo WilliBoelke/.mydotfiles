@@ -51,6 +51,27 @@ def create_db_if_not_exists(db_path: str = "index.db") -> sqlite3.Connection:
                     )
                  """)
 
+    conn.execute("""
+                 CREATE TABLE IF NOT EXISTS directories
+                    (
+                        path TEXT PRIMARY KEY,
+                        indexed_at INTEGER
+                    )
+                    """)
+
+    conn.execute("""
+                CREATE TABLE IF NOT EXISTS files 
+                    (
+                        path TEXT PRIMARY KEY,
+                        name TEXT,
+                        extension TEXT,
+                        size INTEGER,
+                        mime_type TEXT,
+                        modified_at INTEGER,
+                        indexed_at INTEGER
+                    )
+                    """)
+
     conn.commit()
     return conn
 

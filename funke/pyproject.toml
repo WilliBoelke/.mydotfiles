@@ -6,6 +6,11 @@ build-backend = "hatchling.build"
 name = "funke"
 version = "1.0.0"
 
+[project]
+dependencies = [
+    "python-magic"
+]
+
 requires-python = ">=3.14"
 authors = [
   {name = "Willi Boelke"}

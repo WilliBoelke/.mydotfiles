@@ -3,7 +3,12 @@
   "exclude_paths" : [
     "*/node_modules/",
     "*/.git/",
-    "*/.idea/"
+    "*/.idea/",
+    "*/.cache/",
+    "*/.venv/",
+    "*/.tox/",
+    "*/__pycache__/",
+    "*/Steam"
   ],
   "index_interval": "10000",
   "index_timeout": "100"
