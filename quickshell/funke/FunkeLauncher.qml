@@ -94,10 +94,13 @@ PanelWindow {
     Process {
         id: procFunkeAppSearch
 
-        command: ["fk", "query", funkeLauncher.queryString]
+        command: ["fk", "query", funkeLauncher.queryString, "--apps"]
         stdout: StdioCollector {
             onStreamFinished: {
-                funkeLauncher.resultApps = JSON.parse(text)
+                funkeLauncher.resultApps = JSON.parse(text).apps
+                console.log("Search for", funkeLauncher.queryString)
+                console.log(text)
+                console.log(funkeLauncher.resultApps)
                 procFunkeAppSearch.running = false
             }
         }

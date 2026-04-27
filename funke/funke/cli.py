@@ -2,7 +2,11 @@
 import argparse
 
 from funke.indexer import index_apps
+from funke.indexer_files import index_files
 from funke.query import query_apps
+from funke.query import query_directories
+from funke.query import query_files
+import json
 
 def main():
     parser = argparse.ArgumentParser(description="Funke")
@@ -10,15 +14,26 @@ def main():
 
     subparsers.add_parser("index")
 
-
     search_parser = subparsers.add_parser("query")
     search_parser.add_argument("query", nargs="+")
+    search_parser.add_argument("--apps", action="store_true")
+    search_parser.add_argument("--files", action="store_true")
+    search_parser.add_argument("--dirs", action="store_true")
 
     args = parser.parse_args()
 
     if args.command == "index":
         index_apps()
+        index_files()
     elif args.command == "query":
         query = " ".join(args.query)
-        result = query_apps(query)
-        print(result)
+        # if no flags specified, query everything
+        query_all = not args.apps and not args.files and not args.dirs
+        result = {}
+        if args.apps or query_all:
+            result["apps"] = query_apps(query)
+        if args.files or query_all:
+            result["files"] = query_files(query)
+        if args.dirs or query_all:
+            result["dirs"] = query_directories(query)
+        print(json.dumps(result, indent=4))

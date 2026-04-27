@@ -55,6 +55,7 @@ def create_db_if_not_exists(db_path: str = "index.db") -> sqlite3.Connection:
                  CREATE TABLE IF NOT EXISTS directories
                     (
                         path TEXT PRIMARY KEY,
+                        name TEXT,
                         indexed_at INTEGER
                     )
                     """)
@@ -93,15 +94,37 @@ class IndexDatabase:
         ### write app to dbcreated_at
         cursor = self.conn.cursor()
         cursor.execute("""
-            INSERT INTO apps (name, comment, icon, exec, try_exec, path, created_at, last_modified)
+            INSERT INTO apps (name, 
+                              comment, 
+                              icon, 
+                              exec, 
+                              try_exec,
+                              path, 
+                              created_at, 
+                              last_modified)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (app.name, app.comment, app.icon, app.app_exec, app.try_exec, app.path, app.created_at, app.last_modified))
+        """, (
+              app.name,
+              app.comment,
+              app.icon,
+              app.app_exec,
+              app.try_exec,
+              app.path,
+              app.created_at,
+              app.last_modified
+        ))
+
 
     def update_app(self, app: AppEntry):
         cursor = self.conn.cursor()
         cursor.execute("""
             UPDATE apps
-            SET name = ?, comment = ?, icon = ?, exec = ?, try_exec = ?, last_modified = ?
+            SET name = ?, 
+                comment = ?, 
+                icon = ?, 
+                exec = ?, 
+                try_exec = ?, 
+                last_modified = ?
             WHERE path = ?
         """, (app.name, app.comment, app.icon, app.app_exec, app.try_exec, app.last_modified, app.path))
 
@@ -111,6 +134,34 @@ class IndexDatabase:
             DELETE FROM apps
             WHERE path = ?
         """, (path,))
+
+    def write_directory(self, path: str, name: str, indexed_at: int):
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            INSERT INTO directories (path, name,  indexed_at)
+            VALUES (?, ?, ?)
+        """, (path, name, indexed_at))
+
+    def write_file(self,
+                   path: str,
+                   name: str,
+                   extension: str,
+                   size: int,
+                   mime_type: str,
+                   modified_at: int,
+                   indexed_at: int):
+        cursor = self.conn.cursor()
+        cursor.execute("""
+                       INSERT INTO files (path, name, extension, size, mime_type, modified_at, indexed_at)
+                       VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT (path) DO
+                       UPDATE SET
+                           name=excluded.name,
+                           extension=excluded.extension,
+                           size =excluded.size,
+                           mime_type=excluded.mime_type,
+                           modified_at=excluded.modified_at,
+                           indexed_at=excluded.indexed_at
+                       """, (path, name, extension, size, mime_type, modified_at, indexed_at))
 
     def get_indexed_app_paths(self) -> list[str]:
         cursor = self.conn.cursor()
@@ -128,3 +179,14 @@ class IndexDatabase:
         cursor.execute("SELECT * FROM apps WHERE name LIKE ? OR comment LIKE ?",
                        (f"%{partial_name}%", f"%{partial_name}%"))
         return [row for row in cursor.fetchall()]
+
+    def get_directory_by_name(self, name: str):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM directories WHERE name = ?", (name,))
+        return cursor.fetchall()
+
+    def get_file_by_text(self, query: str):
+        # get a file by its name or mimetype
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM files WHERE name LIKE ?", (f"%{query}%",))
+        return cursor.fetchall()

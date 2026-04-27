@@ -7,10 +7,26 @@ def query_apps(query):
     result = db.get_apps_with_text(query)
     db.close()
     result = [dict(row) for row in result]
-    result = json.dumps(result, indent=4)
 
     return result
 
+
+def query_directories(query):
+    db = IndexDatabase()
+    result = db.get_directory_by_name(query)
+    db.close()
+    result = [dict(row) for row in result]
+
+    return result
+
+
+def query_files(query):
+    db = IndexDatabase()
+    result = db.get_file_by_text(query)
+    db.close()
+    result = [dict(row) for row in result]
+
+    return result
 
 
 if __name__ == "__main__":
