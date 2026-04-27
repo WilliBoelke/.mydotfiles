@@ -5,7 +5,6 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 import Quickshell.Io
 import qs.services
-import Quickshell.Io
 import qs.decoratives
 import Quickshell.Widgets
 import QtQuick.Effects
@@ -13,41 +12,32 @@ import QtQuick.Effects
 PanelWindow {
     id: funkeLauncher
 
-
-    // --- position --- //
-
+    // --- position ---
     anchors {
         bottom: true
     }
-
     exclusionMode: ExclusionMode.Ignore
 
+    // --- dimensions ---
+    width: 1200
+    implicitHeight: (resultApps.length > 0 || resultFiles.length > 0 || resultDirs.length > 0) ? 780 : 44
 
-    // --- dimensions --- //alias
-
-    width: 600
-    implicitHeight: resultApps.length > 0 ? 780 : 44
-
-    // --- visuals --- //
-
+    // --- visuals ---
     color: "transparent"
 
-
-    // --- properties --- //
-
+    // --- properties ---
     property bool open: false
     property var screen
-
-
-    // --- search results --- //
-
     property var queryString
     property var resultApps: []
+    property var resultFiles: []
+    property var resultDirs: []
 
     WlrLayershell.namespace: "funke"
     WlrLayershell.keyboardFocus: open ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
     WlrLayershell.screen: screen
 
+    // --- focus grab ---
     HyprlandFocusGrab {
         id: focusGrab
         windows: [funkeLauncher]
@@ -58,57 +48,50 @@ PanelWindow {
     onOpenChanged: {
         if (open) {
             input.forceActiveFocus()
-
         } else {
             input.text = ""
-            funkeLauncher.resultApps = []
+            resultApps = []
+            resultFiles = []
+            resultDirs = []
         }
     }
 
     onQueryStringChanged: {
         if (queryString === "" || queryString === undefined) {
             resultApps = []
-
+            resultFiles = []
+            resultDirs = []
         }
     }
 
-    // --- Keyboard shortcuts ---
-
+    // --- shortcuts ---
     GlobalShortcut {
         appid: "quickshell"
         name: "toggleFunke"
         onPressed: {
-            if (funkeLauncher.screen.name === Hyprland.focusedMonitor?.name) {
+            if (funkeLauncher.screen.name === Hyprland.focusedMonitor?.name)
                 funkeLauncher.open = !funkeLauncher.open
-            }
         }
     }
 
+    // --- processes ---
 
-    // --- processes --- //
-
-    /**
-     * Uses funkes fk query 'query' command to
-     * search for applications and open them when the user submits a search.
-     */
     Process {
-        id: procFunkeAppSearch
-
-        command: ["fk", "query", funkeLauncher.queryString, "--apps"]
+        id: procFunkeSearch
+        command: ["fk", "query", funkeLauncher.queryString, "--apps", "--files", "--dirs"]
         stdout: StdioCollector {
             onStreamFinished: {
-                funkeLauncher.resultApps = JSON.parse(text).apps
-                console.log("Search for", funkeLauncher.queryString)
-                console.log(text)
-                console.log(funkeLauncher.resultApps)
-                procFunkeAppSearch.running = false
+                let result = JSON.parse(text)
+                funkeLauncher.resultApps = result.apps
+                funkeLauncher.resultFiles = result.files
+                funkeLauncher.resultDirs = result.dirs
+                procFunkeSearch.running = false
             }
         }
     }
 
     Process {
         id: procFunkeAppOpen
-        command: ["bash", "-c", modelData.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
         stdout: StdioCollector {
             onStreamFinished: {
                 procFunkeAppOpen.running = false
@@ -117,83 +100,234 @@ PanelWindow {
         }
     }
 
-
-    // --- content --- //
-
+    // --- content ---
     Column {
         anchors.fill: parent
 
-        // --- results ---
-
+        // --- results panel ---
         Rectangle {
             id: funkeResults
-            property int currentIndex: undefined
+            property int currentIndex: -1
             width: parent.width
             implicitHeight: parent.height - 44
             color: ThemeService.active.bgBase
             visible: open
 
-            Column {
-                width: parent.width
-                height: parent.height
+            // outer padding
+            Item {
+                anchors.fill: parent
+                anchors.margins: 16
 
-
-                // scrollable
-                Flickable {
+                Row {
                     anchors.fill: parent
-                    clip: true
-                    contentHeight: resultColumn.implicitHeight
-                    contentWidth: width
-                    anchors.margins: 12
+                    spacing: 16
+
+                    // --- left column: files + dirs ---
                     Column {
-                        id: resultColumn
-                        width: parent.width
+                        width: (parent.width - 32) / 3  // 32 = 2 gaps of 16
+                        height: parent.height
                         spacing: 12
-                        Repeater {
-                            id: resultRepeater
-                            model: funkeLauncher.resultApps
-                            delegate: InteractableCard {
-                                width: parent.width
-                                active : index === funkeResults.currentIndex
-                                implicitHeight: contentRow.implicitHeight + 24
-                                    Row {
-                                        id: contentRow
-                                        anchors.fill: parent
-                                        anchors.margins: 12
-                                        spacing: 12
 
-                                        Item {
-                                            width: 32
-                                            height: 32
-                                            anchors.verticalCenter: parent.verticalCenter
+                        // Files
+                        Card {
+                            width: parent.width
+                            height: (parent.height - 12) / 2  // 12 = gap between cards
 
-                                            IconImage {
+                            Flickable {
+                                anchors.fill: parent
+                                anchors.margins: 12
+                                clip: true
+                                contentHeight: fileColumn.implicitHeight
+                                contentWidth: width
+
+                                Column {
+                                    id: fileColumn
+                                    width: parent.width
+                                    spacing: 8
+
+                                    Text {
+                                        text: "FILES"
+                                        color: ThemeService.active.accent
+                                        font.family: "JetBrainsMono Nerd Font"
+                                        font.pixelSize: 10
+                                        font.weight: Font.Bold
+                                        opacity: 0.6
+                                    }
+
+
+                                    Repeater {
+                                        model: funkeLauncher.resultFiles
+                                        delegate: InteractableCard {
+                                            width: parent.width
+                                            implicitHeight: 48
+                                            Column {
                                                 anchors.fill: parent
-                                                source: "image://icon/" + modelData.icon
-                                                layer.enabled: true
-                                                layer.effect: MultiEffect {
-                                                    colorization: 0.7  // subtle tint, keeps original colors
-                                                    colorizationColor: ThemeService.active.accent
+                                                anchors.margins: 8
+                                                spacing: 2
+                                                Text {
+                                                    text: modelData.name
+                                                    color: "#faa42F"
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 13
+                                                    font.weight: Font.Bold
+                                                    elide: Text.ElideRight
+                                                    width: parent.width
+                                                }
+                                                Text {
+                                                    text: modelData.path
+                                                    color: ThemeService.active.accent
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 10
+                                                    elide: Text.ElideLeft
+                                                    width: parent.width
+                                                }
+                                            }
+                                            MouseArea {
+                                                anchors.fill: parent
+                                                onClicked: {
+                                                    procFunkeAppOpen.command = ["xdg-open", modelData.path, "&", "disown"]
+                                                    procFunkeAppOpen.running = true
                                                 }
                                             }
                                         }
+                                    }
+                                }
+                            }
+                        }
 
-                                        Column {
-                                            Row {
+                        // Dirs
+                        Card {
+                            width: parent.width
+                            height: (parent.height - 12) / 2
+
+                            Flickable {
+                                anchors.fill: parent
+                                anchors.margins: 12
+                                clip: true
+                                contentHeight: dirColumn.implicitHeight
+                                contentWidth: width
+
+                                Column {
+                                    id: dirColumn
+                                    width: parent.width
+                                    spacing: 8
+
+                                    Text {
+                                        text: "DIRECTORIES"
+                                        color: ThemeService.active.accent
+                                        font.family: "JetBrainsMono Nerd Font"
+                                        font.pixelSize: 10
+                                        font.weight: Font.Bold
+                                        opacity: 0.6
+                                    }
+
+                                    Repeater {
+                                        model: funkeLauncher.resultDirs
+                                        delegate: InteractableCard {
+                                            width: parent.width
+                                            implicitHeight: 48
+                                            Column {
+                                                anchors.fill: parent
+                                                anchors.margins: 8
+                                                spacing: 2
                                                 Text {
-                                                    anchors.verticalCenter: parent.verticalCenter
-                                                    anchors.leftMargin: 12
+                                                    text: modelData.name
+                                                    color: ThemeService.active.accent
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 13
+                                                    font.weight: Font.Bold
+                                                    elide: Text.ElideRight
+                                                    width: parent.width
+                                                }
+                                                Text {
+                                                    text: modelData.path
+                                                    color: "#faa42F"
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 10
+                                                    elide: Text.ElideLeft
+                                                    width: parent.width
+                                                }
+                                            }
+                                            MouseArea {
+                                                anchors.fill: parent
+                                                onClicked: {
+                                                    procFunkeAppOpen.command = ["xdg-open", modelData.path]
+                                                    procFunkeAppOpen.running = true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // --- center column: apps ---
+                    Card {
+                        width: (parent.width - 32) / 3
+                        height: parent.height
+
+                        Flickable {
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            clip: true
+                            contentHeight: appColumn.implicitHeight
+                            contentWidth: width
+
+                            Column {
+                                id: appColumn
+                                width: parent.width
+                                spacing: 12
+
+                                Text {
+                                    text: "APPS"
+                                    color: ThemeService.active.accent
+                                    font.family: "JetBrainsMono Nerd Font"
+                                    font.pixelSize: 10
+                                    font.weight: Font.Bold
+                                    opacity: 0.6
+                                }
+
+                                Repeater {
+                                    id: resultRepeater
+                                    model: funkeLauncher.resultApps
+                                    delegate: InteractableCard {
+                                        width: parent.width
+                                        active: index === funkeResults.currentIndex
+                                        implicitHeight: appContentRow.implicitHeight + 24
+
+                                        Row {
+                                            id: appContentRow
+                                            anchors.fill: parent
+                                            anchors.margins: 12
+                                            spacing: 12
+
+                                            Item {
+                                                width: 32
+                                                height: 32
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                IconImage {
+                                                    anchors.fill: parent
+                                                    source: "image://icon/" + modelData.icon
+                                                    layer.enabled: true
+                                                    layer.effect: MultiEffect {
+                                                        colorization: 0.7
+                                                        colorizationColor: ThemeService.active.accent
+                                                    }
+                                                }
+                                            }
+
+                                            Column {
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                spacing: 2
+                                                Text {
                                                     text: modelData.name
                                                     color: ThemeService.active.accent
                                                     font.family: "JetBrainsMono Nerd Font"
                                                     font.pixelSize: 16
                                                     font.weight: Font.ExtraBold
                                                 }
-                                            }
-                                            Row {
                                                 Text {
-                                                    anchors.verticalCenter: parent.verticalCenter
-                                                    anchors.leftMargin: 12
                                                     text: modelData.comment
                                                     color: "#faa42F"
                                                     font.family: "JetBrainsMono Nerd Font"
@@ -202,36 +336,44 @@ PanelWindow {
                                             }
                                         }
 
-
-                                }
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        procFunkeAppOpen.command = ["bash", "-c", modelData.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
-                                        procFunkeAppOpen.running = true
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: {
+                                                procFunkeAppOpen.command = ["bash", "-c", modelData.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
+                                                procFunkeAppOpen.running = true
+                                            }
+                                        }
                                     }
                                 }
                             }
+                        }
+                    }
+
+                    // --- right column: web placeholder ---
+                    Card {
+                        width: (parent.width - 32) / 3
+                        height: parent.height
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "WEB"
+                            color: ThemeService.active.accent
+                            font.family: "JetBrainsMono Nerd Font"
+                            font.pixelSize: 10
+                            font.weight: Font.Bold
+                            opacity: 0.3
                         }
                     }
                 }
             }
         }
 
-
         // --- search bar ---
-
         Rectangle {
-            width: 800
-            implicitHeight: 44
-            anchors.horizontalCenter: parent.horizontalCenter
-            color: "transparent"
             id: funkeSearch
-
-            // Subtle glow
-            layer.enabled: true
-            layer.effect: null
-
+            width: parent.width
+            implicitHeight: 44
+            color: "transparent"
 
             Rectangle {
                 width: open ? 600 : 100
@@ -243,20 +385,18 @@ PanelWindow {
                 radius: 16
 
                 Text {
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.centerIn: parent
                     text: "/search"
                     font.family: "JetBrainsMono Nerd Font"
                     font.pixelSize: 16
                     color: ThemeService.active.accent
                     visible: !open
-                    // center
-                    horizontalAlignment: Text.AlignHCenter
                 }
 
                 TextInput {
                     id: input
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: parent.width - 40
+                    anchors.fill: parent
+                    anchors.margins: 12
                     color: "#ffaa42"
                     font.family: "JetBrainsMono Nerd Font"
                     font.pixelSize: 15
@@ -264,28 +404,22 @@ PanelWindow {
                     selectedTextColor: "#ffaa42"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    anchors.fill: parent
+                    visible: open
+
                     onTextChanged: {
                         if (text.length > 0) {
                             funkeLauncher.queryString = text
-                            procFunkeAppSearch.running = true
-                        } else if (text.length === 0) {
+                            procFunkeSearch.running = true
+                        } else {
                             funkeLauncher.queryString = undefined
-                            procFunkeAppSearch.running = false
+                            procFunkeSearch.running = false
                         }
                     }
-                    visible: open
 
-                    // -- keyboad control for navigating results -- //
-
-                    Keys.onDownPressed: {
-                        funkeResults.currentIndex = Math.min(funkeResults.currentIndex + 1, funkeLauncher.resultApps.length - 1)
-                    }
-                    Keys.onUpPressed: {
-                        funkeResults.currentIndex = Math.max(funkeResults.currentIndex - 1, 0)
-                    }
+                    Keys.onDownPressed: funkeResults.currentIndex = Math.min(funkeResults.currentIndex + 1, funkeLauncher.resultApps.length - 1)
+                    Keys.onUpPressed: funkeResults.currentIndex = Math.max(funkeResults.currentIndex - 1, 0)
                     Keys.onReturnPressed: {
-                        if (funkeResults.currentIndex !== undefined) {
+                        if (funkeResults.currentIndex >= 0) {
                             const app = funkeLauncher.resultApps[funkeResults.currentIndex]
                             procFunkeAppOpen.command = ["bash", "-c", app.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
                             procFunkeAppOpen.running = true
@@ -298,24 +432,16 @@ PanelWindow {
                         duration: 200
                     }
                 }
-                Behavior on border.color {
-                    ColorAnimation {
-                        duration: 150
-                    }
-                }
-                Behavior on color {
+                Behavior on border
+                .
+                color {
                     ColorAnimation {
                         duration: 150
                     }
                 }
 
-
-                /*
-                 Notice click for focus
-                 */
                 MouseArea {
-                    anchors.fill: funkeSearch
-
+                    anchors.fill: parent
                     onClicked: funkeLauncher.open = !funkeLauncher.open
                 }
             }

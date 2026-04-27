@@ -176,17 +176,17 @@ class IndexDatabase:
     def get_apps_with_text(self, partial_name: str):
         cursor = self.conn.cursor()
 
-        cursor.execute("SELECT * FROM apps WHERE name LIKE ? OR comment LIKE ?",
+        cursor.execute("SELECT * FROM apps WHERE name LIKE ? OR comment LIKE ? LIMIT 10",
                        (f"%{partial_name}%", f"%{partial_name}%"))
         return [row for row in cursor.fetchall()]
 
     def get_directory_by_name(self, name: str):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM directories WHERE name = ?", (name,))
+        cursor.execute("SELECT * FROM directories WHERE name LIKE ? LIMIT 10", (f"%{name}%",))
         return cursor.fetchall()
 
     def get_file_by_text(self, query: str):
         # get a file by its name or mimetype
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM files WHERE name LIKE ?", (f"%{query}%",))
+        cursor.execute("SELECT * FROM files WHERE name LIKE ? LIMIT 10", (f"%{query}%",))
         return cursor.fetchall()
