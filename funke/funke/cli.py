@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 import argparse
 
-from funke.indexer import index_apps
+from funke.indexer_apps import index_apps
 from funke.indexer_files import index_files
 from funke.query import query_apps
 from funke.query import query_directories
 from funke.query import query_files
+from funke.query import query_web
 import json
 
 def main():
@@ -19,6 +20,7 @@ def main():
     search_parser.add_argument("--apps", action="store_true")
     search_parser.add_argument("--files", action="store_true")
     search_parser.add_argument("--dirs", action="store_true")
+    search_parser.add_argument("--web", action="store_true")
 
     args = parser.parse_args()
 
@@ -36,4 +38,6 @@ def main():
             result["files"] = query_files(query)
         if args.dirs or query_all:
             result["dirs"] = query_directories(query)
+        if args.web or query_all:
+            result["web"] = query_web(query)
         print(json.dumps(result, indent=4))

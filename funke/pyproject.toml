@@ -6,7 +6,8 @@ build-backend = "hatchling.build"
 name = "funke"
 version = "1.0.0"
 dependencies = [
-    "python-magic"
+    "python-magic",
+     "brotli"
 ]
 
 requires-python = ">=3.14"

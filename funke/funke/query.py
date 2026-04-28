@@ -28,6 +28,9 @@ def query_files(query):
 
     return result
 
+def query_web(query):
+    pass
+
 
 if __name__ == "__main__":
     result = query_apps("priv")

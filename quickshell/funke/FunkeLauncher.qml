@@ -95,6 +95,7 @@ PanelWindow {
         stdout: StdioCollector {
             onStreamFinished: {
                 procFunkeAppOpen.running = false
+                procFunkeAppOpen.command = []
                 funkeLauncher.open = false
             }
         }
