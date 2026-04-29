@@ -1,28 +1,21 @@
-import urllib
+import subprocess
 
 import requests
 
 import re
 import html
-from playwright.sync_api import sync_playwright
-
-
-from playwright_stealth import Stealth
 
 def search_web(query):
-    with sync_playwright() as p:
-        browser = p.chromium.launch_persistent_context(
-            user_data_dir="/home/wboelke/.config/chromium",
-            headless=True
+        result = subprocess.run(
+            [
+                "curl", "-s",
+                "-A", "Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0",
+                f"https://lite.duckduckgo.com/lite/?q={query.replace(' ', '+')}"
+            ],
+            capture_output=True,
+            text=True
         )
-        page = browser.new_page()
-        stealth = Stealth()
-        stealth.apply_stealth_sync(page)
-        page.goto(f"https://lite.duckduckgo.com/lite/?q={query}")
-        response_html = page.content()
-        browser.close()
-
-        print(response_html)
+        response_html = result.stdout
         results_start = response_html.find('<table border="0">\n    \n      \n      <!-- Web results are present -->')
         if results_start != -1:
             response_html = response_html[results_start:]
