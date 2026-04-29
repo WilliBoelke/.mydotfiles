@@ -2,57 +2,53 @@ import urllib
 
 import requests
 
-import urllib.request
-import urllib.parse
 import re
 import html
+from playwright.sync_api import sync_playwright
+
+
+from playwright_stealth import Stealth
 
 def search_web(query):
-    url = "https://lite.duckduckgo.com/lite/"
-    params = urllib.parse.urlencode({"q": query})
+    with sync_playwright() as p:
+        browser = p.chromium.launch_persistent_context(
+            user_data_dir="/home/wboelke/.config/chromium",
+            headless=True
+        )
+        page = browser.new_page()
+        stealth = Stealth()
+        stealth.apply_stealth_sync(page)
+        page.goto(f"https://lite.duckduckgo.com/lite/?q={query}")
+        response_html = page.content()
+        browser.close()
 
-    req = urllib.request.Request(
-        f"{url}?{params}",
-        headers={
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "en-US,en;q=0.5",
-            "Cookie": "kl=wt-wt; p=-2; s=l; o=json",
-            "Referer": "https://lite.duckduckgo.com/",
-            "DNT": "1",
-        }
-    )
+        print(response_html)
+        results_start = response_html.find('<table border="0">\n    \n      \n      <!-- Web results are present -->')
+        if results_start != -1:
+            response_html = response_html[results_start:]
+        pattern = re.compile(
+            r'<a rel="nofollow" href="(.*?)" class=\'result-link\'>(.*?)</a>'
+            r'.*?<td class=\'result-snippet\'>\s*(.*?)\s*</td>'
+            r'.*?<span class=\'link-text\'>(.*?)</span>',
+            re.DOTALL
+        )
 
+        results = pattern.findall(response_html)
+        # cleanup snippets
+        cleaned_results = []
 
-    response = urllib.request.urlopen(req)
-    responseHtml = response.read().decode("utf-8")
-    results_start = responseHtml.find('<table border="0">\n    \n      \n      <!-- Web results are present -->')
-    if results_start != -1:
-        responseHtml = responseHtml[results_start:]
-    pattern = re.compile(
-        r'<a rel="nofollow" href="(.*?)" class=\'result-link\'>(.*?)</a>'
-        r'.*?<td class=\'result-snippet\'>\s*(.*?)\s*</td>'
-        r'.*?<span class=\'link-text\'>(.*?)</span>',
-        re.DOTALL
-    )
-    results = pattern.findall(responseHtml)
-    # cleanup snippets
-    cleaned_results = []
+        for url, title, snippet, domain in results[:5]:
+            snippet = clean_snippet(snippet)
+            url = "https:" + url if url.startswith("//") else url
+            url = html.unescape(url)
+            cleaned_results.append({
+                "title": title,
+                "url": url,
+                "snippet": snippet,
+                "domain": domain
+            })
 
-    for url, title, snippet, domain in results[:5]:
-        snippet = clean_snippet(snippet)
-        url = "https:" + url if url.startswith("//") else url
-        url = html.unescape(url)
-        cleaned_results.append({
-            "title": title,
-            "url": url,
-            "snippet": snippet,
-            "domain": domain
-        })
-
-
-
-    return cleaned_results
+        return cleaned_results
 
 
 def clean_snippet(text):

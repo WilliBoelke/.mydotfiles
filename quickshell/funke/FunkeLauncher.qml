@@ -32,6 +32,7 @@ PanelWindow {
     property var resultApps: []
     property var resultFiles: []
     property var resultDirs: []
+    property var resultWeb: []
 
     WlrLayershell.namespace: "funke"
     WlrLayershell.keyboardFocus: open ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
@@ -78,13 +79,15 @@ PanelWindow {
 
     Process {
         id: procFunkeSearch
-        command: ["fk", "query", funkeLauncher.queryString, "--apps", "--files", "--dirs"]
+        command: ["fk", "query", funkeLauncher.queryString, "--apps", "--files", "--dirs", "--web"]
         stdout: StdioCollector {
             onStreamFinished: {
                 let result = JSON.parse(text)
+                console.log(JSON.stringify(result, null, 2))
                 funkeLauncher.resultApps = result.apps
                 funkeLauncher.resultFiles = result.files
                 funkeLauncher.resultDirs = result.dirs
+                funkeLauncher.resultWeb = result.web
                 procFunkeSearch.running = false
             }
         }
@@ -355,14 +358,70 @@ PanelWindow {
                         width: (parent.width - 32) / 3
                         height: parent.height
 
-                        Text {
-                            anchors.centerIn: parent
-                            text: "WEB"
-                            color: ThemeService.active.accent
-                            font.family: "JetBrainsMono Nerd Font"
-                            font.pixelSize: 10
-                            font.weight: Font.Bold
-                            opacity: 0.3
+                        Flickable {
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            clip: true
+                            contentHeight: appColumn.implicitHeight
+                            contentWidth: width
+
+                            Column {
+                                id: webColumn
+                                width: parent.width
+                                spacing: 12
+
+                                Text {
+                                    text: "APPS"
+                                    color: ThemeService.active.accent
+                                    font.family: "JetBrainsMono Nerd Font"
+                                    font.pixelSize: 10
+                                    font.weight: Font.Bold
+                                    opacity: 0.6
+                                }
+
+                                Repeater {
+                                    id: resultWebRepeater
+                                    model: funkeLauncher.resultWeb
+                                    delegate: InteractableCard {
+                                        width: parent.width
+                                        active: index === funkeResults.currentIndex
+                                        implicitHeight: appContentRow.implicitHeight + 24
+
+                                        Row {
+                                            id: webContentRow
+                                            anchors.fill: parent
+                                            anchors.margins: 12
+                                            spacing: 12
+
+                                            Column {
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                spacing: 2
+                                                Text {
+                                                    text: modelData.title
+                                                    color: ThemeService.active.accent
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 16
+                                                    font.weight: Font.ExtraBold
+                                                }
+                                                Text {
+                                                    text: modelData.snippet
+                                                    color: "#faa42F"
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 12
+                                                }
+                                            }
+                                        }
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: {
+                                                procFunkeAppOpen.command = ["bash", "-c", modelData.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
+                                                procFunkeAppOpen.running = true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
