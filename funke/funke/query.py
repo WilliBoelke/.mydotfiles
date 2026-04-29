@@ -1,6 +1,8 @@
 import json
 
 from funke.db import IndexDatabase
+from funke.ddg_search import search_web
+
 
 def query_apps(query):
     db = IndexDatabase()
@@ -29,7 +31,7 @@ def query_files(query):
     return result
 
 def query_web(query):
-    pass
+    return search_web(query)
 
 
 if __name__ == "__main__":

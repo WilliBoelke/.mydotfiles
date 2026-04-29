@@ -30,7 +30,7 @@ def main():
     elif args.command == "query":
         query = " ".join(args.query)
         # if no flags specified, query everything
-        query_all = not args.apps and not args.files and not args.dirs
+        query_all = not args.apps and not args.files and not args.dirs and not args.web
         result = {}
         if args.apps or query_all:
             result["apps"] = query_apps(query)
