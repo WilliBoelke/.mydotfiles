@@ -1,11 +1,11 @@
 import urllib
 
 import requests
-import json
 
 import urllib.request
 import urllib.parse
-
+import re
+import html
 
 def search_web(query):
     url = "https://lite.duckduckgo.com/lite/"
@@ -23,9 +23,40 @@ def search_web(query):
         }
     )
 
-    response = urllib.request.urlopen(req)
-    return response.read().decode("utf-8")
 
+    response = urllib.request.urlopen(req)
+    responseHtml = response.read().decode("utf-8")
+    results_start = responseHtml.find('<table border="0">\n    \n      \n      <!-- Web results are present -->')
+    if results_start != -1:
+        responseHtml = responseHtml[results_start:]
+    pattern = re.compile(
+        r'<a rel="nofollow" href="(.*?)" class=\'result-link\'>(.*?)</a>'
+        r'.*?<td class=\'result-snippet\'>\s*(.*?)\s*</td>'
+        r'.*?<span class=\'link-text\'>(.*?)</span>',
+        re.DOTALL
+    )
+    results = pattern.findall(responseHtml)
+    # cleanup snippets
+    cleaned_results = []
+
+    for url, title, snippet, domain in results[:5]:
+        snippet = clean_snippet(snippet)
+        url = "https:" + url if url.startswith("//") else url
+        url = html.unescape(url)
+        cleaned_results.append({
+            "title": title,
+            "url": url,
+            "snippet": snippet,
+            "domain": domain
+        })
+
+    return cleaned_results
+
+
+def clean_snippet(text):
+    text = re.sub(r'<.*?>', '', text)
+    text = html.unescape(text)
+    return text.strip()
 
 def ddg_instant_answer(query):
     url = "https://api.duckduckgo.com/"
