@@ -10,7 +10,7 @@ class AppEntry:
     icon: Optional[str] = None
     try_exec: Optional[str] = None
     created_at: Optional[int] = None
-    last_modified: Optional[int] = None
+    modified_at: Optional[int] = None
 
     def __repr__(self):
         return f"<AppEntry {self.name}>"

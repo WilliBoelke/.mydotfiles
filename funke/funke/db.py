@@ -33,7 +33,7 @@ def create_db_if_not_exists(db_path: str = "index.db") -> sqlite3.Connection:
                      try_exec TEXT,
                      path TEXT UNIQUE,
                      created_at INTEGER,
-                     last_modified INTEGER
+                     modified_at INTEGER
                  )
                  """)
 
@@ -56,7 +56,8 @@ def create_db_if_not_exists(db_path: str = "index.db") -> sqlite3.Connection:
                     (
                         path TEXT PRIMARY KEY,
                         name TEXT,
-                        indexed_at INTEGER
+                        indexed_at INTEGER,
+                        modified_at INTEGER
                     )
                     """)
 
@@ -101,7 +102,7 @@ class IndexDatabase:
                               try_exec,
                               path, 
                               created_at, 
-                              last_modified)
+                              modified_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """, (
               app.name,
@@ -111,7 +112,7 @@ class IndexDatabase:
               app.try_exec,
               app.path,
               app.created_at,
-              app.last_modified
+              app.modified_at
         ))
 
 
@@ -124,9 +125,9 @@ class IndexDatabase:
                 icon = ?, 
                 exec = ?, 
                 try_exec = ?, 
-                last_modified = ?
+                modified_at = ?
             WHERE path = ?
-        """, (app.name, app.comment, app.icon, app.app_exec, app.try_exec, app.last_modified, app.path))
+        """, (app.name, app.comment, app.icon, app.app_exec, app.try_exec, app.modified_at, app.path))
 
     def delete_app(self, path: str):
         cursor = self.conn.cursor()
@@ -135,12 +136,16 @@ class IndexDatabase:
             WHERE path = ?
         """, (path,))
 
-    def write_directory(self, path: str, name: str, indexed_at: int):
+    def write_directory(self, path: str, name: str, indexed_at: int, modified_at: int):
         cursor = self.conn.cursor()
         cursor.execute("""
-            INSERT INTO directories (path, name,  indexed_at)
-            VALUES (?, ?, ?)
-        """, (path, name, indexed_at))
+            INSERT INTO directories (path, name,  indexed_at, modified_at)
+            VALUES (?, ?, ?, ?) ON CONFLICT (path) DO
+                UPDATE SET 
+                           name=excluded.name, 
+                           indexed_at=excluded.indexed_at, 
+                           modified_at=excluded.modified_at
+        """, (path, name, indexed_at, modified_at))
 
     def write_file(self,
                    path: str,
@@ -168,9 +173,9 @@ class IndexDatabase:
         cursor.execute("SELECT path FROM apps")
         return [row[0] for row in cursor.fetchall()]
 
-    def get_app_last_modified(self, path: str) -> int:
+    def get_app_modified_at(self, path: str) -> int:
         cursor = self.conn.cursor()
-        cursor.execute("SELECT last_modified FROM apps WHERE path = ?", (path,))
+        cursor.execute("SELECT modified_at FROM apps WHERE path = ?", (path,))
         return cursor.fetchone()[0]
 
     def get_apps_with_text(self, partial_name: str):
@@ -190,3 +195,13 @@ class IndexDatabase:
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM files WHERE name LIKE ? LIMIT 10", (f"%{query}%",))
         return cursor.fetchall()
+
+    def get_file_modified_at(self, path: str) -> int:
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT modified_at FROM files WHERE path = ?", (path,))
+        return cursor.fetchone()
+
+    def get_directory_modified_at(self, path: str) -> int:
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT modified_at FROM directories WHERE path = ?", (path,))
+        return cursor.fetchone()

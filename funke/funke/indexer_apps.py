@@ -52,9 +52,9 @@ def index_apps():
                         # already indexed?
                         if file in current_indexed_files:
                             # check if modified
-                            last_modified = os.path.getmtime(file)
-                            prev_last_modified = database.get_app_last_modified(file)
-                            if prev_last_modified < last_modified:
+                            modified_at = os.path.getmtime(file)
+                            prev_modified_at = database.get_app_modified_at(file)
+                            if prev_modified_at < modified_at:
                                 print(f"File {file} modified, updating...")
                                 # update app entry
                                 database.update_app(
@@ -64,7 +64,7 @@ def index_apps():
                                         app_exec=config['Desktop Entry'].get('Exec', fallback=''),
                                         try_exec=config['Desktop Entry'].get('TryExec', fallback=''),
                                         icon=config['Desktop Entry'].get('Icon', fallback=''),
-                                        last_modified=last_modified,
+                                        modified_at=modified_at,
                                         path=file,
                                     )
                                 )
@@ -80,7 +80,7 @@ def index_apps():
                                     try_exec=config['Desktop Entry'].get('TryExec', fallback=''),
                                     icon=config['Desktop Entry'].get('Icon', fallback=''),
                                     created_at = int(time.time()),
-                                    last_modified=os.path.getmtime(file),
+                                    modified_at=os.path.getmtime(file),
                                     path=file,
                                 )
                             )
