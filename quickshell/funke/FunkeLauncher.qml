@@ -20,14 +20,14 @@ PanelWindow {
 
     // --- dimensions ---
     width: 1200
-    implicitHeight: (resultApps.length > 0 || resultFiles.length > 0 || resultDirs.length > 0) ? 780 : 44
+    implicitHeight: (queryString) ? 780 : 44
 
     // --- visuals ---
     color: "transparent"
 
     // --- properties ---
     property bool open: false
-    property var screen
+    property var screenresultsWeb
     property var queryString
     property var resultApps: []
     property var resultFiles: []
@@ -77,18 +77,36 @@ PanelWindow {
 
     // --- processes ---
 
+    Timer {
+        id: webSearchDebounce
+        interval: 1500
+        repeat: false
+        onTriggered: procFunkeWebSearch.running = true
+    }
+
     Process {
         id: procFunkeSearch
-        command: ["fk", "query", funkeLauncher.queryString, "--apps", "--files", "--dirs", "--web"]
+        command: ["fk", "query", funkeLauncher.queryString, "--apps", "--files", "--dirs"]
         stdout: StdioCollector {
             onStreamFinished: {
                 let result = JSON.parse(text)
-                console.log(JSON.stringify(result, null, 2))
                 funkeLauncher.resultApps = result.apps
                 funkeLauncher.resultFiles = result.files
                 funkeLauncher.resultDirs = result.dirs
-                funkeLauncher.resultWeb = result.web
                 procFunkeSearch.running = false
+            }
+        }
+    }
+
+    Process {
+        id: procFunkeWebSearch
+        command: ["fk", "query", funkeLauncher.queryString, "--web"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                let result = JSON.parse(text)
+
+                funkeLauncher.resultWeb = result.web
+                procFunkeWebSearch.running = false
             }
         }
     }
@@ -385,7 +403,7 @@ PanelWindow {
                                     delegate: InteractableCard {
                                         width: parent.width
                                         active: index === funkeResults.currentIndex
-                                        implicitHeight: appContentRow.implicitHeight + 24
+                                        implicitHeight: webContentRow.implicitHeight + 24
 
                                         Row {
                                             id: webContentRow
@@ -473,6 +491,13 @@ PanelWindow {
                         } else {
                             funkeLauncher.queryString = undefined
                             procFunkeSearch.running = false
+                            funkeLauncher.resultWeb = []
+                        }
+                        if (text.length > 3) {
+                            webSearchDebounce.restart()
+                        } else {
+                            webSearchDebounce.stop()
+                            funkeLauncher.resultWeb = []
                         }
                     }
 
