@@ -41,3 +41,5 @@ eval "$(oh-my-posh init bash --config $HOME/.config/ohmyposh/zen.toml)"
 export PATH="$PATH:/home/wboelke/.lmstudio/bin"
 # End of LM Studio CLI section
 
+
+export PATH=$PATH:/home/wboelke/.spicetify

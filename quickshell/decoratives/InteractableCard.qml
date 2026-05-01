@@ -5,6 +5,8 @@ Rectangle {
     id: root
 
     property bool active: false
+    property bool neutral: false
+
     // Content slot
     default property alias content: contentItem.data
 
@@ -12,9 +14,9 @@ Rectangle {
     signal clicked
 
     // Style from IconButton
-    border.color: (active || mouseArea.containsMouse) ? Qt.rgba(1, 0.45, 0, 0.55) : Qt.rgba(1, 1, 1, 0.12)
+    border.color: neutral ? "transparent" : (active || mouseArea.containsMouse) ? Qt.rgba(1, 0.45, 0, 0.55) : Qt.rgba(1, 1, 1, 0.12)
     border.width: 1
-    color: (active ||  mouseArea.containsMouse) ? Qt.rgba(1, 0.4, 0, 0.18) : Qt.rgba(1, 1, 1, 0.07)
+    color:  neutral ? "transparent" :  (active ||  mouseArea.containsMouse) ? Qt.rgba(1, 0.4, 0, 0.18) : Qt.rgba(1, 1, 1, 0.07)
     radius: 12
 
     // Height/width should be set by parent or content

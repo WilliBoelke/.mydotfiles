@@ -56,7 +56,12 @@ def search_web(query):
             "domain": domain
         })
 
-    return cleaned_results
+    if(len(cleaned_results) > 0):
+        return cleaned_results
+    else:
+        print("No results found")
+        print(response_html)
+        return None
 
 
 def clean_snippet(text):
@@ -78,5 +83,5 @@ def ddg_instant_answer(query):
 
 
 if __name__ == "__main__":
-    results = search_web("jetbrains")
+    results = search_web("mozilla")
     print(results)
