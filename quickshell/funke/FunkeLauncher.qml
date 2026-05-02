@@ -149,16 +149,29 @@ PanelWindow {
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.clearRect(0, 0, width, height)
+                return;
+                var r = 16
+
+                // p0: search bar top-center (start)
+                var origin  = funkeSearch.mapToItem(lineCanvas, funkeSearch.width/2, 0)
+                // appLeft.x: x of the vertical line along the app column; appLeft.y: top of app column (end)
+                var appLeft = appColumn.mapToItem(lineCanvas, -16, 0)
+
+                var p0x = origin.x,   p0y = origin.y        // start: search bar
+                var horzY = p0y - 6                         // y of horizontal segment
+                var p1x = p0x,        p1y = horzY           // corner 1: up → left
+                var p2x = appLeft.x,  p2y = horzY           // corner 2: left → up
+                var p3x = appLeft.x,  p3y = appLeft.y       // end: top of app column
+
                 ctx.strokeStyle = ThemeService.active.accent
                 ctx.lineWidth = 2
                 ctx.beginPath()
-
-                var p1 = funkeSearch.mapToItem(lineCanvas, funkeSearch.width/2, 0)
-                console.log("search center:", p1.x, p1.y)
-
-                // test line — draw from search bar center straight up 100px
-                ctx.moveTo(p1.x, p1.y)
-                ctx.lineTo(p1.x, p1.y - 100)
+                ctx.moveTo(p0x, p0y)
+                ctx.lineTo(p1x, p1y + r)                          // straight up, stop before corner 1
+                ctx.quadraticCurveTo(p1x, p1y, p1x - r, p1y)     // round corner 1
+                ctx.lineTo(p2x + r, p2y)                          // straight left, stop before corner 2
+                ctx.quadraticCurveTo(p2x, p2y, p2x, p2y - r)     // round corner 2
+                ctx.lineTo(p3x, p3y)                               // straight up to end
                 ctx.stroke()
             }
         }
@@ -314,13 +327,14 @@ PanelWindow {
                             width: (parent.width - 32) / 3
                             height: parent.height
 
+
                             Flickable {
                                 anchors.fill: parent
                                 anchors.margins: 12
                                 clip: true
                                 contentHeight: appColumn.implicitHeight
                                 contentWidth: width
-
+                                id: appResultsSection
                                 Column {
                                     id: appColumn
                                     width: parent.width
@@ -476,6 +490,7 @@ PanelWindow {
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: 16
                         color: ThemeService.active.accent
+                        verticalAlignment: Text.AlignVCenter
                         visible: !open
                     }
 

@@ -45,10 +45,10 @@ InteractableCard {
             }
             Text {
                 Layout.fillWidth: true
-                color: ThemeService.active.accent
+                color: "#ffaa42"
                 elide: Text.ElideRight
                 font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 10
+                font.pixelSize: 12
                 text: root.subtitle
             }
         }

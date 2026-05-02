@@ -51,7 +51,7 @@ Item {
                     spacing: 12
 
                     IconButton {
-                        Layout.fillWidth: true
+                        Layout.fillWidth: trueF
                         active: GameModeService.enabled
                         iconText: "󰺶"
                         subtitle: "Improve performance for games"
