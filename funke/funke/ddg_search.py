@@ -22,14 +22,16 @@ def search_web(query):
     response_html = result.stdout
 
     # mimic browser loading remaining resources with natural delay
-    time.sleep(random.uniform(0.3, 1.2))
+    time.sleep(random.uniform(0.3, 0.7))
 
     # load tracking pixel
-    subprocess.run(
-        ["curl_firefox147", "-s",
-         "https://duckduckgo.com/t/sl_l"],
-        capture_output=True
-    )
+    css_match = re.search(r'href="(//duckduckgo\.com/dist/[^"]+\.css)"', response_html)
+    if css_match:
+        css_url = "https:" + css_match.group(1)
+        subprocess.run(["curl_firefox147", "-s", css_url], capture_output=True)
+
+    subprocess.run(["curl_firefox147", "-s", "https://duckduckgo.com/favicon.ico"], capture_output=True)
+    subprocess.run(["curl_firefox147", "-s", "https://duckduckgo.com/t/sl_l"], capture_output=True)
 
     results_start = response_html.find('<table border="0">\n    \n      \n      <!-- Web results are present -->')
     if results_start != -1:
@@ -81,7 +83,6 @@ def ddg_instant_answer(query):
 
 
 
-
 if __name__ == "__main__":
-    results = search_web("mozilla")
+    results = search_web("mozilla ai assistant")
     print(results)

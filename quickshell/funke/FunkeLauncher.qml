@@ -179,6 +179,7 @@ PanelWindow {
         Column {
             anchors.fill: parent
             // --- results panel ---
+
             Rectangle {
                 id: funkeResults
                 property int currentIndex: -1
@@ -197,123 +198,103 @@ PanelWindow {
                         spacing: 16
 
                         // --- left column: files + dirs ---
-                        Column {
-                            width: (parent.width - 32) / 3  // 32 = 2 gaps of 16
+
+                        Card {
+                            width: (parent.width - 32) / 3
                             height: parent.height
-                            spacing: 12
 
-                            // Files
-                            Card {
-                                width: parent.width
-                                height: (parent.height - 12) / 2  // 12 = gap between cards
+                            Flickable {
+                                anchors.fill: parent
+                                anchors.margins: 12
+                                clip: true
+                                contentHeight: fileColumn.implicitHeight
+                                contentWidth: width
 
-                                Flickable {
-                                    anchors.fill: parent
-                                    anchors.margins: 12
-                                    clip: true
-                                    contentHeight: fileColumn.implicitHeight
-                                    contentWidth: width
-
-                                    Column {
-                                        id: fileColumn
-                                        width: parent.width
-                                        spacing: 8
+                                Column {
+                                    id: fileColumn
+                                    width: parent.width
+                                    spacing: 12
 
 
-                                        Repeater {
-                                            model: funkeLauncher.resultFiles
-                                            delegate: InteractableCard {
-                                                neutral: true
-                                                width: parent.width
-                                                implicitHeight: 48
-                                                Column {
-                                                    anchors.fill: parent
-                                                    anchors.margins: 8
-                                                    spacing: 4
-                                                    Text {
-                                                        text: modelData.name
-                                                        color: "#faa42F"
-                                                        font.family: "JetBrainsMono Nerd Font"
-                                                        font.pixelSize: 13
-                                                        font.weight: Font.Bold
-                                                        elide: Text.ElideRight
-                                                        width: parent.width - 12
-                                                    }
-                                                    Text {
-                                                        text: modelData.path
-                                                        color: ThemeService.active.accent
-                                                        font.family: "JetBrainsMono Nerd Font"
-                                                        font.pixelSize: 10
-                                                        elide: Text.ElideLeft
-                                                        width: parent.width
-                                                        wrapMode: Text.WordWrap
-                                                    }
+                                    Repeater {
+                                        model: funkeLauncher.resultFiles
+                                        delegate: InteractableCard {
+                                            neutral: true
+                                            width: parent.width
+                                            active: index === funkeResults.currentIndex
+                                            implicitHeight: webContentRow.implicitHeight + 24
+
+                                            Column {
+                                                id: webContentRow
+                                                anchors.fill: parent
+                                                anchors.margins: 6
+                                                spacing: 4
+
+                                                Text {
+                                                    text: modelData.name
+                                                    color: ThemeService.active.accent
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 15
+                                                    font.weight: Font.ExtraBold
+                                                    wrapMode: Text.WordWrap
                                                 }
-                                                MouseArea {
-                                                    anchors.fill: parent
-                                                    onClicked: {
-                                                        procFunkeAppOpen.command = ["xdg-open", modelData.path, "&", "disown"]
-                                                        procFunkeAppOpen.running = true
-                                                    }
+                                                Text {
+                                                    text: modelData.path
+
+                                                    color: "#faa42F"
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 11
+                                                    elide: Text.ElideLeft
+                                                    width: parent.width
+                                                    wrapMode: Text.WordWrap
+                                                }
+
+                                            }
+                                            MouseArea {
+                                                anchors.fill: parent
+                                                onClicked: {
+                                                    procFunkeAppOpen.command = ["xdg-open", modelData.path, "&", "disown"]
+                                                    procFunkeAppOpen.running = true
                                                 }
                                             }
                                         }
                                     }
-                                }
-                            }
+                                    Repeater {
+                                        model: funkeLauncher.resultDirs
+                                        delegate: InteractableCard {
+                                            neutral: true
+                                            width: parent.width
+                                            implicitHeight: webContentRow.implicitHeight + 24
 
-                            // Dirs
-                            Card {
-                                width: parent.width
-                                height: (parent.height - 12) / 2
+                                            Column {
+                                                id: webContentRow
+                                                anchors.fill: parent
+                                                anchors.margins: 6
+                                                spacing: 4
 
-                                Flickable {
-                                    anchors.fill: parent
-                                    anchors.margins: 12
-                                    clip: true
-                                    contentHeight: dirColumn.implicitHeight
-                                    contentWidth: width
-
-                                    Column {
-                                        id: dirColumn
-                                        width: parent.width
-                                        spacing: 8
-
-
-                                        Repeater {
-                                            model: funkeLauncher.resultDirs
-                                            delegate: InteractableCard {
-                                                neutral: true
-                                                width: parent.width
-                                                implicitHeight: 48
-                                                Column {
-                                                    anchors.fill: parent
-                                                    anchors.margins: 8
-                                                    spacing: 2
-                                                    Text {
-                                                        text: modelData.name
-                                                        color: ThemeService.active.accent
-                                                        font.family: "JetBrainsMono Nerd Font"
-                                                        font.pixelSize: 13
-                                                        font.weight: Font.Bold
-                                                        elide: Text.ElideRight
-                                                        width: parent.width
-                                                    }
-                                                    Text {
-                                                        text: modelData.path
-                                                        color: "#faa42F"
-                                                        font.family: "JetBrainsMono Nerd Font"
-                                                        font.pixelSize: 10
-                                                        elide: Text.ElideLeft
-                                                        width: parent.width
-                                                    }
+                                                Text {
+                                                    text: modelData.name
+                                                    color: ThemeService.active.accent
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 15
+                                                    font.weight: Font.ExtraBold
+                                                    wrapMode: Text.WordWrap
                                                 }
-                                                MouseArea {
-                                                    anchors.fill: parent
-                                                    onClicked: {
-                                                        procFunkeAppOpen.command = ["xdg-open", modelData.path]
-                                                        procFunkeAppOpen.running = true
-                                                    }
+                                                Text {
+                                                    text: modelData.path
+                                                    color: "#faa42F"
+                                                    font.family: "JetBrainsMono Nerd Font"
+                                                    font.pixelSize: 11
+                                                    elide: Text.ElideLeft
+                                                    width: parent.width
+                                                    wrapMode: Text.WordWrap
+                                                }
+                                            }
+                                            MouseArea {
+                                                anchors.fill: parent
+                                                onClicked: {
+                                                    procFunkeAppOpen.command = ["xdg-open", modelData.path]
+                                                    procFunkeAppOpen.running = true
                                                 }
                                             }
                                         }
@@ -401,7 +382,7 @@ PanelWindow {
                             }
                         }
 
-                        // --- right column: web placeholder ---
+                        // --- right column: web  ---
                         Card {
                             width: (parent.width - 32) / 3
                             height: parent.height
