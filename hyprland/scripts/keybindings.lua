@@ -50,7 +50,7 @@ hl.binde("ALT + Tab", hl.dsp.window.bring_active_to_top())
 
 -- Actions
 hl.bind(mainMod .. " + CTRL + R",   hl.dsp.exec_cmd("hyprctl reload"))
-hl.bind(mainMod .. " + SHIFT + A",  hl.dsp.exec_cmd(HYPRSCRIPTS .. "/toggle-animations.sh"))
+hl.bind(mainMod .. " + SHIFT + A",  hl.dsp.exec_cmd(HYPRSCRIPTS .. "/toggle-animation.lua.sh"))
 hl.bind(mainMod .. " + PRINT",      hl.dsp.exec_cmd(HYPRSCRIPTS .. "/screenshot.sh"))
 hl.bind(mainMod .. " + ALT + F",    hl.dsp.exec_cmd(HYPRSCRIPTS .. "/screenshot.sh --instant"))
 hl.bind(mainMod .. " + SHIFT + S",  hl.dsp.exec_cmd(HYPRSCRIPTS .. "/screenshot.sh --instant-area"))

@@ -10,6 +10,7 @@ hl.on("hyprland.start", function()
     hl.exec_once("gsettings set org.gnome.desktop.interface accent-color 'orange'")
     hl.exec_once("gsettings set org.gnome.desktop.interface gtk-theme 'Ember'")
     hl.exec_once("hyprctl setcursor Adwaita 24")
+    hl.exec_once("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
 end)
 
 
