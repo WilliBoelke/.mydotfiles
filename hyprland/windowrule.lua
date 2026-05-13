@@ -50,7 +50,7 @@ hl.window_rule({
 hl.window_rule({
     match = {
         class = "^(jetbrains-.*)$",
-      title="^win\\d+$"
+         title="^win\\d+$"
     },
     no_focus = true,
     opaque = true
