@@ -6,6 +6,7 @@ Rectangle {
 
     property bool active: false
     property bool neutral: false
+    readonly property bool hovered: mouseArea.containsMouse
 
     // Content slot
     default property alias content: contentItem.data

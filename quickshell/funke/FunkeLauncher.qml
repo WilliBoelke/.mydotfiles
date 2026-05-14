@@ -6,52 +6,54 @@ import Quickshell.Wayland
 import Quickshell.Io
 import qs.services
 import qs.decoratives
-import Quickshell.Widgets
-import QtQuick.Effects
 
 PanelWindow {
     id: funkeLauncher
 
     // --- position ---
-    anchors {
-        bottom: true
-    }
+    anchors { bottom: true }
     exclusionMode: ExclusionMode.Ignore
 
     // --- dimensions ---
     width: 1200
-    implicitHeight: (queryString) ? 780 : 44
-
-    // --- visuals ---
+    implicitHeight: queryString ? 780 : 44
     color: "transparent"
 
     // --- properties ---
     property bool open: false
-    property var screenresultsWeb
+    property var screen
     property var queryString
     property var resultApps: []
     property var resultFiles: []
     property var resultDirs: []
     property var resultWeb: []
 
+    // --- layer config ---
+    WlrLayershell.namespace: "funke"
+    WlrLayershell.keyboardFocus: open ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+    WlrLayershell.screen: screen
+
+    // --- helpers ---
     function cancelWebSearch() {
         webSearchDebounce.stop()
         procFunkeWebSearch.running = false
         resultWeb = []
     }
 
-    WlrLayershell.namespace: "funke"
-    WlrLayershell.keyboardFocus: open ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-    WlrLayershell.screen: screen
-
-    // --- focus grab ---
-    HyprlandFocusGrab {
-        id: focusGrab
-        windows: [funkeLauncher]
-        active: funkeLauncher.open
-        onCleared: funkeLauncher.open = false
+    function activeColumnLength() {
+        if (funkeResults.currentY === 0) return resultFiles.length + resultDirs.length
+        if (funkeResults.currentY === 1) return resultApps.length
+        if (funkeResults.currentY === 2) return resultWeb.length
+        return 0
     }
 
+    function launch(command) {
+        procLaunch.command = command
+        procLaunch.running = true
+        open = false
+    }
+
+    // --- lifecycle ---
     onOpenChanged: {
         if (open) {
             input.forceActiveFocus()
@@ -65,7 +67,7 @@ PanelWindow {
     }
 
     onQueryStringChanged: {
-        if (queryString === "" || queryString === undefined) {
+        if (!queryString) {
             cancelWebSearch()
             resultApps = []
             resultFiles = []
@@ -73,6 +75,14 @@ PanelWindow {
         } else {
             lineCanvas.requestPaint()
         }
+    }
+
+    // --- focus grab ---
+    HyprlandFocusGrab {
+        id: focusGrab
+        windows: [funkeLauncher]
+        active: funkeLauncher.open
+        onCleared: funkeLauncher.open = false
     }
 
     // --- shortcuts ---
@@ -85,18 +95,18 @@ PanelWindow {
         }
     }
 
-    // --- processes ---
-
+    // --- timers ---
     Timer {
         id: webSearchDebounce
         interval: 1500
         repeat: false
         onTriggered: {
-            procFunkeWebSearch.running = false
-            procFunkeWebSearch.running = true
+            if (funkeLauncher.queryString && funkeLauncher.queryString.length > 4)
+                procFunkeWebSearch.running = true
         }
     }
 
+    // --- processes ---
     Process {
         id: procFunkeSearch
         command: ["fk", "query", funkeLauncher.queryString, "--apps", "--files", "--dirs"]
@@ -116,32 +126,26 @@ PanelWindow {
         command: ["fk", "query", funkeLauncher.queryString, "--web"]
         stdout: StdioCollector {
             onStreamFinished: {
-                console.log("web search finished", text)
-                let result = JSON.parse(text)
-
-                funkeLauncher.resultWeb = result.web
+                try {
+                    funkeLauncher.resultWeb = JSON.parse(text).web
+                } catch (e) {
+                    funkeLauncher.resultWeb = []
+                }
                 procFunkeWebSearch.running = false
             }
         }
     }
 
     Process {
-        id: procFunkeAppOpen
-        stdout: StdioCollector {
-            onStreamFinished: {
-                procFunkeAppOpen.running = false
-                procFunkeAppOpen.command = []
-                funkeLauncher.open = false
-            }
-        }
+        id: procLaunch
+        stdout: StdioCollector { onStreamFinished: procLaunch.running = false }
     }
 
     // --- content ---
-
     Item {
         anchors.fill: parent
 
-        // canvas layer — fills everything, no layout impact
+        // --- line canvas ---
         Canvas {
             id: lineCanvas
             anchors.fill: parent
@@ -149,46 +153,43 @@ PanelWindow {
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.clearRect(0, 0, width, height)
-                return;
-                var r = 16
+                return
 
-                // p0: search bar top-center (start)
-                var origin  = funkeSearch.mapToItem(lineCanvas, funkeSearch.width/2, 0)
-                // appLeft.x: x of the vertical line along the app column; appLeft.y: top of app column (end)
+                var r = 16
+                var origin  = funkeSearch.mapToItem(lineCanvas, funkeSearch.width / 2, 0)
                 var appLeft = appColumn.mapToItem(lineCanvas, -16, 0)
 
-                var p0x = origin.x,   p0y = origin.y        // start: search bar
-                var horzY = p0y - 6                         // y of horizontal segment
-                var p1x = p0x,        p1y = horzY           // corner 1: up → left
-                var p2x = appLeft.x,  p2y = horzY           // corner 2: left → up
-                var p3x = appLeft.x,  p3y = appLeft.y       // end: top of app column
+                var p0x = origin.x,  p0y = origin.y
+                var horzY = p0y - 6
+                var p2x = appLeft.x, p2y = horzY
 
                 ctx.strokeStyle = ThemeService.active.accent
                 ctx.lineWidth = 2
                 ctx.beginPath()
                 ctx.moveTo(p0x, p0y)
-                ctx.lineTo(p1x, p1y + r)                          // straight up, stop before corner 1
-                ctx.quadraticCurveTo(p1x, p1y, p1x - r, p1y)     // round corner 1
-                ctx.lineTo(p2x + r, p2y)                          // straight left, stop before corner 2
-                ctx.quadraticCurveTo(p2x, p2y, p2x, p2y - r)     // round corner 2
-                ctx.lineTo(p3x, p3y)                               // straight up to end
+                ctx.lineTo(p0x, horzY + r)
+                ctx.quadraticCurveTo(p0x, horzY, p0x - r, horzY)
+                ctx.lineTo(p2x + r, horzY)
+                ctx.quadraticCurveTo(p2x, horzY, p2x, horzY - r)
+                ctx.lineTo(p2x, appLeft.y)
                 ctx.stroke()
             }
         }
 
+        // --- layout ---
         Column {
             anchors.fill: parent
-            // --- results panel ---
 
+            // --- results panel ---
             Rectangle {
                 id: funkeResults
-                property int currentIndex: -1
+                property int currentX: 0
+                property int currentY: 1
                 width: parent.width
                 implicitHeight: parent.height - 44
                 color: ThemeService.active.bgBase
                 visible: open
 
-                // outer padding
                 Item {
                     anchors.fill: parent
                     anchors.margins: 16
@@ -197,8 +198,7 @@ PanelWindow {
                         anchors.fill: parent
                         spacing: 16
 
-                        // --- left column: files + dirs ---
-
+                        // --- files + dirs ---
                         Card {
                             width: (parent.width - 32) / 3
                             height: parent.height
@@ -214,175 +214,67 @@ PanelWindow {
                                     id: fileColumn
                                     width: parent.width
                                     spacing: 12
-
+                                    property bool columnActive: funkeResults.currentY === 0
 
                                     Repeater {
                                         model: funkeLauncher.resultFiles
-                                        delegate: InteractableCard {
-                                            neutral: true
+                                        delegate: FunkeFileResult {
                                             width: parent.width
-                                            active: index === funkeResults.currentIndex
-                                            implicitHeight: webContentRow.implicitHeight + 24
-
-                                            Column {
-                                                id: webContentRow
-                                                anchors.fill: parent
-                                                anchors.margins: 6
-                                                spacing: 4
-
-                                                Text {
-                                                    text: modelData.name
-                                                    color: ThemeService.active.accent
-                                                    font.family: "JetBrainsMono Nerd Font"
-                                                    font.pixelSize: 15
-                                                    font.weight: Font.ExtraBold
-                                                    wrapMode: Text.WordWrap
-                                                }
-                                                Text {
-                                                    text: modelData.path
-
-                                                    color: "#faa42F"
-                                                    font.family: "JetBrainsMono Nerd Font"
-                                                    font.pixelSize: 11
-                                                    elide: Text.ElideLeft
-                                                    width: parent.width
-                                                    wrapMode: Text.WordWrap
-                                                }
-
-                                            }
-                                            MouseArea {
-                                                anchors.fill: parent
-                                                onClicked: {
-                                                    procFunkeAppOpen.command = ["xdg-open", modelData.path, "&", "disown"]
-                                                    procFunkeAppOpen.running = true
-                                                }
-                                            }
+                                            externalActive: index === funkeResults.currentX && fileColumn.columnActive
+                                            file: modelData
+                                            onLaunched: funkeLauncher.launch(["gio", "open", modelData.path])
                                         }
                                     }
+
                                     Repeater {
                                         model: funkeLauncher.resultDirs
-                                        delegate: InteractableCard {
-                                            neutral: true
+                                        delegate: FunkeFileResult {
                                             width: parent.width
-                                            implicitHeight: webContentRow.implicitHeight + 24
-
-                                            Column {
-                                                id: webContentRow
-                                                anchors.fill: parent
-                                                anchors.margins: 6
-                                                spacing: 4
-
-                                                Text {
-                                                    text: modelData.name
-                                                    color: ThemeService.active.accent
-                                                    font.family: "JetBrainsMono Nerd Font"
-                                                    font.pixelSize: 15
-                                                    font.weight: Font.ExtraBold
-                                                    wrapMode: Text.WordWrap
-                                                }
-                                                Text {
-                                                    text: modelData.path
-                                                    color: "#faa42F"
-                                                    font.family: "JetBrainsMono Nerd Font"
-                                                    font.pixelSize: 11
-                                                    elide: Text.ElideLeft
-                                                    width: parent.width
-                                                    wrapMode: Text.WordWrap
-                                                }
-                                            }
-                                            MouseArea {
-                                                anchors.fill: parent
-                                                onClicked: {
-                                                    procFunkeAppOpen.command = ["xdg-open", modelData.path]
-                                                    procFunkeAppOpen.running = true
-                                                }
-                                            }
+                                            externalActive: index === funkeResults.currentX && fileColumn.columnActive
+                                            file: modelData
+                                            onLaunched: funkeLauncher.launch(["gio", "open", modelData.path])
                                         }
                                     }
                                 }
                             }
                         }
 
-                        // --- center column: apps ---
+                        // --- apps ---
                         Card {
                             width: (parent.width - 32) / 3
                             height: parent.height
 
-
                             Flickable {
+                                id: appResultsSection
                                 anchors.fill: parent
                                 anchors.margins: 12
                                 clip: true
                                 contentHeight: appColumn.implicitHeight
                                 contentWidth: width
-                                id: appResultsSection
+
                                 Column {
                                     id: appColumn
                                     width: parent.width
                                     spacing: 12
+                                    property bool columnActive: funkeResults.currentY === 1
 
                                     Repeater {
                                         id: resultRepeater
                                         model: funkeLauncher.resultApps
-                                        delegate: InteractableCard {
+                                        delegate: FunkeAppResult {
                                             width: parent.width
-                                            active: index === funkeResults.currentIndex
-                                            implicitHeight: appContentRow.implicitHeight + 24
-
-                                            Row {
-                                                id: appContentRow
-                                                anchors.fill: parent
-                                                anchors.margins: 12
-                                                spacing: 12
-
-                                                Item {
-                                                    width: 32
-                                                    height: 32
-                                                    anchors.verticalCenter: parent.verticalCenter
-                                                    IconImage {
-                                                        anchors.fill: parent
-                                                        source: "image://icon/" + modelData.icon
-                                                        layer.enabled: true
-                                                        layer.effect: MultiEffect {
-                                                            colorization: 0.7
-                                                            colorizationColor: ThemeService.active.accent
-                                                        }
-                                                    }
-                                                }
-
-                                                Column {
-                                                    anchors.verticalCenter: parent.verticalCenter
-                                                    spacing: 2
-                                                    Text {
-                                                        text: modelData.name
-                                                        color: ThemeService.active.accent
-                                                        font.family: "JetBrainsMono Nerd Font"
-                                                        font.pixelSize: 16
-                                                        font.weight: Font.ExtraBold
-                                                    }
-                                                    Text {
-                                                        text: modelData.comment
-                                                        color: "#faa42F"
-                                                        font.family: "JetBrainsMono Nerd Font"
-                                                        font.pixelSize: 12
-                                                    }
-                                                }
-                                            }
-
-                                            MouseArea {
-                                                anchors.fill: parent
-                                                onClicked: {
-                                                    procFunkeAppOpen.command = ["bash", "-c", modelData.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
-                                                    procFunkeAppOpen.running = true
-                                                }
-                                            }
+                                            active: index === funkeResults.currentX && appColumn.columnActive
+                                            app: modelData
+                                            onLaunched: funkeLauncher.launch(
+                                                ["bash", "-c", modelData.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
+                                            )
                                         }
                                     }
                                 }
                             }
                         }
 
-                        // --- right column: web  ---
+                        // --- web ---
                         Card {
                             width: (parent.width - 32) / 3
                             height: parent.height
@@ -391,55 +283,23 @@ PanelWindow {
                                 anchors.fill: parent
                                 anchors.margins: 12
                                 clip: true
-                                contentHeight: appColumn.implicitHeight
+                                contentHeight: webColumn.implicitHeight
                                 contentWidth: width
 
                                 Column {
                                     id: webColumn
                                     width: parent.width
                                     spacing: 12
+                                    property bool columnActive: funkeResults.currentY === 2
 
                                     Repeater {
                                         id: resultWebRepeater
                                         model: funkeLauncher.resultWeb
-                                        delegate: InteractableCard {
-                                            neutral: true
+                                        delegate: FunkeWebResult {
                                             width: parent.width
-                                            active: index === funkeResults.currentIndex
-                                            implicitHeight: webContentRow.implicitHeight + 24
-
-                                            Column {
-                                                id: webContentRow
-                                                anchors.fill: parent
-                                                anchors.margins: 12
-                                                spacing: 4
-
-                                                Text {
-                                                    text: modelData.title
-                                                    width: parent.width
-                                                    color: ThemeService.active.accent
-                                                    font.family: "JetBrainsMono Nerd Font"
-                                                    font.pixelSize: 15
-                                                    font.weight: Font.ExtraBold
-                                                    wrapMode: Text.WordWrap
-                                                }
-                                                Text {
-                                                    text: modelData.snippet
-                                                    width: parent.width
-                                                    color: "#faa42F"
-                                                    font.family: "JetBrainsMono Nerd Font"
-                                                    font.pixelSize: 11
-                                                    wrapMode: Text.WordWrap
-                                                }
-                                            }
-
-                                            MouseArea {
-                                                anchors.fill: parent
-                                                onClicked: {
-                                                    procFunkeAppOpen.command = ["bash", "-c", modelData.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
-                                                    procFunkeAppOpen.running = true
-                                                }
-                                            }
+                                            externalActive: index === funkeResults.currentX && webColumn.columnActive
+                                            result: modelData
+                                            onLaunched: funkeLauncher.launch(["gio", "open", modelData.url])
                                         }
                                     }
                                 }
@@ -471,7 +331,6 @@ PanelWindow {
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: 16
                         color: ThemeService.active.accent
-                        verticalAlignment: Text.AlignVCenter
                         visible: !open
                     }
 
@@ -489,48 +348,50 @@ PanelWindow {
                         visible: open
 
                         onTextChanged: {
+                            funkeResults.currentX = 0
                             if (text.length > 0) {
                                 funkeLauncher.queryString = text
                                 procFunkeSearch.running = true
+                                if (text.length > 4) webSearchDebounce.restart()
+                                else cancelWebSearch()
                             } else {
                                 funkeLauncher.queryString = undefined
                                 procFunkeSearch.running = false
-                            }
-                            if (text.length > 4) {
-                                webSearchDebounce.restart()
-                            } else {
-                                funkeLauncher.cancelWebSearch()
+                                cancelWebSearch()
                             }
                         }
 
                         Keys.onDownPressed: {
-                            funkeResults.currentIndex = Math.min(funkeResults.currentIndex + 1, funkeLauncher.resultApps.length - 1)
-                            webSearchDebounce.restart()
+                            webSearchDebounce.stop()
+                            procFunkeWebSearch.running = false
+                            funkeResults.currentX = Math.min(funkeResults.currentX + 1, activeColumnLength() - 1)
                         }
                         Keys.onUpPressed: {
-                            funkeResults.currentIndex = Math.max(funkeResults.currentIndex - 1, 0)
-                            webSearchDebounce.restart()
+                            webSearchDebounce.stop()
+                            procFunkeWebSearch.running = false
+                            funkeResults.currentX = Math.max(funkeResults.currentX - 1, 0)
+                        }
+                        Keys.onTabPressed: {
+                            funkeResults.currentY = (funkeResults.currentY + 1) % 3
+                            funkeResults.currentX = 0
                         }
                         Keys.onReturnPressed: {
-                            funkeLauncher.cancelWebSearch()
-                            if (funkeResults.currentIndex >= 0) {
-                                const app = funkeLauncher.resultApps[funkeResults.currentIndex]
-                                procFunkeAppOpen.command = ["bash", "-c", app.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"]
-                                procFunkeAppOpen.running = true
+                            if (funkeResults.currentY === 0) {
+                                const item = funkeLauncher.resultFiles.concat(funkeLauncher.resultDirs)[funkeResults.currentX]
+                                if (item) funkeLauncher.launch(["gio", "open", item.path])
+                            } else if (funkeResults.currentY === 1) {
+                                const app = funkeLauncher.resultApps[funkeResults.currentX]
+                                if (app) funkeLauncher.launch(["bash", "-c", app.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"])
+                            } else if (funkeResults.currentY === 2) {
+                                const web = funkeLauncher.resultWeb[funkeResults.currentX]
+                                if (web) funkeLauncher.launch(["gio", "open", web.url])
                             }
+                            cancelWebSearch()  // cancel AFTER reading the result
                         }
                     }
 
-                    Behavior on width {
-                        NumberAnimation {
-                            duration: 200
-                        }
-                    }
-                    Behavior on border.color {
-                        ColorAnimation {
-                            duration: 150
-                        }
-                    }
+                    Behavior on width { NumberAnimation { duration: 200 } }
+                    Behavior on border.color { ColorAnimation { duration: 150 } }
 
                     MouseArea {
                         anchors.fill: parent
