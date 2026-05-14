@@ -57,8 +57,8 @@ Card {
 
                     ShapePath {
                         fillColor: "transparent"
-                        strokeColor: "#d55c1b"
-                        strokeWidth: 6
+                        strokeColor: "#f9a742"
+                        strokeWidth: 4
 
                         PathAngleArc {
                             id: arc
@@ -125,23 +125,29 @@ Card {
                 Canvas {
                     id: graphCanvas
 
-                    height: parent.height
+                    anchors.fill: parent
                     width: parent.width
 
                     onPaint: {
                         const ctx = getContext("2d");
                         ctx.clearRect(0, 0, width, height);
-                        ctx.lineWidth = 2;
+                        ctx.lineWidth = 1;
                         ctx.lineCap = "round";
                         ctx.lineJoin = "round";
 
-                        // Extract RGB from Qt color for alpha-aware gradient
-                        const c = statsCard.accentColor;
-                        const rgb = `${Math.round(c.r * 255)}, ${Math.round(c.g * 255)}, ${Math.round(c.b * 255)}`;
+                        const window = 3;
+                        // smoothing the graphs by using a 3-point moving average over all the data pointsc
+                        const smoothed = statsCard.history.map((_, i, arr) => {
+                            const half = Math.floor(window / 2);
+                            const start = Math.max(0, i - half);
+                            const end = Math.min(arr.length - 1, i + half);
+                            const sum = arr.slice(start, end + 1).reduce((acc, v) => acc + v.usage, 0);
+                            return sum / (end - start + 1);
+                        });
 
-                        const topPoints = statsCard.history.map((item, index) => ({
-                                    x: width * (index / statsCard.history.length),
-                                    y: height / 2 - (height / 2 * (item.usage / 100))
+                        const topPoints = smoothed.map((usage, index) => ({
+                                    x: width * (index / smoothed.length),
+                                    y: height / 2 - (height / 2 * (usage / 100))
                                 }));
 
                         const bottomPoints = [...topPoints].reverse().map(item => ({
@@ -149,9 +155,21 @@ Card {
                                     y: height - item.y
                                 }));
 
+
+                        const grad = ctx.createLinearGradient(0, 0, 0, height);
+                        grad.addColorStop(0,   "rgba(255, 170, 66, 0.6)");
+                        grad.addColorStop(0.5, "rgba(255, 170, 66, 0.1)");
+                        grad.addColorStop(1,   "rgba(255, 170, 66, 0.6)");
+
+                        ctx.fillStyle = grad;
+                        ctx.beginPath();
+                        topPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+                        bottomPoints.forEach(p => ctx.lineTo(p.x, p.y));
+                        ctx.closePath();
+                        ctx.fill();
+
                         // Top line
-                        ctx.strokeStyle = `#ffaa42`
-                        ctx.strokeWidth = 1;
+                        ctx.strokeStyle = "#ffaa42";
                         ctx.beginPath();
                         topPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
                         ctx.stroke();

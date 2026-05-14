@@ -32,7 +32,17 @@ InteractableCard {
 
         anchors.fill: parent
         hoverEnabled: true
+        acceptedButtons: Qt.MiddleButton
+
+        onClicked: mouse => {
+            if (mouse.button === Qt.MiddleButton) {
+                root.dismissRequested()
+
+            }
+        }
     }
+
+
     ColumnLayout {
         id: contentCol
 
@@ -63,7 +73,7 @@ InteractableCard {
                     brightness: 0.0
                     colorization: 1.0
                     colorizationColor: ThemeService.active.accent
-                    saturation: .000001
+                    saturation: .00001
                 }
             }
             Text {
@@ -71,18 +81,18 @@ InteractableCard {
                 elide: Text.ElideRight
                 color: ThemeService.active.accent
                 font.family: "Agave Nerd Font"
-                font.pixelSize: 16
+                font.pixelSize: 18
                 font.weight: Font.ExtraBold
                 text: root.notif.summary ?? ""
             }
             Text {
-                color: "#555"
+                color: "#ffaa42"
                 font.pixelSize: 10
                 text: root.notif?.time ? Qt.formatDateTime(new Date(root.notif.time * 1000), "hh:mm") : ""
                 visible: root.showTime && text !== ""
             }
             Text {
-                color: "#555"
+                color: "#ffaa42"
                 font.pixelSize: 11
                 text: "✕"
                 visible: root.showDismiss
@@ -90,7 +100,6 @@ InteractableCard {
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
-
                     onClicked: root.dismissRequested()
                 }
             }
@@ -99,9 +108,9 @@ InteractableCard {
         // Body
         Text {
             Layout.fillWidth: true
-            color: "#aaaaaa"
+            color: "#ffaa42"
             elide: Text.ElideRight
-            font.pixelSize: 11
+            font.pixelSize: 13
             maximumLineCount: root.compact ? 3 : 4
             text: root.notif?.body ?? ""
             textFormat: Text.PlainText

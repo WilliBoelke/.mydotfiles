@@ -138,13 +138,26 @@ PanelWindow {
                             title: "Uptime"
                             value: UptimeService.uptime
                         }
-                    }
-                    Notifications {
-                        Layout.fillWidth: true
+                        InfoCard {
+                            Layout.fillWidth: true
+                            accentColor: "#d55c1b"
+                            title: "Uptime"
+                            value: UptimeService.uptime
+                        }
+                        InfoCard {
+                            Layout.fillWidth: true
+                            accentColor: "#d55c1b"
+                            title: "Uptime"
+                            value: UptimeService.uptime
+                        }
                     }
                     UpdateWidget {
                         Layout.fillWidth: true
                     }
+                    Notifications {
+                        Layout.fillWidth: true
+                    }
+
                 }
             }
         }

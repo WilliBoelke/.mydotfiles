@@ -48,35 +48,51 @@ CollapsibleCard {
 
     header: Item {
         width: parent.width
-        implicitHeight: 64
+        implicitHeight: 48
 
         RowLayout {
             anchors.fill: parent
-            anchors.margins: 8
-            spacing: 8
+            anchors.leftMargin: 4
+            anchors.rightMargin: 4
+            spacing: 10
 
+            // --- expand toggle ---
+            InteractableCard {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredHeight: 36
+                Layout.preferredWidth: 36
 
-            Text {
-                color: "#d55c1b"
-                font.pixelSize: 20
-                font.weight: Font.Bold
-                text: UpdateService.updates.length + " updates available"
-                topPadding: 4
+                onClicked: updateWidget.toggle()
+
+                Icon {
+                    anchors.centerIn: parent
+                    icon: updateWidget.expanded ? "󰅀" : "󰅂"
+                    size: 16
+                }
             }
 
-            InteractableCard {
-                Layout.preferredHeight: 42
-                Layout.preferredWidth: 42
+            // --- label ---
+            Text {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                color: "#d55c1b"
+                font.pixelSize: 15
+                font.weight: Font.Bold
+                text: UpdateService.updates.length + " updates available"
+            }
 
-                onClicked: {
-                    UpdateService.checkUpdates();
-                    updateWidget.toggle();
-                }
+            // --- refresh button ---
+            InteractableCard {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredHeight: 36
+                Layout.preferredWidth: 36
+
+                onClicked: UpdateService.checkUpdates()
 
                 Icon {
                     anchors.centerIn: parent
                     icon: "󰚰"
-                    size: 20
+                    size: 16
                 }
             }
         }

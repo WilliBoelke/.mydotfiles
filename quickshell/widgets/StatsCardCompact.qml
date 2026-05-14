@@ -70,7 +70,7 @@ Card {
                 // Line
                 ctx.globalAlpha = 1.0;
                 ctx.strokeStyle = "#ffaa42";
-                ctx.lineWidth = 1.5;
+                ctx.lineWidth = 1;
                 ctx.lineCap = "round";
                 ctx.lineJoin = "round";
                 ctx.beginPath();
