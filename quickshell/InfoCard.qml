@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.decoratives
+import qs.texts
 
 Card {
     id: infoCard
@@ -18,17 +19,12 @@ Card {
         anchors.centerIn: parent
         spacing: 4
 
-        Text {
+        TextLarge {
             Layout.alignment: Qt.AlignHCenter
-            color: infoCard.accentColor
-            font.pixelSize: 16
-            font.weight: Font.Bold
             text: infoCard.value
         }
-        Text {
+        TextSmall {
             Layout.alignment: Qt.AlignHCenter
-            color: infoCard.accentColor
-            font.pixelSize: 10
             text: infoCard.title
         }
     }

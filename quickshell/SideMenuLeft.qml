@@ -56,7 +56,9 @@ PanelWindow {
         color: ThemeService.active.bgBase
         width: root.panelWidth
 
-        Behavior on anchors.leftMargin {
+        Behavior on anchors
+        .
+        leftMargin {
             NumberAnimation {
                 duration: 250
                 easing.type: Easing.OutCubic
@@ -90,7 +92,6 @@ PanelWindow {
                     // Flyout popup, anchored to this bar's screen
                     MusicPlayer {
                         id: flyout
-
                         Layout.fillWidth: true
                     }
                     SettingsWidget {

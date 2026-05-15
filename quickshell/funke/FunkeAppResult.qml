@@ -10,7 +10,9 @@ InteractableCard {
 
     property var app
 
+
     signal launched()
+
 
     implicitHeight: appContentRow.implicitHeight + 24
 

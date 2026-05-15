@@ -59,7 +59,9 @@ PanelWindow {
         color: ThemeService.active.bgBase
         width: root.panelWidth
 
-        Behavior on anchors.rightMargin {
+        Behavior on anchors
+        .
+        rightMargin {
             NumberAnimation {
                 duration: 250
                 easing.type: Easing.OutCubic
@@ -85,47 +87,53 @@ PanelWindow {
                 ColumnLayout {
                     id: menuColumn
 
-                    spacing: 12
+                    spacing: 24
                     width: parent.width - 24
                     x: 12
                     y: 12
 
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 12
+                    ColumnLayout {
 
-                        StatsCard {
-                            Layout.fillWidth: true
-                            history: CpuService.history
-                            title: "CPU"
-                            unit: "%"
-                            value: CpuService.cpuUsage
-                        }
-                        StatsCard {
-                            Layout.fillWidth: true
-                            history: MemService.history
-                            title: "RAM"
-                            unit: "%"
-                            value: MemService.memUsage
-                        }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
                         spacing: 12
+                        width: parent.width - 24
 
-                        StatsCard {
+                        RowLayout {
                             Layout.fillWidth: true
-                            history: NvidiaGpuService.history
-                            title: "GPU"
-                            unit: "%"
-                            value: NvidiaGpuService.gpuUsage
+                            spacing: 12
+
+                            StatsCard {
+                                Layout.fillWidth: true
+                                history: CpuService.history
+                                title: "CPU"
+                                unit: "%"
+                                value: CpuService.cpuUsage
+                            }
+                            StatsCard {
+                                Layout.fillWidth: true
+                                history: MemService.history
+                                title: "RAM"
+                                unit: "%"
+                                value: MemService.memUsage
+                            }
                         }
-                        StatsCard {
+                        RowLayout {
                             Layout.fillWidth: true
-                            history: CpuService.history
-                            title: "CPU"
-                            unit: "%"
-                            value: CpuService.cpuUsage
+                            spacing: 12
+
+                            StatsCard {
+                                Layout.fillWidth: true
+                                history: NvidiaGpuService.history
+                                title: "GPU"
+                                unit: "%"
+                                value: NvidiaGpuService.gpuUsage
+                            }
+                            StatsCard {
+                                Layout.fillWidth: true
+                                history: CpuService.history
+                                title: "CPU"
+                                unit: "%"
+                                value: CpuService.cpuUsage
+                            }
                         }
                     }
                     RowLayout {

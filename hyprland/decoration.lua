@@ -27,7 +27,7 @@ hl.layer_rule({
     match = { namespace = "quickshell" },
     blur = true,
     ignore_alpha = 0.1,
-    xray = true,
+    xray = false,
 })
 
 hl.layer_rule({
@@ -36,5 +36,5 @@ hl.layer_rule({
     blur = true,
     ignore_alpha = 0,
     no_anim = true,
-    xray = true,
+    xray = false,
 })

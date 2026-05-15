@@ -8,7 +8,9 @@ InteractableCard {
     property var file
     property bool externalActive: false
 
+
     signal launched()
+
 
     neutral: true
     active: externalActive || root.hovered

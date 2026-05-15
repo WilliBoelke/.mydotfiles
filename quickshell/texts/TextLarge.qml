@@ -1,13 +1,11 @@
-import qs.services
-import Quickshell
 import QtQuick
+import qs.services
 
 Text {
-    property string icon: ""
-    property int size: 14
     property color mColor: ThemeService.active.accent
     font.family: "Agave Nerd Font"
+
     color: mColor
-    font.pixelSize: size
-    text: icon
+    font.pixelSize: 19
+    font.weight: Font.Bold
 }

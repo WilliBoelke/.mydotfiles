@@ -16,6 +16,7 @@ Singleton
         checUpdateProcess.running = true;
     }
 
+
     Process {
         id: checUpdateProcess
 

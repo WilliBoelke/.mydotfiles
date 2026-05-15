@@ -11,7 +11,9 @@ PanelWindow {
     id: funkeLauncher
 
     // --- position ---
-    anchors { bottom: true }
+    anchors {
+        bottom: true
+    }
     exclusionMode: ExclusionMode.Ignore
 
     // --- dimensions ---
@@ -33,12 +35,14 @@ PanelWindow {
     WlrLayershell.keyboardFocus: open ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
     WlrLayershell.screen: screen
 
+
     // --- helpers ---
     function cancelWebSearch() {
         webSearchDebounce.stop()
         procFunkeWebSearch.running = false
         resultWeb = []
     }
+
 
     function activeColumnLength() {
         if (funkeResults.currentY === 0) return resultFiles.length + resultDirs.length
@@ -47,11 +51,13 @@ PanelWindow {
         return 0
     }
 
+
     function launch(command) {
         procLaunch.command = command
         procLaunch.running = true
         open = false
     }
+
 
     // --- lifecycle ---
     onOpenChanged: {
@@ -138,7 +144,9 @@ PanelWindow {
 
     Process {
         id: procLaunch
-        stdout: StdioCollector { onStreamFinished: procLaunch.running = false }
+        stdout: StdioCollector {
+            onStreamFinished: procLaunch.running = false
+        }
     }
 
     // --- content ---
@@ -156,10 +164,10 @@ PanelWindow {
                 return
 
                 var r = 16
-                var origin  = funkeSearch.mapToItem(lineCanvas, funkeSearch.width / 2, 0)
+                var origin = funkeSearch.mapToItem(lineCanvas, funkeSearch.width / 2, 0)
                 var appLeft = appColumn.mapToItem(lineCanvas, -16, 0)
 
-                var p0x = origin.x,  p0y = origin.y
+                var p0x = origin.x, p0y = origin.y
                 var horzY = p0y - 6
                 var p2x = appLeft.x, p2y = horzY
 
@@ -390,8 +398,18 @@ PanelWindow {
                         }
                     }
 
-                    Behavior on width { NumberAnimation { duration: 200 } }
-                    Behavior on border.color { ColorAnimation { duration: 150 } }
+                    Behavior on width {
+                        NumberAnimation {
+                            duration: 200
+                        }
+                    }
+                    Behavior on border
+                    .
+                    color {
+                        ColorAnimation {
+                            duration: 150
+                        }
+                    }
 
                     MouseArea {
                         anchors.fill: parent

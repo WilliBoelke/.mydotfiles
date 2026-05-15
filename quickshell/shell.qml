@@ -22,7 +22,6 @@ ShellRoot {
                 property bool sideMenuRightOpen: false
 
 
-
                 // --- panels ---
 
 

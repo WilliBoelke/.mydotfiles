@@ -21,7 +21,9 @@ Slider {
         radius: 12
         width: parent.availableWidth
 
-        Behavior on border.color {
+        Behavior on border
+        .
+        color {
             ColorAnimation {
                 duration: 150
             }

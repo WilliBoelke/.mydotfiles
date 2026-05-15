@@ -9,7 +9,7 @@ Card {
     property bool expanded: false
     property Component header
     property int maxHeight: 10000
-    height: outerLayout.implicitHeight + 16
+    implicitHeight: outerLayout.implicitHeight + 16
     width: parent.width
 
 

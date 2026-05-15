@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.services
 import qs.decoratives
+import qs.texts
 
 /**
  * SystemStatusWidget
@@ -48,7 +49,8 @@ Card {
     // ── Public API ──────────────────────────────────────────────────────────
 
     property bool sideMenuOpen: false
-        signal toggleSideMenu
+        signal
+    toggleSideMenu
 
     // ── Internal state ──────────────────────────────────────────────────────
 
@@ -59,8 +61,8 @@ Card {
     }
 
     // The three widget states.  Add "load" here later.
-    readonly property string stateDefault:    "default"
-    readonly property string stateNotifying:  "notifying"
+    readonly property string stateDefault: "default"
+    readonly property string stateNotifying: "notifying"
 
     // Active display state — drives all visibility and sizing below.
     property string activeState: stateDefault
@@ -75,6 +77,7 @@ Card {
         timerProgress.restart();
     }
 
+
     function enterDefault() {
         dismissTimer.stop();
         timerProgress.stop();
@@ -82,12 +85,13 @@ Card {
         targetWidth = defaultContentWidth;
     }
 
+
     // ── Sizing ──────────────────────────────────────────────────────────────
 
     // Each content item exposes its natural width via these properties.
     // The card width animates between them when activeState changes.
-    readonly property real defaultContentWidth:      defaultContent.implicitWidth  + 48
-    readonly property real notifyingContentWidth:    notifyingContent.implicitWidth + 16
+    readonly property real defaultContentWidth: defaultContent.implicitWidth + 48
+    readonly property real notifyingContentWidth: notifyingContent.implicitWidth + 16
 
     property real targetWidth: defaultContentWidth
 
@@ -107,7 +111,7 @@ Card {
     // ── Reactions ───────────────────────────────────────────────────────────
 
     onLastNotificationChanged: {
-        if (lastNotification !== null) {
+        if (lastNotification !== null && activeState !== stateNotifying) {
             activeState = stateNotifying;
             root.enterNotifying()
             targetWidth = notifyingContentWidth;
@@ -128,6 +132,7 @@ Card {
         onTriggered: root.dismissNotification()
     }
 
+
     function dismissNotification() {
         dismissTimer.stop();
         timerProgress.stop();
@@ -135,6 +140,7 @@ Card {
         root.enterDefault()
         targetWidth = defaultContentWidth;
     }
+
 
     // ── Interaction ─────────────────────────────────────────────────────────
 
@@ -146,7 +152,9 @@ Card {
 
         onClicked: mouse => {
             if (mouse.button === Qt.MiddleButton && root.activeState === root.stateNotifying) {
-                root.lastNotification?.dismiss();
+                root.lastNotification
+                ?.
+                dismiss();
                 root.dismissNotification();
             } else if (mouse.button === Qt.LeftButton) {
                 root.toggleSideMenu();
@@ -158,7 +166,7 @@ Card {
     //
     // Both items share the same anchor box.  Opacity + x-offset are animated
     // by the `states` block at the bottom.  Starting values here represent
-    // the "off" (hidden) position so the first transition plays correctly.
+    // the "off" (hidden) position, so the first transition plays correctly.
 
     // ── 1. Default state content ─────────────────────────────────────────────
 
@@ -174,22 +182,37 @@ Card {
         RowLayout {
             spacing: 24
 
-            Text {
-                color: "#C35A24"
-                elide: Text.ElideRight
-                font.pixelSize: 14
-                font.weight: Font.Medium
-                horizontalAlignment: Text.AlignRight
-                text: `${NotificationService.trackedNotifications.values.length}`
+            RowLayout {
+                spacing: 6
+                visible: NotificationService.trackedNotifications.values.length > 0
+                TextLarge {
+                    color: ThemeService.active.accentLight
+                    elide: Text.ElideRight
+                    horizontalAlignment: Text.AlignRight
+                    text: `${NotificationService.trackedNotifications.values.length}`
+                }
+                Icon {
+                    color: ThemeService.active.action
+                    icon: "󰎟"
+                    size: 20
+                }
             }
 
-            Text {
-                color: "#C35A24"
-                elide: Text.ElideRight
-                font.pixelSize: 14
-                font.weight: Font.Medium
-                horizontalAlignment: Text.AlignRight
-                text: `${UpdateService.updates.length}`
+            RowLayout {
+                spacing: 6
+                visible: UpdateService.updates.length > 0
+                TextLarge {
+                    color: ThemeService.active.accentLight
+                    elide: Text.ElideRight
+                    horizontalAlignment: Text.AlignRight
+                    text: `${UpdateService.updates.length}`
+                }
+
+                Icon {
+                    color: ThemeService.active.action
+                    icon: "󰚰"
+                    size: 20
+                }
             }
         }
     }
@@ -213,28 +236,30 @@ Card {
             RowLayout {
                 id: titleRow
                 spacing: 8
-                Text {
+                TextSmall {
                     color: "#C35A24"
-                    font.pixelSize: 12
-                    font.weight: Font.Medium
-                    text: root.lastNotification?.summary ?? ""
+                    text: root.lastNotification
+                    ?.
+                        summary ?? ""
                 }
-                Text {
-                    color: "#cd893b"
-                    font.pixelSize: 12
-                    text: root.lastNotification?.appName ?? ""
+                TextSmall {
+                    text: root.lastNotification
+                    ?.
+                        appName ?? ""
                 }
             }
 
             RowLayout {
                 id: bodyRow
                 width: 100
-                Text {
+                TextSmall {
                     width: 100
                     wrapMode: Text.WordWrap
                     color: "#d55c1b"
                     font.pixelSize: 12
-                    text: root.lastNotification?.body ?? ""
+                    text: root.lastNotification
+                    ?.
+                        body ?? ""
                 }
             }
         }
@@ -252,7 +277,11 @@ Card {
                 color: "#d55c1b"
                 font.pixelSize: 24
                 text: "󰎟"
-                visible: (root.lastNotification?.appIcon ?? "") === ""
+                visible: (root.lastNotification
+                ?.
+                    appIcon ?? ""
+                ) ===
+                ""
             }
         }
 
@@ -261,9 +290,9 @@ Card {
             parent: root          // ← reparent to card for geometry
             anchors.bottom: root.bottom
             anchors.left: root.left
-            height: 1
-            radius: 1
-            color: "#4ac6ca"
+            height: 4
+            radius: 2
+            color: ThemeService.active.action
             width: root.implicitWidth - 16
             visible: root.activeState === root.stateNotifying
 
@@ -278,7 +307,6 @@ Card {
     }
 
 
-
     // ── State machine ─────────────────────────────────────────────────
     //
     // `states` declaratively owns opacity and x for both content items.
@@ -290,39 +318,67 @@ Card {
     states: [
         State {
             name: "default"
-            PropertyChanges { target: defaultContent;   opacity: 1; x: 0        }
-            PropertyChanges { target: notifyingContent; opacity: 0; x: notifyingContent.width }
+            PropertyChanges {
+                target: defaultContent; opacity: 1; x: 0
+            }
+            PropertyChanges {
+                target: notifyingContent; opacity: 0; x: notifyingContent.width
+            }
         },
         State {
             name: "notifying"
-            PropertyChanges { target: defaultContent;   opacity: 0; x: -8       }
-            PropertyChanges { target: notifyingContent; opacity: 1; x: 0        }
+            PropertyChanges {
+                target: defaultContent; opacity: 0; x: -8
+            }
+            PropertyChanges {
+                target: notifyingContent; opacity: 1; x: 0
+            }
         }
     ]
 
     transitions: [
         // Default  →  Notifying:  notification slides in from right
         Transition {
-            from: "default"; to: "notifying"
+            from: "default";
+            to: "notifying"
             SequentialAnimation {
                 // Fade out default content quickly
-                NumberAnimation { target: defaultContent;   property: "opacity"; duration: 120; easing.type: Easing.InQuad }
+                NumberAnimation {
+                    target: defaultContent; property: "opacity";
+                    duration: 120; easing.type: Easing.InQuad
+                }
                 // Then slide + fade in notification content
                 ParallelAnimation {
-                    NumberAnimation { target: notifyingContent; property: "x";       duration: 260; easing.type: Easing.OutCubic }
-                    NumberAnimation { target: notifyingContent; property: "opacity"; duration: 200; easing.type: Easing.OutQuad }
+                    NumberAnimation {
+                        target: notifyingContent; property: "x";
+                        duration: 260; easing.type: Easing.OutCubic
+                    }
+                    NumberAnimation {
+                        target: notifyingContent; property: "opacity";
+                        duration: 200; easing.type: Easing.OutQuad
+                    }
                 }
             }
         },
         // Notifying  →  Default:  notification slides out to right, default fades in
         Transition {
-            from: "notifying"; to: "default"
+            from: "notifying";
+            to: "default"
             SequentialAnimation {
                 ParallelAnimation {
-                    NumberAnimation { target: notifyingContent; property: "x";       duration: 240; easing.type: Easing.InCubic }
-                    NumberAnimation { target: notifyingContent; property: "opacity"; duration: 180; easing.type: Easing.InQuad }
+                    NumberAnimation {
+                        target: notifyingContent; property: "x";
+                        duration: 240; easing.type: Easing.InCubic
+                    }
+                    NumberAnimation {
+                        target: notifyingContent; property: "opacity";
+                        duration: 180; easing.type: Easing.InQuad
+                    }
                 }
-                NumberAnimation { target: defaultContent; property: "opacity"; duration: 160; easing.type: Easing.OutQuad }
+                NumberAnimation {
+                    target: defaultContent; property: "opacity";
+                    duration: 160; easing.type: Easing.OutQuad
+                }
             }
         }
     ]

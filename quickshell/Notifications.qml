@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 import qs.services
 import qs.decoratives
+import qs.texts
 
 Item {
     id: root
@@ -26,19 +27,22 @@ Item {
             anchors.margins: 12
             spacing: 12
 
+            implicitHeight: 48
+
             anchors {
                 fill: parent
                 margins: outerPadding
             }
-            RowLayout {
-                width: parent.width
 
-                Text {
-                    color: "#d55c1b"
-                    font.pixelSize: 20
-                    font.weight: Font.Bold
+            // -- header ---
+            RowLayout {
+                height: 48
+                Layout.alignment: Qt.AlignVCenter
+                width: parent.width
+                TextH1 {
+                    height: parent.height
+                    Layout.alignment: Qt.AlignVCenter
                     text: "Notifications"
-                    topPadding: 4
                 }
                 Item {
                     Layout.fillWidth: true
@@ -62,6 +66,8 @@ Item {
                     }
                 }
             }
+
+            // --- items ---
             Item {
                 Layout.fillWidth: true
                 implicitHeight: notifList.visible ? notifList.implicitHeight : fallback.implicitHeight
@@ -90,15 +96,6 @@ Item {
 
                         onDismissRequested: notif.tracked = false
                     }
-                }
-                Text {
-                    id: fallback
-
-                    anchors.centerIn: parent
-                    color: "#d55c1b"
-                    font.pixelSize: 14
-                    text: "No notifications"
-                    visible: !notifList.visible
                 }
             }
         }

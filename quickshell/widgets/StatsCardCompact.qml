@@ -2,6 +2,7 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 import qs.decoratives
+import qs.texts
 
 Card {
     id: compactStatsCard
@@ -21,11 +22,8 @@ Card {
         anchors.margins: 4
         spacing: 6
 
-        Text {
+        TextSmall {
             Layout.alignment: Qt.AlignVCenter
-            color: "#ffaa42"
-            font.pixelSize: 11
-            font.weight: Font.Bold
             text: `${compactStatsCard.value}${compactStatsCard.unit}`
         }
         Canvas {

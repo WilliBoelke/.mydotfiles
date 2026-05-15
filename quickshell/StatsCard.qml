@@ -3,6 +3,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Shapes
 import qs.decoratives
+import qs.services
+import qs.texts
 
 Card {
     id: statsCard
@@ -57,7 +59,7 @@ Card {
 
                     ShapePath {
                         fillColor: "transparent"
-                        strokeColor: "#f9a742"
+                        strokeColor: ThemeService.active.accentLight
                         strokeWidth: 4
 
                         PathAngleArc {
@@ -98,20 +100,14 @@ Card {
                 }
                 ColumnLayout {
                     anchors.centerIn: parent
-                    spacing: 0
+                    spacing: 4
 
-                    Text {
+                    TextLarge {
                         Layout.alignment: Qt.AlignHCenter
-                        color: "#d55c1b"
-                        font.pixelSize: 20
-                        font.weight: Font.Bold
                         text: `${statsCard.value} ${statsCard.unit}`
                     }
-                    Text {
+                    TextSmall {
                         Layout.alignment: Qt.AlignHCenter
-                        color: "#d55c1b"
-                        font.pixelSize: 10
-                        font.weight: Font.Bold
                         text: `${statsCard.title}`
                     }
                 }
@@ -146,20 +142,20 @@ Card {
                         });
 
                         const topPoints = smoothed.map((usage, index) => ({
-                                    x: width * (index / smoothed.length),
-                                    y: height / 2 - (height / 2 * (usage / 100))
-                                }));
+                            x: width * (index / smoothed.length),
+                            y: height / 2 - (height / 2 * (usage / 100))
+                        }));
 
                         const bottomPoints = [...topPoints].reverse().map(item => ({
-                                    x: item.x,
-                                    y: height - item.y
-                                }));
+                            x: item.x,
+                            y: height - item.y
+                        }));
 
 
                         const grad = ctx.createLinearGradient(0, 0, 0, height);
-                        grad.addColorStop(0,   "rgba(255, 170, 66, 0.6)");
+                        grad.addColorStop(0, "rgba(255, 170, 66, 0.6)");
                         grad.addColorStop(0.5, "rgba(255, 170, 66, 0.1)");
-                        grad.addColorStop(1,   "rgba(255, 170, 66, 0.6)");
+                        grad.addColorStop(1, "rgba(255, 170, 66, 0.6)");
 
                         ctx.fillStyle = grad;
                         ctx.beginPath();

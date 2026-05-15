@@ -13,8 +13,10 @@ PanelWindow {
     property bool sideMenuRightOpen: false
 
     // --- Signals ---
-    signal toggleSideLeftMenu
-    signal toggleSideRightMenu
+        signal
+    toggleSideLeftMenu
+        signal
+    toggleSideRightMenu
     // --- Window config ---
     color: "transparent"
     implicitHeight: 44
@@ -61,7 +63,9 @@ PanelWindow {
                 onToggleSideMenu: root.toggleSideLeftMenu()
             }
 
-            Item { Layout.fillWidth: true }
+            Item {
+                Layout.fillWidth: true
+            }
 
             SystemStatusWidget {
                 sideMenuOpen: root.sideMenuLeftOpen

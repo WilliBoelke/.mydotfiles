@@ -12,17 +12,20 @@ Rectangle {
     default property alias content: contentItem.data
 
 
-    signal clicked
+        signal
+    clicked
 
     // Style from IconButton
     border.color: neutral ? "transparent" : (active || mouseArea.containsMouse) ? Qt.rgba(1, 0.45, 0, 0.55) : Qt.rgba(1, 1, 1, 0.12)
     border.width: 1
-    color:  neutral ? "transparent" :  (active ||  mouseArea.containsMouse) ? Qt.rgba(1, 0.4, 0, 0.18) : Qt.rgba(1, 1, 1, 0.07)
+    color: neutral ? "transparent" : (active || mouseArea.containsMouse) ? Qt.rgba(1, 0.4, 0, 0.18) : Qt.rgba(1, 1, 1, 0.07)
     radius: 12
 
     // Height/width should be set by parent or content
 
-    Behavior on border.color {
+    Behavior on border
+    .
+    color {
         ColorAnimation {
             duration: 150
         }

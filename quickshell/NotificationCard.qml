@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import qs.widgets
 import qs.decoratives
 import qs.services
+import qs.texts
 import QtQuick.Effects
 
 InteractableCard {
@@ -17,7 +18,8 @@ InteractableCard {
     property bool showDismiss: true
     property bool showTime: true
 
-    signal dismissRequested
+        signal
+    dismissRequested
 
     implicitHeight: contentCol.implicitHeight + (root.padding * 2)
 
@@ -66,7 +68,10 @@ InteractableCard {
                 Layout.preferredHeight: 20
                 Layout.preferredWidth: 20
                 layer.enabled: true
-                source: Quickshell.iconPath(root.notif?.appIcon ?? "", "")
+                source: Quickshell.iconPath(root.notif
+                ?.
+                    appIcon ?? "", ""
+                )
                 visible: source !== ""
 
                 layer.effect: MultiEffect {
@@ -76,19 +81,15 @@ InteractableCard {
                     saturation: .00001
                 }
             }
-            Text {
+            TextLarge {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
-                color: ThemeService.active.accent
-                font.family: "Agave Nerd Font"
-                font.pixelSize: 18
-                font.weight: Font.ExtraBold
                 text: root.notif.summary ?? ""
             }
-            Text {
-                color: "#ffaa42"
-                font.pixelSize: 10
-                text: root.notif?.time ? Qt.formatDateTime(new Date(root.notif.time * 1000), "hh:mm") : ""
+            TextSmall {
+                text: root.notif
+                ?.
+                time ? Qt.formatDateTime(new Date(root.notif.time * 1000), "hh:mm") : ""
                 visible: root.showTime && text !== ""
             }
             Text {
@@ -106,14 +107,13 @@ InteractableCard {
         }
 
         // Body
-        Text {
+        TextSmall {
             Layout.fillWidth: true
-            color: "#ffaa42"
             elide: Text.ElideRight
-            font.pixelSize: 13
             maximumLineCount: root.compact ? 3 : 4
-            text: root.notif?.body ?? ""
-            textFormat: Text.PlainText
+            text: root.notif
+            ?.
+                body ?? ""
             visible: text !== ""
             wrapMode: Text.WordWrap
         }
@@ -122,10 +122,14 @@ InteractableCard {
         RowLayout {
             Layout.fillWidth: true
             spacing: 6
-            visible: root.showActions && root.notif?.actions && root.notif.actions.length > 0
+            visible: root.showActions && root.notif
+            ?.
+                actions && root.notif.actions.length > 0
 
             Repeater {
-                model: root.notif?.actions ?? []
+                model: root.notif
+                ?.
+                    actions ?? []
 
                 delegate: BarButton {
                     property var action: modelData

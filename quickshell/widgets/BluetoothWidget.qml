@@ -6,6 +6,7 @@ import Quickshell.Io
 import Quickshell.Bluetooth
 import QtQuick.Controls
 import qs.decoratives
+import qs.texts
 
 CollapsibleCard {
     id: bluetoothWidget
@@ -97,6 +98,8 @@ CollapsibleCard {
                     }
                 }
                 Icon {
+                    /* center in parent */
+                    anchors.centerIn: hoverArea
                     icon: "󰂳"
                     size: 22
                 }

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.decoratives
 import qs.services
+import qs.texts
 
 CollapsibleCard {
     id: updateWidget
@@ -22,24 +23,33 @@ CollapsibleCard {
 
                 RowLayout {
                     anchors.fill: parent
-                    anchors.margins: 10
+                    anchors.margins: 12
                     spacing: 8
 
                     Text {
                         Layout.fillWidth: true
-                        color: ThemeService.active.textPrimary
-                        font.pixelSize: 13
+                        color: ThemeService.active.accent
+                        font.weight: Font.Bold
+                        font.pixelSize: 14
                         text: modelData.package
                     }
                     Text {
-                        color: ThemeService.active.textSecondary
-                        font.pixelSize: 12
+                        color: ThemeService.active.accentLight
+                        font.pixelSize: 14
+                        font.weight: Font.Bold
                         text: modelData.version
                     }
                     Text {
-                        color: ThemeService.active.accent
-                        font.pixelSize: 12
-                        text: "→ " + modelData.newVersion
+                        color: ThemeService.active.accentLight
+                        font.pixelSize: 14
+                        font.weight: Font.Bold
+                        text: "→"
+                    }
+                    Text {
+                        color: ThemeService.active.action
+                        font.pixelSize: 14
+                        font.weight: Font.Bold
+                        text: modelData.newVersion
                     }
                 }
             }
@@ -56,28 +66,11 @@ CollapsibleCard {
             anchors.rightMargin: 4
             spacing: 10
 
-            // --- expand toggle ---
-            InteractableCard {
-                Layout.alignment: Qt.AlignVCenter
-                Layout.preferredHeight: 36
-                Layout.preferredWidth: 36
-
-                onClicked: updateWidget.toggle()
-
-                Icon {
-                    anchors.centerIn: parent
-                    icon: updateWidget.expanded ? "󰅀" : "󰅂"
-                    size: 16
-                }
-            }
 
             // --- label ---
-            Text {
+            TextH1 {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.fillWidth: true
-                color: "#d55c1b"
-                font.pixelSize: 15
-                font.weight: Font.Bold
                 text: UpdateService.updates.length + " updates available"
             }
 
@@ -87,7 +80,11 @@ CollapsibleCard {
                 Layout.preferredHeight: 36
                 Layout.preferredWidth: 36
 
-                onClicked: UpdateService.checkUpdates()
+                onClicked: {
+                    updateWidget.toggle()
+                    UpdateService.checkUpdates()
+                }
+
 
                 Icon {
                     anchors.centerIn: parent

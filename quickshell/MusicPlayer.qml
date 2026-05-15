@@ -5,6 +5,8 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 import QtQuick.Effects
 import qs.decoratives
+import qs.services
+import qs.texts
 
 Card {
     id: musicPlayer
@@ -47,11 +49,8 @@ Card {
             }
 
             // Header
-            Text {
-                color: "#d55c1b"
-                font.pixelSize: 20
-                font.weight: Font.Bold
-                text: "Now Playing " + Mpris.players.values.length + " " + musicPlayer.hasPlayers
+            TextH1 {
+                text: "Now Playing " + Mpris.players.values.length
                 topPadding: headerTopPadding
             }
 
@@ -77,13 +76,7 @@ Card {
                             duration: 200
                         }
                     }
-                    layer.effect: MultiEffect {
-                        shadowBlur: 1
-                        shadowColor: "#80000000"
-                        shadowEnabled: true
-                        shadowHorizontalOffset: 0
-                        shadowVerticalOffset: 4
-                    }
+
 
                     MouseArea {
                         id: hoverArea
@@ -131,83 +124,110 @@ Card {
                             }
                             Column {
                                 Layout.fillWidth: true
-                                spacing: 2
+                                spacing: 6
 
-                                Text {
-                                    color: "#d55c1b"
+                                RowLayout {
+                                    width: parent.width
+
+                                    TextLarge {
+                                        elide: Text.ElideRight
+                                        text: player.trackTitle || "Unknown title"
+                                        width: parent.width
+                                    }
+                                }
+                                TextSmall {
                                     elide: Text.ElideRight
-                                    font.pixelSize: 18
-                                    font.weight: Font.Bold
-                                    text: player.trackTitle || "Unknown title"
+                                    text: `${player.trackArtist} - ${player.trackAlbum}`
                                     width: parent.width
                                 }
-                                Text {
-                                    color: "#aaaaaa"
-                                    elide: Text.ElideRight
-                                    font.pixelSize: 16
-                                    text: player.trackArtist || ""
+
+                                // --- spacing ---
+                                Item {
                                     width: parent.width
-                                }
-                                Text {
-                                    color: "#666"
-                                    font.pixelSize: 16
-                                    text: player.identity || player.dbusName || ""
+                                    height: 12
                                 }
 
                                 // Controls
                                 RowLayout {
                                     width: parent.width
+                                    spacing: 0
 
                                     Item {
                                         Layout.fillWidth: true
                                     }
-                                    Repeater {
-                                        model: [
-                                            {
-                                                label: "⏮",
-                                                action: function () {
-                                                    player.previous();
-                                                },
-                                                size: 24,
-                                                enabled: player.canGoPrevious
-                                            },
-                                            {
-                                                label: player.isPlaying ? "⏸" : "▶",
-                                                action: function () {
-                                                    player.togglePlaying();
-                                                },
-                                                enabled: player.canTogglePlaying,
-                                                size: 24
-                                            },
-                                            {
-                                                label: "⏭",
-                                                action: function () {
-                                                    player.next();
-                                                },
-                                                size: 24,
-                                                enabled: player.canGoNext
-                                            }
-                                        ]
 
-                                        delegate: Text {
-                                            required property var modelData
+                                    Rectangle {
+                                        id: previous
+                                        Layout.preferredWidth: 40
+                                        Layout.preferredHeight: 40
+                                        Layout.alignment: Qt.AlignVCenter
+                                        color: "transparent"
+                                        opacity: player.canGoPrevious ? 1.0 : 0.3
 
-                                            font.family: "JetBrainsMono Nerd Font"
-                                            font.pixelSize: modelData.size
-                                            font.weight: Font.Bold
-                                            leftPadding: 12
-                                            rightPadding: 12
-                                            text: modelData.label
-
-                                            MouseArea {
-                                                anchors.fill: parent
-                                                cursorShape: Qt.PointingHandCursor
-                                                enabled: modelData.enabled
-
-                                                onClicked: modelData.action()
-                                            }
+                                        Icon {
+                                            anchors.centerIn: parent
+                                            icon: "⏮"
+                                            size: 24
+                                        }
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            enabled: player.canGoPrevious
+                                            onClicked: player.previous()
                                         }
                                     }
+
+                                    Item {
+                                        Layout.preferredWidth: 8
+                                    }
+
+                                    Rectangle {
+                                        id: playPause
+                                        Layout.preferredWidth: 40
+                                        Layout.preferredHeight: 40
+                                        Layout.alignment: Qt.AlignVCenter
+                                        color: "transparent"
+                                        opacity: player.canTogglePlaying ? 1.0 : 0.3
+
+                                        Icon {
+                                            anchors.centerIn: parent
+                                            icon: player.isPlaying ? "⏸" : "▶"
+                                            size: 32
+                                        }
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            enabled: player.canTogglePlaying
+                                            onClicked: player.togglePlaying()
+                                        }
+                                    }
+
+                                    Item {
+                                        Layout.preferredWidth: 8
+                                    }
+
+                                    Rectangle {
+                                        id: next
+                                        Layout.preferredWidth: 40
+                                        Layout.preferredHeight: 40
+                                        Layout.alignment: Qt.AlignVCenter
+                                        color: "transparent"
+                                        opacity: player.canGoNext ? 1.0 : 0.3
+
+                                        Icon {
+                                            anchors.centerIn: parent
+                                            icon: "⏭"
+                                            size: 24
+                                        }
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            enabled: player.canGoNext
+                                            onClicked: player.next()
+                                        }
+                                    }
+
                                     Item {
                                         Layout.fillWidth: true
                                     }
