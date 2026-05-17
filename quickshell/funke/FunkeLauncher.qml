@@ -389,7 +389,7 @@ PanelWindow {
                                 if (item) funkeLauncher.launch(["gio", "open", item.path])
                             } else if (funkeResults.currentY === 1) {
                                 const app = funkeLauncher.resultApps[funkeResults.currentX]
-                                if (app) funkeLauncher.launch(["bash", "-c", app.exec.replace(/%[a-zA-Z]/g, "").trim() + " &disown"])
+                                if (app) funkeLauncher.launch(["bash", "-c", app.exec.replace(/%[a-zA-Z]/g, "").replace(/\s+--\s*$/, "").trim(), "&", "disown"])
                             } else if (funkeResults.currentY === 2) {
                                 const web = funkeLauncher.resultWeb[funkeResults.currentX]
                                 if (web) funkeLauncher.launch(["gio", "open", web.url])
